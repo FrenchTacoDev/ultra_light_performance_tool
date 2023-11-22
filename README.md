@@ -1,39 +1,43 @@
-<!--
-This README describes the package. If you publish this package to pub.dev,
-this README's contents appear on the landing page for your package.
+Ultra Light Performance Tool -> Short ULPT is an open source tool for pilots and students on ultra light aircraft.
+It is meant to be used as an advisory and guidance tool for the performance calculation under different circumstances.
 
-For information about how to write a good package README, see the guide for
-[writing package pages](https://dart.dev/guides/libraries/writing-package-pages).
+UL-Pilots can use this tool to determine a calculated takeoff distance, given their entries on aircraft data and environmental conditions.
+The use of this tool does not relief the Pilot in Command from consulting the aircraft's manual and appropiate documentation.
+The tool uses estimated and interpolated values only and is therefore just for information.
+The liability lies solely with the Pilot in Command.
 
-For general information about developing packages, see the Dart guide for
-[creating packages](https://dart.dev/guides/libraries/create-library-packages)
-and the Flutter guide for
-[developing packages and plugins](https://flutter.dev/developing-packages).
--->
-
-TODO: Put a short description of the package here that helps potential users
-know whether this package might be useful for them.
-
-## Features
-
-TODO: List what your package can do. Maybe include images, gifs, or videos.
+If you'd like to contirbute to this project, please open a pull-request or send me a message asking what you could do to help out.
 
 ## Getting started
 
-TODO: List prerequisites and provide or point to information on how to
-start using the package.
+Add the current dependency to your Flutter project in your pubspec.yaml file:
+
+```yaml
+  ultra_light_performance_tool:
+    git: https://github.com/FrenchTacoDev/ultra_light_performance_tool.git
+```
 
 ## Usage
 
-TODO: Include short and useful examples for package users. Add longer examples
-to `/example` folder.
+Add the ULPT Widget to your App or your main method.
 
 ```dart
-const like = 'sample';
+void main() {
+
+  //This is needed to setup SQLite FFI so the database library can work on desktop!
+  if(io.Platform.isWindows ||io.Platform.isMacOS){
+    sqfliteFfiInit();
+    databaseFactory = databaseFactoryFfi;
+  }
+
+  runApp(const ULPT());
+}
 ```
 
 ## Additional information
 
-TODO: Tell users more about the package: where to find more information, how to
-contribute to the package, how to file issues, what response they can expect
-from the package authors, and more.
+ULPT is meant to be an open source / free to use prodcut.
+It will be published free of charge to the respective stores.
+
+If you want to publish your own version, please feel free.
+However we would love you to contribute here to further enhance the project.
