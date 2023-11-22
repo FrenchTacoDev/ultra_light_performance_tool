@@ -1,0 +1,222 @@
+import 'package:flutter/material.dart';
+import 'package:ultra_light_performance_tool/src/res/themes.dart';
+import 'package:ultra_light_performance_tool/src/shared%20widgets/ulpt_tab_page.dart';
+
+///Panel to show the calc results
+class Results extends StatelessWidget {
+  const Results({super.key, this.rawTOD, this.factorizedTod, this.availTod, required this.isSmallSize});
+
+  ///raw takeoff distance without factor
+  final int? rawTOD;
+  ///takeoff distance factored
+  final int? factorizedTod;
+  ///available takeoff distance
+  final int? availTod;
+  ///used for screen size adjustment
+  final bool isSmallSize;
+
+  @override
+  Widget build(BuildContext context) {
+    if(rawTOD == null || availTod == null) return const _NoData();
+    return _Data(tod: rawTOD!, factorizedTod: factorizedTod!, availTod: availTod!, isSmallSize: isSmallSize,);
+  }
+}
+
+class _NoData extends StatelessWidget {
+  const _NoData();
+
+  @override
+  Widget build(BuildContext context) {
+    return Text(
+      "Daten Eingeben",
+      style: TextStyle(
+        fontSize: 40,
+        color: Colors.white.withOpacity(0.2),
+      ),
+    );
+  }
+}
+
+class _Data extends StatelessWidget {
+  const _Data({
+    required this.tod,
+    required this.factorizedTod,
+    required this.availTod,
+    required this.isSmallSize,
+  });
+
+  final int tod;
+  final int factorizedTod;
+  final int availTod;
+  final bool isSmallSize;
+
+  @override
+  Widget build(BuildContext context) {
+    var theme = Theme.of(context).extensions[ULPTTheme]! as ULPTTheme;
+
+    var remainTod = availTod - factorizedTod;
+    var remainTodUnfactored = availTod - tod;
+    double fontSize = isSmallSize ? 16 : 20;
+    double arrowSize = isSmallSize ? 20 : 40;
+
+    if(isSmallSize){
+
+      return ULPTTabPage(
+        theme: theme.tabPageTheme,
+        widgets: [
+          Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              Text(
+                "Verfügbare Startdistanz: ${availTod}m",
+                style: TextStyle(
+                  fontSize: fontSize,
+                  color: remainTod >= 0 ? theme.interactiveHintTextColor : Colors.redAccent,
+                ),
+              ),
+              const SizedBox(height: 16,),
+              Text(
+                "Startstrecke mit Aufschlag: ${factorizedTod}m",
+                style: TextStyle(
+                    color: remainTod >= 0 ? Colors.green : Colors.redAccent,
+                    fontSize: fontSize,
+                ),
+              ),
+              const SizedBox(height: 4,),
+              Icon(
+                Icons.arrow_downward_rounded,
+                size: arrowSize, color: remainTod >= 0 ? Colors.green : Colors.redAccent,
+              ),
+              Text(
+                "Verbleibende Pistenlänge: ${remainTod}m",
+                style: TextStyle(
+                    color: remainTod >= 0 ? Colors.green : Colors.redAccent,
+                    fontSize: fontSize,
+                ),
+              )
+            ],
+          ),
+          Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              Text(
+                "Verfügbare Startdistanz: ${availTod}m",
+                style: TextStyle(
+                  fontSize: fontSize,
+                  color: remainTodUnfactored >= 0 ? theme.interactiveHintTextColor : Colors.redAccent,
+                ),
+              ),
+              const SizedBox(height: 16,),
+              Text(
+                "Startstrecke ohne Aufschlag: ${tod}m",
+                style: TextStyle(
+                    color: remainTodUnfactored >= 0 ? theme.interactiveHintTextColor : Colors.redAccent,
+                    fontSize: fontSize,
+                ),
+              ),
+              const SizedBox(height: 4,),
+              Icon(
+                Icons.arrow_downward_rounded,
+                size: arrowSize,
+                color: remainTodUnfactored >= 0 ? theme.interactiveHintTextColor : Colors.redAccent,
+              ),
+              Text(
+                "Verbleibende Pistenlänge: ${remainTodUnfactored}m",
+                style: TextStyle(
+                    color: remainTodUnfactored >= 0 ? theme.interactiveHintTextColor : Colors.redAccent,
+                    fontSize: fontSize,
+                ),
+              )
+            ],
+          ),
+        ],
+      );
+
+    }
+
+    return ULPTTabPage(
+        theme: theme.tabPageTheme,
+        widgets: [
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: [
+              Text(
+                "Verfügbare Startdistanz: ${availTod}m",
+                style: TextStyle(
+                  fontSize: fontSize,
+                  color: remainTod >= 0 ? theme.interactiveHintTextColor : Colors.redAccent,
+                ),
+              ),
+              Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Text(
+                    "Startstrecke mit Aufschlag: ${factorizedTod}m",
+                    style: TextStyle(
+                        color: remainTod >= 0 ? Colors.green : Colors.redAccent,
+                        fontSize: fontSize,
+                    ),
+                  ),
+                  const SizedBox(height: 4,),
+                  Icon(
+                    Icons.arrow_downward_rounded,
+                    size: arrowSize, color: remainTod >= 0 ? Colors.green : Colors.redAccent,
+                  ),
+                  Text(
+                    "Verbleibende Pistenlänge: ${remainTod}m",
+                    style: TextStyle(
+                        color: remainTod >= 0 ? Colors.green : Colors.redAccent,
+                        fontSize: fontSize,
+                    ),
+                  )
+                ],
+              ),
+            ],
+          ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: [
+              Text(
+                "Verfügbare Startdistanz: ${availTod}m",
+                style: TextStyle(
+                  fontSize: fontSize,
+                  color: remainTodUnfactored >= 0 ? theme.interactiveHintTextColor : Colors.redAccent,
+                ),
+              ),
+              Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Text(
+                    "Startstrecke ohne Aufschlag: ${tod}m",
+                    style: TextStyle(
+                        color: remainTodUnfactored >= 0 ? theme.interactiveHintTextColor : Colors.redAccent,
+                        fontSize: fontSize,
+                    ),
+                  ),
+                  const SizedBox(height: 4,),
+                  Icon(
+                    Icons.arrow_downward_rounded,
+                    size: arrowSize,
+                    color: remainTodUnfactored >= 0 ? theme.interactiveHintTextColor : Colors.redAccent,
+                  ),
+                  Text(
+                    "Verbleibende Pistenlänge: ${remainTodUnfactored}m",
+                    style: TextStyle(
+                        color: remainTodUnfactored >= 0 ? theme.interactiveHintTextColor : Colors.redAccent,
+                        fontSize: fontSize,
+                    ),
+                  )
+                ],
+              ),
+            ],
+          ),
+        ],
+    );
+  }
+}
+
+

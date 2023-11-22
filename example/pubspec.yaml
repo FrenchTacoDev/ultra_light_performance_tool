@@ -1,0 +1,28 @@
+name: ulpt_example
+description: Example application for "ultra_light_performance_tool" package
+version: 1.0.0+1
+publish_to: none
+
+environment:
+  sdk: '>=3.1.5 <4.0.0'
+
+dependencies:
+  flutter:
+    sdk: flutter
+  cupertino_icons: ^1.0.2
+
+  #Make sure to download not only the example but also the package to run the example app!
+  ultra_light_performance_tool:
+    path: ../
+
+  sqflite: ^2.3.0
+  sqflite_common_ffi: ^2.3.0
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^2.0.0
+
+flutter:
+
+  uses-material-design: true
