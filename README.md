@@ -36,6 +36,9 @@ void main() {
 
 ## Additional information
 
+Currently the app is only in German as testing is done with selected testers.
+If you like to be part of the testing team, please leave a message.
+
 ULPT is meant to be an open source / free to use prodcut.
 It will be published free of charge to the respective stores.
 
