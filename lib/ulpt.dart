@@ -1,6 +1,7 @@
 library ulpt;
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ultra_light_performance_tool/src/core/core.dart';
 import 'src/aircraft/aircraft.dart';
@@ -45,6 +46,7 @@ class MainPage extends StatelessWidget {
     return SafeArea(
         child: Scaffold(
           appBar: AppBar(
+            systemOverlayStyle: SystemUiOverlayStyle.dark,
             centerTitle: true,
             title: const Text("Ultra Light Performance Tool"),
             actions: const [
