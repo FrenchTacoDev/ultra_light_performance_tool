@@ -61,6 +61,7 @@ ULPTTheme _darkULPTTheme = ULPTTheme(
 );
 
 final darkTheme = ThemeData(
+  useMaterial3: false,
   appBarTheme: AppBarTheme(
     color: _darkULPTTheme.baseColor,
   ),
