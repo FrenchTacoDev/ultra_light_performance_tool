@@ -67,8 +67,8 @@ class ULPTTextField extends StatelessWidget {
   }
 
   TextInputType? _getMatchingKeyboard({required bool isNumbersOnly}){
-    if(Platform.isIOS || isNumbersOnly) return TextInputType.datetime;
-    if(Platform.isAndroid || isNumbersOnly) return TextInputType.number;
-    return null;
+    if(Platform.isIOS && isNumbersOnly) return TextInputType.datetime;
+    if(Platform.isAndroid && isNumbersOnly) return TextInputType.number;
+    return TextInputType.text;
   }
 }
