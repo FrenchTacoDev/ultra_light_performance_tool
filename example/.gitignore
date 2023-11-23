@@ -31,6 +31,7 @@ migrate_working_dir/
 .pub-cache/
 .pub/
 /build/
+/pubspec.lock
 
 # Symbolication related
 app.*.symbols
@@ -42,3 +43,15 @@ app.*.map.json
 /android/app/debug
 /android/app/profile
 /android/app/release
+
+#ios
+/ios/Flutter
+/ios/Podfile.lock
+/ios/Runner.xcodeproj
+/ios/Runner.xcworkspace
+
+#macos
+/macos/DerivedData
+/macos/Flutter/
+/macos/Podfile.lock
+/macos/Flutter/Flutter-Debug.xcconfig
