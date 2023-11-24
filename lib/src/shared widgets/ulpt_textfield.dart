@@ -15,6 +15,7 @@ class ULPTTextField extends StatelessWidget {
     this.enabled,
     this.alignRight = false,
     this.isOnlyNumbers = false,
+    this.isLastInFocusGroup = false,
   });
 
   final FocusNode focusNode;
@@ -24,6 +25,7 @@ class ULPTTextField extends StatelessWidget {
   final bool? enabled;
   final bool alignRight;
   final bool isOnlyNumbers;
+  final bool isLastInFocusGroup;
 
   @override
   Widget build(BuildContext context) {
@@ -46,6 +48,7 @@ class ULPTTextField extends StatelessWidget {
         controller: tec,
         autocorrect: false,
         enableSuggestions: false,
+        textInputAction: isLastInFocusGroup ? TextInputAction.done : TextInputAction.next,
         keyboardType: _getMatchingKeyboard(isNumbersOnly: isOnlyNumbers),
         decoration: InputDecoration(
           hintText: hintText,
