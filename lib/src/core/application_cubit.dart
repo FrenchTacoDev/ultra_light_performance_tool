@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ultra_light_performance_tool/src/aircraft/aircraft.dart';
 import 'package:ultra_light_performance_tool/src/airports/airports.dart';
+import 'package:ultra_light_performance_tool/src/core/settings/settings.dart';
 import 'package:ultra_light_performance_tool/src/database/savemanager.dart';
 import 'package:ultra_light_performance_tool/src/performance%20calculation/views/perf_calculation_panel.dart';
 import 'package:ultra_light_performance_tool/src/res/themes.dart';
@@ -57,6 +58,18 @@ class ApplicationCubit extends Cubit<ApplicationState>{
         context,
         MaterialPageRoute(
             builder: (context) => const AirportManagePanel(),
+        )
+    );
+
+    emit(state.copyWith());
+  }
+
+  ///Will open a [SettingsPanel] to change the app settings
+  Future<void> openSettings({required BuildContext context}) async{
+    await Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => const SettingsPanel(),
         )
     );
 

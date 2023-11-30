@@ -76,7 +76,6 @@ class PerformanceCalculator{
     var tod = rawTod * slopeFactor * pressureFactor * tempFactor * windFactor * undergroundFactor
         * sodDamagedFactor * highGrassFactor * contaminationFactor * 1.1;
 
-    //print("$rawTod * $slopeFactor * $pressureFactor * $tempFactor * $windFactor * $undergroundFactor * $sodDamagedFactor * $highGrassFactor * $contaminationFactor * 1.1");
     return tod;
   }
 
@@ -98,5 +97,53 @@ class PerformanceCalculator{
     if(angularDiff % 360 == 180) return 180;
     if(angularDiff % 360 <= 180) return angularDiff % 180;
     return (wind.direction - runway.direction) % 180;
+  }
+}
+
+///Used to bundle all correction values for the performance calculation
+class Corrections{
+
+  Corrections();
+
+  ///Per 10 kts
+  double headWindFactor = 1.1;
+  ///Per 10 kts
+  double tailWindFactor = 1.5;
+
+  double grassFactorFirm = 1.2;
+  double grassFactorWet = 1.3;
+  double grassFactorSoftened = 2.0;
+
+  double sodDamagedFactor = 1.1;
+  double highGrassFactor = 1.2;
+
+  double conditionFactorWet = 1.0;
+  double conditionFactorStandingWater = 1.3;
+
+  double conditionFactorDrySnow = 1.25;
+  double conditionFactorSlush = 1.3;
+  double conditionFactorWetSnow = 1.5;
+
+  Corrections copy(){
+    var cor = Corrections();
+
+    cor.headWindFactor = headWindFactor;
+    cor.tailWindFactor = tailWindFactor;
+
+    cor.grassFactorFirm = grassFactorFirm;
+    cor.grassFactorWet = grassFactorWet;
+    cor.grassFactorSoftened = grassFactorSoftened;
+
+    cor.sodDamagedFactor = sodDamagedFactor;
+    cor.highGrassFactor = highGrassFactor;
+
+    cor.conditionFactorWet = conditionFactorWet;
+    cor.conditionFactorStandingWater = conditionFactorStandingWater;
+
+    cor.conditionFactorDrySnow = conditionFactorDrySnow;
+    cor.conditionFactorSlush = conditionFactorSlush;
+    cor.conditionFactorWetSnow = conditionFactorWetSnow;
+
+    return cor;
   }
 }
