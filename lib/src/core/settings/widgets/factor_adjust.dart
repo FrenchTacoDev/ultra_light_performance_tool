@@ -23,6 +23,18 @@ class FactorAdjustPanel extends StatelessWidget {
                   leading: BackButton(onPressed: (){
                     Navigator.pop(context, state.corrections);
                   }),
+                  actions: [
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 16),
+                      child: Tooltip(
+                        message: "Zurücksetzen",
+                        child: IconButton(
+                            onPressed: () => context.read<FactorAdjustCubit>().reset(),
+                            icon: const Icon(Icons.restart_alt_outlined),
+                        ),
+                      ),
+                    ),
+                  ],
                   title: const Text("Faktoren Anpassen"),
                 ),
                 body: Padding(

@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter_test/flutter_test.dart';
 import 'package:ultra_light_performance_tool/src/airports/airports.dart';
+import 'package:ultra_light_performance_tool/src/core/settings/settings.dart';
 import 'package:ultra_light_performance_tool/src/performance%20calculation/calculations.dart';
 
 void main() {
@@ -31,6 +32,14 @@ void main() {
     var map = jsonDecode(json);
     var deserialized = Corrections.deserialize(map: map);
     expect(deserialized, testCorrection);
+  });
+
+  test("Serialize Settings", (){
+    var serialized = testSetting.serialize();
+    var json = jsonEncode(serialized);
+    var map = jsonDecode(json);
+    var deserialized = Settings.deserialize(map: map);
+    expect(deserialized, testSetting);
   });
 }
 
@@ -62,6 +71,8 @@ Airport testPort = Airport(
     runways: [runway, runway2],
     elevation: 1045,
 );
+
+Settings testSetting = Settings()..corrections = testCorrection;
 
 Corrections testCorrection = Corrections()
     ..headWindFactor = 1.1

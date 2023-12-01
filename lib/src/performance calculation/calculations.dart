@@ -1,5 +1,5 @@
 import 'dart:math';
-import '../airports/airports.dart';
+import 'package:ultra_light_performance_tool/src/airports/airports.dart';
 
 typedef Wind = ({int direction, int speed});
 
@@ -101,21 +101,21 @@ class PerformanceCalculator{
 }
 
 //json keys for Corrections
-const hwFieldValue = "headwindFac";
-const twFieldValue = "tailwindFac";
+const _hwFieldValue = "headwindFac";
+const _twFieldValue = "tailwindFac";
 
-const grassFirmFieldValue = "grassFirmFac";
-const grassWetFieldValue = "grassWetFac";
-const grassSoftFieldValue = "grassSoftFac";
+const _grassFirmFieldValue = "grassFirmFac";
+const _grassWetFieldValue = "grassWetFac";
+const _grassSoftFieldValue = "grassSoftFac";
 
-const sodDamagedFieldValue = "sodDamagedFac";
-const highGrassFieldValue = "highGrassFac";
+const _sodDamagedFieldValue = "sodDamagedFac";
+const _highGrassFieldValue = "highGrassFac";
 
-const condWetFieldValue = "wetFac";
-const condStandWaterFieldValue = "standingWaterFac";
-const condDrySnowFieldValue = "drySnowFac";
-const condSlushFieldValue = "slushFac";
-const condWetSnowFieldValue = "wetSnowFac";
+const _condWetFieldValue = "wetFac";
+const _condStandWaterFieldValue = "standingWaterFac";
+const _condDrySnowFieldValue = "drySnowFac";
+const _condSlushFieldValue = "slushFac";
+const _condWetSnowFieldValue = "wetSnowFac";
 
 ///Used to bundle all correction values for the performance calculation
 class Corrections{
@@ -167,21 +167,21 @@ class Corrections{
   ///transform class into json representation
   Map<String, dynamic> serialize(){
     return {
-      hwFieldValue : headWindFactor,
-      twFieldValue : tailWindFactor,
+      _hwFieldValue : headWindFactor,
+      _twFieldValue : tailWindFactor,
 
-      grassFirmFieldValue : grassFactorFirm,
-      grassWetFieldValue : grassFactorWet,
-      grassSoftFieldValue : grassFactorSoftened,
+      _grassFirmFieldValue : grassFactorFirm,
+      _grassWetFieldValue : grassFactorWet,
+      _grassSoftFieldValue : grassFactorSoftened,
 
-      sodDamagedFieldValue : sodDamagedFactor,
-      highGrassFieldValue : highGrassFactor,
+      _sodDamagedFieldValue : sodDamagedFactor,
+      _highGrassFieldValue : highGrassFactor,
 
-      condWetFieldValue : conditionFactorWet,
-      condStandWaterFieldValue : conditionFactorStandingWater,
-      condDrySnowFieldValue : conditionFactorDrySnow,
-      condSlushFieldValue : conditionFactorSlush,
-      condWetSnowFieldValue : conditionFactorWetSnow,
+      _condWetFieldValue : conditionFactorWet,
+      _condStandWaterFieldValue : conditionFactorStandingWater,
+      _condDrySnowFieldValue : conditionFactorDrySnow,
+      _condSlushFieldValue : conditionFactorSlush,
+      _condWetSnowFieldValue : conditionFactorWetSnow,
     };
   }
 
@@ -189,22 +189,22 @@ class Corrections{
   factory Corrections.deserialize({required Map<String, dynamic> map}){
     var cor = Corrections();
 
-    cor.headWindFactor = map[hwFieldValue] ?? cor.headWindFactor;
-    cor.tailWindFactor = map[twFieldValue] ?? cor.tailWindFactor;
+    cor.headWindFactor = map[_hwFieldValue] ?? cor.headWindFactor;
+    cor.tailWindFactor = map[_twFieldValue] ?? cor.tailWindFactor;
 
-    cor.grassFactorFirm = map[grassFirmFieldValue] ?? cor.grassFactorFirm;
-    cor.grassFactorWet = map[grassWetFieldValue] ?? cor.grassFactorWet;
-    cor.grassFactorSoftened = map[grassSoftFieldValue] ?? cor.grassFactorSoftened;
+    cor.grassFactorFirm = map[_grassFirmFieldValue] ?? cor.grassFactorFirm;
+    cor.grassFactorWet = map[_grassWetFieldValue] ?? cor.grassFactorWet;
+    cor.grassFactorSoftened = map[_grassSoftFieldValue] ?? cor.grassFactorSoftened;
 
-    cor.sodDamagedFactor = map[sodDamagedFieldValue] ?? cor.sodDamagedFactor;
-    cor.highGrassFactor = map[highGrassFieldValue] ?? cor.highGrassFactor;
+    cor.sodDamagedFactor = map[_sodDamagedFieldValue] ?? cor.sodDamagedFactor;
+    cor.highGrassFactor = map[_highGrassFieldValue] ?? cor.highGrassFactor;
 
-    cor.conditionFactorWet = map[condWetFieldValue] ?? cor.conditionFactorWet;
-    cor.conditionFactorStandingWater = map[condStandWaterFieldValue] ?? cor.conditionFactorStandingWater;
+    cor.conditionFactorWet = map[_condWetFieldValue] ?? cor.conditionFactorWet;
+    cor.conditionFactorStandingWater = map[_condStandWaterFieldValue] ?? cor.conditionFactorStandingWater;
 
-    cor.conditionFactorDrySnow = map[condDrySnowFieldValue] ?? cor.conditionFactorDrySnow;
-    cor.conditionFactorSlush = map[condSlushFieldValue] ?? cor.conditionFactorSlush;
-    cor.conditionFactorWetSnow = map[condWetSnowFieldValue] ?? cor.conditionFactorWetSnow;
+    cor.conditionFactorDrySnow = map[_condDrySnowFieldValue] ?? cor.conditionFactorDrySnow;
+    cor.conditionFactorSlush = map[_condSlushFieldValue] ?? cor.conditionFactorSlush;
+    cor.conditionFactorWetSnow = map[_condWetSnowFieldValue] ?? cor.conditionFactorWetSnow;
 
     return cor;
   }
