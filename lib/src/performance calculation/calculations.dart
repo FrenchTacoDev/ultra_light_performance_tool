@@ -100,6 +100,23 @@ class PerformanceCalculator{
   }
 }
 
+//json keys for Corrections
+const hwFieldValue = "headwindFac";
+const twFieldValue = "tailwindFac";
+
+const grassFirmFieldValue = "grassFirmFac";
+const grassWetFieldValue = "grassWetFac";
+const grassSoftFieldValue = "grassSoftFac";
+
+const sodDamagedFieldValue = "sodDamagedFac";
+const highGrassFieldValue = "highGrassFac";
+
+const condWetFieldValue = "wetFac";
+const condStandWaterFieldValue = "standingWaterFac";
+const condDrySnowFieldValue = "drySnowFac";
+const condSlushFieldValue = "slushFac";
+const condWetSnowFieldValue = "wetSnowFac";
+
 ///Used to bundle all correction values for the performance calculation
 class Corrections{
 
@@ -146,4 +163,74 @@ class Corrections{
 
     return cor;
   }
+
+  ///transform class into json representation
+  Map<String, dynamic> serialize(){
+    return {
+      hwFieldValue : headWindFactor,
+      twFieldValue : tailWindFactor,
+
+      grassFirmFieldValue : grassFactorFirm,
+      grassWetFieldValue : grassFactorWet,
+      grassSoftFieldValue : grassFactorSoftened,
+
+      sodDamagedFieldValue : sodDamagedFactor,
+      highGrassFieldValue : highGrassFactor,
+
+      condWetFieldValue : conditionFactorWet,
+      condStandWaterFieldValue : conditionFactorStandingWater,
+      condDrySnowFieldValue : conditionFactorDrySnow,
+      condSlushFieldValue : conditionFactorSlush,
+      condWetSnowFieldValue : conditionFactorWetSnow,
+    };
+  }
+
+  ///transform json representation into dart class
+  factory Corrections.deserialize({required Map<String, dynamic> map}){
+    var cor = Corrections();
+
+    cor.headWindFactor = map[hwFieldValue] ?? cor.headWindFactor;
+    cor.tailWindFactor = map[twFieldValue] ?? cor.tailWindFactor;
+
+    cor.grassFactorFirm = map[grassFirmFieldValue] ?? cor.grassFactorFirm;
+    cor.grassFactorWet = map[grassWetFieldValue] ?? cor.grassFactorWet;
+    cor.grassFactorSoftened = map[grassSoftFieldValue] ?? cor.grassFactorSoftened;
+
+    cor.sodDamagedFactor = map[sodDamagedFieldValue] ?? cor.sodDamagedFactor;
+    cor.highGrassFactor = map[highGrassFieldValue] ?? cor.highGrassFactor;
+
+    cor.conditionFactorWet = map[condWetFieldValue] ?? cor.conditionFactorWet;
+    cor.conditionFactorStandingWater = map[condStandWaterFieldValue] ?? cor.conditionFactorStandingWater;
+
+    cor.conditionFactorDrySnow = map[condDrySnowFieldValue] ?? cor.conditionFactorDrySnow;
+    cor.conditionFactorSlush = map[condSlushFieldValue] ?? cor.conditionFactorSlush;
+    cor.conditionFactorWetSnow = map[condWetSnowFieldValue] ?? cor.conditionFactorWetSnow;
+
+    return cor;
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return other is Corrections
+        && other.headWindFactor == headWindFactor
+        && other.tailWindFactor == tailWindFactor
+        && other.grassFactorFirm == grassFactorFirm
+        && other.grassFactorWet == grassFactorWet
+        && other.grassFactorSoftened == grassFactorSoftened
+        && other.sodDamagedFactor == sodDamagedFactor
+        && other.highGrassFactor == highGrassFactor
+        && other.conditionFactorWet == conditionFactorWet
+        && other.conditionFactorStandingWater == conditionFactorStandingWater
+        && other.conditionFactorDrySnow == conditionFactorDrySnow
+        && other.conditionFactorSlush == conditionFactorSlush
+        && other.conditionFactorWetSnow == conditionFactorWetSnow;
+  }
+
+  @override
+  int get hashCode => Object.hash(
+      headWindFactor, tailWindFactor, grassFactorFirm,
+      grassFactorWet, grassFactorSoftened, sodDamagedFactor, highGrassFactor,
+      conditionFactorWet, conditionFactorStandingWater, conditionFactorDrySnow,
+      conditionFactorSlush, conditionFactorWetSnow
+  );
 }

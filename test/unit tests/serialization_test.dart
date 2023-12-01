@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter_test/flutter_test.dart';
 import 'package:ultra_light_performance_tool/src/airports/airports.dart';
+import 'package:ultra_light_performance_tool/src/performance%20calculation/calculations.dart';
 
 void main() {
   test('Serialize and deserialize Intersections', () async {
@@ -22,6 +23,14 @@ void main() {
   test("Serialize Airport", () async {
     var serialized = await testPort.serialize();
     expect(await Airport.deserialize(map: serialized), testPort);
+  });
+
+  test("Serialize Corrections", (){
+    var serialized = testCorrection.serialize();
+    var json = jsonEncode(serialized);
+    var map = jsonDecode(json);
+    var deserialized = Corrections.deserialize(map: map);
+    expect(deserialized, testCorrection);
   });
 }
 
@@ -53,3 +62,17 @@ Airport testPort = Airport(
     runways: [runway, runway2],
     elevation: 1045,
 );
+
+Corrections testCorrection = Corrections()
+    ..headWindFactor = 1.1
+    ..tailWindFactor = 1.2
+    ..grassFactorFirm = 1.3
+    ..grassFactorWet = 1.4
+    ..grassFactorSoftened = 1.5
+    ..sodDamagedFactor = 1.6
+    ..highGrassFactor = 1.7
+    ..conditionFactorWet = 1.8
+    ..conditionFactorStandingWater = 1.9
+    ..conditionFactorDrySnow = 2.0
+    ..conditionFactorSlush = 2.1
+    ..conditionFactorWetSnow = 2.2;
