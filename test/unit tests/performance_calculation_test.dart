@@ -1,10 +1,46 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:ultra_light_performance_tool/src/aircraft/aircraft.dart';
 import 'package:ultra_light_performance_tool/src/airports/airports.dart';
+import 'package:ultra_light_performance_tool/src/performance%20calculation/calculations.dart';
 
 void main(){
-  test('Test', () async {
+  test('Calculate TO Distance with default factors on asphalt runway', () async {
 
+    var calc = PerformanceCalculator(
+        corrections: Corrections(),
+        rawTod: kiebitz.todr,
+        runway: edfo.runways.first,
+        airport: edfo,
+        qnh: 1008,
+        temp: 5,
+        wind: (direction: 200, speed: 8),
+        underground: Underground.firm,
+        highGrass: false,
+        sodDamaged: false,
+        runwayCondition: RunwayCondition.dry
+    );
+
+    expect(calc.calculateUnfactored().ceil(), 371);
+
+    calc = PerformanceCalculator(
+        corrections: Corrections(),
+        rawTod: kiebitz.todr,
+        runway: edfo.runways[1],
+        airport: edfo,
+        qnh: 999,
+        temp: 33,
+        wind: (direction: 200, speed: 8),
+        underground: Underground.firm,
+        highGrass: false,
+        sodDamaged: false,
+        runwayCondition: RunwayCondition.wetSnow
+    );
+
+    expect(calc.calculateUnfactored().ceil(), 680);
+  });
+
+  test('Calculate TO Distance with default factors on grass runway', () async {
+    //Todo implement
   });
 }
 
