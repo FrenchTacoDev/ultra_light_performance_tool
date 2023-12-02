@@ -1,7 +1,9 @@
+import 'package:flutter/foundation.dart';
 import 'package:path/path.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:ultra_light_performance_tool/src/aircraft/aircraft.dart';
 import 'package:ultra_light_performance_tool/src/airports/airports.dart';
+import 'package:ultra_light_performance_tool/src/core/settings/settings.dart';
 import 'package:ultra_light_performance_tool/src/database/workqueue.dart';
 import 'package:sqflite/sqflite.dart' as sq;
 
@@ -13,13 +15,18 @@ class ULPTDB{
   static const String databaseName = "ULPT_Database.db";
   static const String acTableName = "Aircraft";
   static const String apTableName = "Airports";
+  static const String settingsTableName = "Settings";
 
+  ULPTDB({required this.currentDBVersion});
+
+  final int currentDBVersion;
   late final String dbPath;
   late DBWorkQueue workQueue;
   late sq.Database _db;
   bool isWorking = false;
 
   Future<void> setup() async{
+    _fillUpgradeList();
     dbPath = join((await getApplicationDocumentsDirectory()).path, "ULPT", databaseName);
     await _openDatabase();
     await _db.close();
@@ -36,12 +43,13 @@ class ULPTDB{
   }
 
   Future<void> _openDatabase() async{
-    _db = await sq.openDatabase(dbPath, version: 1, onCreate: _onDBCreate);
+    _db = await sq.openDatabase(dbPath, version: currentDBVersion, onCreate: _onDBCreate, onUpgrade: _onUpgrade);
   }
 
   Future<void> _onDBCreate(db, version) async{
     await _createAircraftTable(db);
     await _createAirportTable(db);
+    await _createSettingsTable(db);
   }
   
   Future<int> addToTable({required String table, required Map<String, dynamic> data}) async{
@@ -96,4 +104,37 @@ class ULPTDB{
             ' ${Airport.runwayFieldValue} TEXT)'
     );
   }
+
+  Future<void> _createSettingsTable(sq.Database db) async{
+    await db.execute(
+        'CREATE TABLE $settingsTableName '
+            '(id INTEGER PRIMARY KEY,'
+            ' ${Settings.correctionsFieldValue} TEXT)'
+    );
+  }
+
+  //region Upgrade
+  late final List<AsyncValueSetter<sq.Database>> _upgradeMethods;
+
+  void _fillUpgradeList(){
+    _upgradeMethods = [
+          (d) => _upgradeTo2(d),
+    ];
+  }
+
+  Future<void> _onUpgrade(sq.Database db, int oldV, int newV) async{
+    int currentV = oldV;
+    assert(currentV < currentDBVersion);
+
+    while(currentV != currentDBVersion){
+      await _upgradeMethods[currentV - 1](db);
+      currentV = await db.getVersion();
+    }
+  }
+
+  Future<void> _upgradeTo2(sq.Database d) async{
+    _createSettingsTable(d);
+    d.setVersion(2);
+  }
+  //endregion
 }

@@ -8,6 +8,7 @@ typedef Wind = ({int direction, int speed});
 ///Then call the [calculateUnfactored] function to get a result without safety margin.
 class PerformanceCalculator{
 
+  final Corrections corrections;
   final int rawTod;
   final Runway runway;
   final Airport airport;
@@ -20,6 +21,7 @@ class PerformanceCalculator{
   final RunwayCondition runwayCondition;
 
   const PerformanceCalculator({
+    required this.corrections,
     required this.rawTod,
     required this.runway,
     required this.airport,
@@ -34,6 +36,7 @@ class PerformanceCalculator{
 
   ///results in takeoff distance without safety margin!
   double calculateUnfactored(){
+    //Todo implement factors after calculation test was implemented
     var slopeFactor = (runway.slope / 10) + 1;
 
     var pa = 30 * (1013 - qnh) + airport.elevation;
@@ -137,9 +140,9 @@ class Corrections{
   double conditionFactorWet = 1.0;
   double conditionFactorStandingWater = 1.3;
 
-  double conditionFactorDrySnow = 1.25;
   double conditionFactorSlush = 1.3;
   double conditionFactorWetSnow = 1.5;
+  double conditionFactorDrySnow = 1.25;
 
   Corrections copy(){
     var cor = Corrections();
@@ -157,9 +160,9 @@ class Corrections{
     cor.conditionFactorWet = conditionFactorWet;
     cor.conditionFactorStandingWater = conditionFactorStandingWater;
 
-    cor.conditionFactorDrySnow = conditionFactorDrySnow;
     cor.conditionFactorSlush = conditionFactorSlush;
     cor.conditionFactorWetSnow = conditionFactorWetSnow;
+    cor.conditionFactorDrySnow = conditionFactorDrySnow;
 
     return cor;
   }
@@ -179,9 +182,10 @@ class Corrections{
 
       _condWetFieldValue : conditionFactorWet,
       _condStandWaterFieldValue : conditionFactorStandingWater,
-      _condDrySnowFieldValue : conditionFactorDrySnow,
       _condSlushFieldValue : conditionFactorSlush,
       _condWetSnowFieldValue : conditionFactorWetSnow,
+      _condDrySnowFieldValue : conditionFactorDrySnow,
+
     };
   }
 
@@ -202,9 +206,9 @@ class Corrections{
     cor.conditionFactorWet = map[_condWetFieldValue] ?? cor.conditionFactorWet;
     cor.conditionFactorStandingWater = map[_condStandWaterFieldValue] ?? cor.conditionFactorStandingWater;
 
-    cor.conditionFactorDrySnow = map[_condDrySnowFieldValue] ?? cor.conditionFactorDrySnow;
     cor.conditionFactorSlush = map[_condSlushFieldValue] ?? cor.conditionFactorSlush;
     cor.conditionFactorWetSnow = map[_condWetSnowFieldValue] ?? cor.conditionFactorWetSnow;
+    cor.conditionFactorDrySnow = map[_condDrySnowFieldValue] ?? cor.conditionFactorDrySnow;
 
     return cor;
   }
@@ -221,16 +225,16 @@ class Corrections{
         && other.highGrassFactor == highGrassFactor
         && other.conditionFactorWet == conditionFactorWet
         && other.conditionFactorStandingWater == conditionFactorStandingWater
-        && other.conditionFactorDrySnow == conditionFactorDrySnow
         && other.conditionFactorSlush == conditionFactorSlush
-        && other.conditionFactorWetSnow == conditionFactorWetSnow;
+        && other.conditionFactorWetSnow == conditionFactorWetSnow
+        && other.conditionFactorDrySnow == conditionFactorDrySnow;
   }
 
   @override
   int get hashCode => Object.hash(
       headWindFactor, tailWindFactor, grassFactorFirm,
       grassFactorWet, grassFactorSoftened, sodDamagedFactor, highGrassFactor,
-      conditionFactorWet, conditionFactorStandingWater, conditionFactorDrySnow,
-      conditionFactorSlush, conditionFactorWetSnow
+      conditionFactorWet, conditionFactorStandingWater,
+      conditionFactorSlush, conditionFactorWetSnow, conditionFactorDrySnow,
   );
 }

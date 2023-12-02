@@ -2,19 +2,21 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:ultra_light_performance_tool/src/core/settings/widgets/factor_adjust_field.dart';
 import 'package:ultra_light_performance_tool/src/performance%20calculation/calculations.dart';
+import 'factor_adjust_field.dart';
 
 ///Panel that is used by the user to adjust the factors for the performance calculation
 ///Should be made accessible on the settings page.
 class FactorAdjustPanel extends StatelessWidget {
-  const FactorAdjustPanel({super.key});
+  const FactorAdjustPanel({super.key, this.corrections});
+
+  final Corrections? corrections;
 
   @override
   Widget build(BuildContext context) {
     return SafeArea(
       child: BlocProvider<FactorAdjustCubit>(
-        create: (context) => FactorAdjustCubit(),
+        create: (context) => FactorAdjustCubit(corrections: corrections),
         child: BlocBuilder<FactorAdjustCubit, FactorAdjustState>(
           builder: (context, state) {
             return Scaffold(
