@@ -1,47 +1,50 @@
-//EDFO 26 elev	1143	hdg 260	toda 574 startelev	1113 endelev	1143 slope	1,593051
-//EDFO 08	elev 1143	hdg 080	toda 570	startelev 1143 endelev	1113	slope -1,6042
-
-//FK 9 Mk IV todr	230
+import 'package:flutter_test/flutter_test.dart';
 import 'package:ultra_light_performance_tool/src/aircraft/aircraft.dart';
 import 'package:ultra_light_performance_tool/src/airports/airports.dart';
+
+void main(){
+  test('Test', () async {
+
+  });
+}
 
 const Aircraft kiebitz = Aircraft(name: "Kiebitz", todr: 280);
 const Aircraft fk9 = Aircraft(name: "FK 9 MK IV", todr: 230);
 
 final Airport edfo = Airport(
-    name: "Michelstadt",
-    icao: "EDFO",
-    elevation: 1143,
-    runways: [
-        Runway(
-            designator: "26",
-            direction: 260,
-            surface: Surface.asphalt,
-            startElevation: 1113,
-            endElevation: 1143,
-            slope: 1.59,
-            intersections: [
-              const Intersection(
-                  designator: "Voll",
-                  toda: 574
-              )
-            ]
-        ),
-      Runway(
-          designator: "08",
-          direction: 80,
-          surface: Surface.asphalt,
-          startElevation: 1143,
-          endElevation: 1113,
-          slope: -1.59,
-          intersections: [
-            const Intersection(
-                designator: "Voll",
-                toda: 570
-            )
-          ]
-      ),
-      ],
+  name: "Michelstadt",
+  icao: "EDFO",
+  elevation: 1143,
+  runways: [
+    Runway(
+        designator: "26",
+        direction: 260,
+        surface: Surface.asphalt,
+        startElevation: 1113,
+        endElevation: 1143,
+        slope: 1.59,
+        intersections: [
+          const Intersection(
+              designator: "Voll",
+              toda: 574
+          )
+        ]
+    ),
+    Runway(
+        designator: "08",
+        direction: 80,
+        surface: Surface.asphalt,
+        startElevation: 1143,
+        endElevation: 1113,
+        slope: -1.59,
+        intersections: [
+          const Intersection(
+              designator: "Voll",
+              toda: 570
+          )
+        ]
+    ),
+  ],
 );
 
 final Airport edry = Airport(
