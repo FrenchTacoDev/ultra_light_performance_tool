@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ultra_light_performance_tool/src/aircraft/aircraft.dart';
 import 'package:ultra_light_performance_tool/src/airports/airports.dart';
+import 'package:ultra_light_performance_tool/src/core/core.dart';
 import 'package:ultra_light_performance_tool/src/performance calculation/calculations.dart';
 import 'package:ultra_light_performance_tool/src/performance%20calculation/views/widgets/not_enough_runway_dialog.dart';
 
@@ -228,6 +229,7 @@ class CalculationCubit extends Cubit<CalculationState>{
   void calculate({required BuildContext context}){
     var rawTod = aircraft.todr;
     var calc = PerformanceCalculator(
+        corrections: context.read<ApplicationCubit>().settings.corrections,
         rawTod: rawTod,
         runway: state.runway!,
         airport: state.airport!,

@@ -3,7 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:ultra_light_performance_tool/src/res/themes.dart';
 import 'package:ultra_light_performance_tool/src/shared%20widgets/ulpt_textfield.dart';
 
-///Text entry to add the QNH.
+///Text entry to add and adjust the safety factor.
 class SafetyFactorEntryField extends StatefulWidget {
   const SafetyFactorEntryField({
     Key? key,
@@ -117,7 +117,7 @@ class _SafetyFactorEntryFieldState extends State<SafetyFactorEntryField> {
               focusNode: focusNode,
               tec: tec,
               alignRight: true,
-              hintText: "Sicherheitsaufschlag in %",
+              hintText: "Aufschlag in %",
               inputFormatter: SFInputFormatter(maxValue: widget.maxValue),
               isOnlyNumbers: true,
           ),
@@ -159,7 +159,7 @@ class SFInputFormatter extends TextInputFormatter{
     if(newValue.text.length < oldValue.text.length) return newValue;
     var corrected = newValue.text.replaceAll(RegExp(r'[^0-9]'), "");
     var value = int.tryParse(corrected);
-    if(value != null && value > 1000) return oldValue;
+    if(value != null && value > maxValue) return oldValue;
     return newValue.copyWith(
         text: corrected,
         selection: TextSelection(baseOffset: corrected.length, extentOffset: corrected.length),
