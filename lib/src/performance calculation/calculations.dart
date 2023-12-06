@@ -34,9 +34,8 @@ class PerformanceCalculator{
     required this.runwayCondition,
   });
 
-  ///results in takeoff distance without safety margin!
+  ///Results in takeoff distance without safety margin!
   double calculateUnfactored(){
-    //Todo implement factors after calculation test was implemented
     var slopeFactor = (runway.slope / 10) + 1;
 
     var pa = 30 * (1013 - qnh) + airport.elevation;
@@ -48,9 +47,10 @@ class PerformanceCalculator{
     var tempFactor = deltaT >= 0 ? deltaT / 100 + 1 : 1 + deltaT / 100;
 
     var hwc = _getHeadwindComponent();
-    var hwCorrection = 10;
-    var twCorrection = 25;
-    var windFactor = hwc < 0 ? (hwc / 10).abs() * 2 * (twCorrection / 100) + 1 : 1 - (hwc / 10).abs() * (hwCorrection / 100);
+    var windFactor = hwc < 0 ? (hwc / 10).abs() * (corrections.tailWindFactor - 1) + 1 : 1 - (hwc / 10).abs() * (corrections.headWindFactor - 1);
+    windFactor = windFactor < 0 ? 0 : windFactor;
+    //Todo think about what makes sense when headwind is so strong that the tod is 0
+    //Either 0 => all becomes 0 or 0.1 or 0.01 for a very small number
 
     //Todo enums should resolve from maps especially when implementing custom factors later on
     var undergroundFactor = 1.0;
@@ -58,26 +58,34 @@ class PerformanceCalculator{
     var highGrassFactor = 1.0;
 
     if(runway.surface == Surface.grass){
-      if(underground == Underground.firm) undergroundFactor = 1.2;
-      if(underground == Underground.wet) undergroundFactor = 1.3;
-      if(underground == Underground.softened) undergroundFactor = 2.0;
+      if(underground == Underground.firm) undergroundFactor = corrections.grassFactorFirm;
+      if(underground == Underground.wet) undergroundFactor = corrections.grassFactorWet;
+      if(underground == Underground.softened) undergroundFactor = corrections.grassFactorSoftened;
 
-      if(sodDamaged == true) sodDamagedFactor = 1.1;
-      if(highGrass == true) highGrassFactor = 1.2;
+      if(sodDamaged == true) sodDamagedFactor = corrections.sodDamagedFactor;
+      if(highGrass == true) highGrassFactor = corrections.highGrassFactor;
     }
 
     var contaminationFactor = 1.0;
     if(runwayCondition == RunwayCondition.dry) contaminationFactor = 1.0;
-    if(runwayCondition == RunwayCondition.wet) contaminationFactor = 1.0;
+    if(runwayCondition == RunwayCondition.wet) contaminationFactor = corrections.conditionFactorWet;
 
-    if(runwayCondition == RunwayCondition.standingWater) contaminationFactor = 1.3;
-    if(runwayCondition == RunwayCondition.slush) contaminationFactor = 1.3;
+    if(runwayCondition == RunwayCondition.standingWater) contaminationFactor = corrections.conditionFactorStandingWater;
+    if(runwayCondition == RunwayCondition.slush) contaminationFactor = corrections.conditionFactorSlush;
 
-    if(runwayCondition == RunwayCondition.wetSnow) contaminationFactor = 1.5;
-    if(runwayCondition == RunwayCondition.drySnow) contaminationFactor = 1.25;
+    if(runwayCondition == RunwayCondition.wetSnow) contaminationFactor = corrections.conditionFactorWetSnow;
+    if(runwayCondition == RunwayCondition.drySnow) contaminationFactor = corrections.conditionFactorDrySnow;
 
     var tod = rawTod * slopeFactor * pressureFactor * tempFactor * windFactor * undergroundFactor
         * sodDamagedFactor * highGrassFactor * contaminationFactor * 1.1;
+
+
+    /*
+         print("rawTod: $rawTod, Slope: $slopeFactor, Pressure: $pressureFactor,"
+     "Temp: $tempFactor, Wind: $windFactor, "
+     "underGround: $undergroundFactor, sod: $sodDamagedFactor,"
+     "highGrass: $highGrassFactor, contam: $contaminationFactor, * 1.1");
+     */
 
     return tod;
   }

@@ -27,6 +27,22 @@ void main(){
         rawTod: kiebitz.todr,
         runway: edfo.runways[1],
         airport: edfo,
+        qnh: 990,
+        temp: -10,
+        wind: (direction: 100, speed: 28),
+        underground: Underground.firm,
+        highGrass: false,
+        sodDamaged: false,
+        runwayCondition: RunwayCondition.slush
+    );
+
+    expect(calc.calculateUnfactored().ceil(), 273);
+
+    calc = PerformanceCalculator(
+        corrections: Corrections(),
+        rawTod: kiebitz.todr,
+        runway: edfo.runways[1],
+        airport: edfo,
         qnh: 999,
         temp: 33,
         wind: (direction: 200, speed: 8),
@@ -36,13 +52,176 @@ void main(){
         runwayCondition: RunwayCondition.wetSnow
     );
 
-    expect(calc.calculateUnfactored().ceil(), 680);
+    expect(calc.calculateUnfactored().ceil(), 679);
   });
 
   test('Calculate TO Distance with default factors on grass runway', () async {
-    //Todo implement
+    var calc = PerformanceCalculator(
+        corrections: Corrections(),
+        rawTod: kiebitz.todr,
+        runway: edry.runways.first,
+        airport: edry,
+        qnh: 1008,
+        temp: 5,
+        wind: (direction: 200, speed: 8),
+        underground: Underground.firm,
+        highGrass: true,
+        sodDamaged: true,
+        runwayCondition: RunwayCondition.dry
+    );
+
+    expect(calc.calculateUnfactored().ceil(), 435);
+
+    calc = PerformanceCalculator(
+        corrections: Corrections(),
+        rawTod: kiebitz.todr,
+        runway: edry.runways[1],
+        airport: edry,
+        qnh: 990,
+        temp: -10,
+        wind: (direction: 100, speed: 28),
+        underground: Underground.softened,
+        highGrass: false,
+        sodDamaged: true,
+        runwayCondition: RunwayCondition.wetSnow
+    );
+
+    expect(calc.calculateUnfactored().ceil(), 1635);
+
+    calc = PerformanceCalculator(
+        corrections: Corrections(),
+        rawTod: kiebitz.todr,
+        runway: edry.runways[1],
+        airport: edry,
+        qnh: 999,
+        temp: 33,
+        wind: (direction: 200, speed: 8),
+        underground: Underground.softened,
+        highGrass: false,
+        sodDamaged: false,
+        runwayCondition: RunwayCondition.wet
+    );
+
+    expect(calc.calculateUnfactored().ceil(), 1043);
+  });
+
+  test('Calculate TO Distance with test factors on asphalt runway', () async {
+
+    var calc = PerformanceCalculator(
+        corrections: testCorrections,
+        rawTod: kiebitz.todr,
+        runway: edfo.runways.first,
+        airport: edfo,
+        qnh: 1008,
+        temp: 5,
+        wind: (direction: 200, speed: 8),
+        underground: Underground.firm,
+        highGrass: false,
+        sodDamaged: false,
+        runwayCondition: RunwayCondition.dry
+    );
+
+    expect(calc.calculateUnfactored().ceil(), 232);
+
+    calc = PerformanceCalculator(
+        corrections: testCorrections,
+        rawTod: kiebitz.todr,
+        runway: edfo.runways[1],
+        airport: edfo,
+        qnh: 990,
+        temp: -10,
+        wind: (direction: 100, speed: 28),
+        underground: Underground.firm,
+        highGrass: false,
+        sodDamaged: false,
+        runwayCondition: RunwayCondition.slush
+    );
+
+    expect(calc.calculateUnfactored().ceil(), 0);
+
+    calc = PerformanceCalculator(
+        corrections: testCorrections,
+        rawTod: kiebitz.todr,
+        runway: edfo.runways[1],
+        airport: edfo,
+        qnh: 999,
+        temp: 33,
+        wind: (direction: 200, speed: 8),
+        underground: Underground.firm,
+        highGrass: false,
+        sodDamaged: false,
+        runwayCondition: RunwayCondition.wetSnow
+    );
+
+    expect(calc.calculateUnfactored().ceil(), 1684);
+  });
+
+  test('Calculate TO Distance with test factors factors on grass runway', () async {
+    var calc = PerformanceCalculator(
+        corrections: testCorrections,
+        rawTod: kiebitz.todr,
+        runway: edry.runways.first,
+        airport: edry,
+        qnh: 1008,
+        temp: 5,
+        wind: (direction: 200, speed: 8),
+        underground: Underground.firm,
+        highGrass: true,
+        sodDamaged: true,
+        runwayCondition: RunwayCondition.dry
+    );
+
+    expect(calc.calculateUnfactored().ceil(), 1513);
+
+    calc = PerformanceCalculator(
+        corrections: testCorrections,
+        rawTod: kiebitz.todr,
+        runway: edry.runways[1],
+        airport: edry,
+        qnh: 990,
+        temp: -10,
+        wind: (direction: 100, speed: 28),
+        underground: Underground.softened,
+        highGrass: false,
+        sodDamaged: true,
+        runwayCondition: RunwayCondition.wetSnow
+    );
+
+    expect(calc.calculateUnfactored().ceil(), 14052);
+
+    calc = PerformanceCalculator(
+        corrections: testCorrections,
+        rawTod: kiebitz.todr,
+        runway: edry.runways[1],
+        airport: edry,
+        qnh: 999,
+        temp: 33,
+        wind: (direction: 200, speed: 8),
+        underground: Underground.softened,
+        highGrass: false,
+        sodDamaged: false,
+        runwayCondition: RunwayCondition.wet
+    );
+
+    expect(calc.calculateUnfactored().ceil(), 4358);
   });
 }
+
+final testCorrections = Corrections()
+  ..headWindFactor = 2.0
+  ..tailWindFactor = 2.1
+
+  ..grassFactorFirm = 2.2
+  ..grassFactorWet = 2.3
+  ..grassFactorSoftened = 2.4
+  ..highGrassFactor = 2.5
+  ..sodDamagedFactor = 2.6
+
+  ..conditionFactorWet = 2.7
+  ..conditionFactorStandingWater = 2.8
+  ..conditionFactorSlush = 2.9
+  ..conditionFactorDrySnow = 3.0
+  ..conditionFactorWetSnow = 3.1;
 
 const Aircraft kiebitz = Aircraft(name: "Kiebitz", todr: 280);
 const Aircraft fk9 = Aircraft(name: "FK 9 MK IV", todr: 230);
@@ -72,7 +251,7 @@ final Airport edfo = Airport(
         surface: Surface.asphalt,
         startElevation: 1143,
         endElevation: 1113,
-        slope: -1.59,
+        slope: -1.60,
         intersections: [
           const Intersection(
               designator: "Voll",
