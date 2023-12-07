@@ -242,7 +242,7 @@ class CalculationCubit extends Cubit<CalculationState>{
         runwayCondition: state.runwayCondition!
     );
 
-    emit(state.copyWith(rawTod: calc.calculateUnfactored().round()));
+    emit(state.copyWith(rawTod: calc.calculateUnfactored().ceil()));
 
     if(state.factorizedTod == null && state.intersection?.toda == null) return;
 
