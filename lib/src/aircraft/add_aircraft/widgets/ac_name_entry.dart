@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:ultra_light_performance_tool/src/core/core.dart';
 import 'package:ultra_light_performance_tool/src/shared widgets/ulpt_textfield.dart';
 
 ///Text entry to add aircraft name.
@@ -51,7 +52,7 @@ class _ACNameEntryState extends State<ACNameEntry>{
     return ULPTTextField(
       focusNode: focusNode,
       tec: tec,
-      hintText: "Name oder Registrierung des Luftfahrzeugs",
+      hintText: Localizer.of(context).addACNameHint,
     );
   }
 

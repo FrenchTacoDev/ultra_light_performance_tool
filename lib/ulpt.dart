@@ -18,20 +18,22 @@ class ULPT extends StatelessWidget {
       create: (context) => ApplicationCubit(),
       child: BlocBuilder<ApplicationCubit, ApplicationState>(
           builder: (context, state) {
-            return MaterialApp(
-              title: "ULPT",
-              theme: state.theme,
-              localizationsDelegates: const [
-                GlobalMaterialLocalizations.delegate,
-                GlobalWidgetsLocalizations.delegate,
-                GlobalCupertinoLocalizations.delegate,
-              ],
-              //Todo implement own loc solution with maps resolving to title: string (Map<Locale, Map<String, String>>)
-              supportedLocales: const [
-                Locale.fromSubtags(countryCode: "GB", languageCode: "en"),
-                Locale.fromSubtags(countryCode: "DE", languageCode: "de"),
-              ],
-              home: Localizer(child: MainPage(setupComplete: state.setupComplete)),
+            return Localizer(
+              child: MaterialApp(
+                title: "ULPT",
+                theme: state.theme,
+                localizationsDelegates: const [
+                  GlobalMaterialLocalizations.delegate,
+                  GlobalWidgetsLocalizations.delegate,
+                  GlobalCupertinoLocalizations.delegate,
+                ],
+                //Todo implement own loc solution with maps resolving to title: string (Map<Locale, Map<String, String>>)
+                supportedLocales: const [
+                  Locale.fromSubtags(countryCode: "GB", languageCode: "en"),
+                  Locale.fromSubtags(countryCode: "DE", languageCode: "de"),
+                ],
+                home: MainPage(setupComplete: state.setupComplete),
+              ),
             );
           },
       ),
