@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:ultra_light_performance_tool/src/core/application_cubit.dart';
+import 'package:ultra_light_performance_tool/src/core/core.dart';
 
 ///Menu for the Application
 ///[customMenuItems] can be added to expand on the menu and implement own behaviour.
@@ -27,21 +27,21 @@ class AppMenu extends StatelessWidget {
       itemBuilder: (context) => [
         PopupMenuItem(
             onTap: () => cubit.manageAirports(context: context),
-            child: const Row(
+            child: Row(
               children: [
-                Icon(Icons.flight_takeoff_outlined, size: 18),
-                SizedBox(width: 8,),
-                Text("Flugplätze verwalten"),
+                const Icon(Icons.flight_takeoff_outlined, size: 18),
+                const SizedBox(width: 8,),
+                Text(Localizer.of(context).menuAirports),
               ],
             )
         ),
         PopupMenuItem(
             onTap: () => cubit.openSettings(context: context),
-            child: const Row(
+            child: Row(
               children: [
-                Icon(Icons.settings_outlined, size: 18),
-                SizedBox(width: 8,),
-                Text("Einstellungen"),
+                const Icon(Icons.settings_outlined, size: 18),
+                const SizedBox(width: 8,),
+                Text(Localizer.of(context).menuSettings),
               ],
             )
         ),

@@ -10,6 +10,9 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
+  flutter_localizations:
+    sdk: flutter
+  intl: any
 
   flutter_bloc: ^8.1.2
   sqflite: ^2.3.0
@@ -26,6 +29,8 @@ dev_dependencies:
 # following page: https://dart.dev/tools/pub/pubspec
 
 # The following section is specific to Flutter packages.
+# Needed for localization code generation
+# Call flutter gen-l10n to generate localization file
 flutter:
 
   # To add assets to your package, add an assets section, like this:

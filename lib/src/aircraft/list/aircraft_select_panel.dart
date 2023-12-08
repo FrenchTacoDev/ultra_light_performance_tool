@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ultra_light_performance_tool/src/aircraft/aircraft.dart';
 import 'package:ultra_light_performance_tool/src/aircraft/list/BLoC/aircraft_select_bloc.dart';
+import 'package:ultra_light_performance_tool/src/core/core.dart';
 
 ///Class that contains all aircraft currently in the database to select, add, edit or delete.
 class AircraftSelectPanel extends StatelessWidget {
@@ -29,13 +30,13 @@ class AircraftSelectPanel extends StatelessWidget {
             builder: (context, snapshot) {
 
               if(snapshot.hasError) return _ErrorScreen(error: snapshot.error!,);
-              if(snapshot.hasData == false) return const _ErrorScreen(error: "No Aircraft found!");
+              if(snapshot.hasData == false) return _ErrorScreen(error: Localizer.of(context).acSelectError);
 
               return Column(
                 children: [
                   Divider(color: Colors.white.withOpacity(0.35), height: 0.5),
-                  const ListTile(
-                    title: Text("Luftfahrzeug Auswählen", textAlign: TextAlign.center),
+                  ListTile(
+                    title: Text(Localizer.of(context).acSelectTitle, textAlign: TextAlign.center),
                     titleAlignment: ListTileTitleAlignment.center,
                   ),
                   Divider(color: Colors.white.withOpacity(0.35), height: 0.5),
@@ -128,13 +129,13 @@ class _ACListTile extends StatelessWidget {
             Rect.fromLTWH(0, 0, overlay.paintBounds.size.width, overlay.paintBounds.size.height)
         ),
         items: [
-          const PopupMenuItem(
+          PopupMenuItem(
             value: 0,
-            child: Text("Bearbeiten"),
+            child: Text(Localizer.of(context).edit),
           ),
-          const PopupMenuItem(
+          PopupMenuItem(
             value: 1,
-            child: Text("Löschen"),
+            child: Text(Localizer.of(context).delete),
           ),
         ]
     );

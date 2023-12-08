@@ -3,9 +3,9 @@ library ulpt;
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:ultra_light_performance_tool/src/core/core.dart';
 import 'src/aircraft/aircraft.dart';
-
 
 ///This is the main entry point for the App.
 ///When creating your own version of ULPT, just plug this widget into Flutters [runApp] function.
@@ -21,7 +21,17 @@ class ULPT extends StatelessWidget {
             return MaterialApp(
               title: "ULPT",
               theme: state.theme,
-              home: MainPage(setupComplete: state.setupComplete),
+              localizationsDelegates: const [
+                GlobalMaterialLocalizations.delegate,
+                GlobalWidgetsLocalizations.delegate,
+                GlobalCupertinoLocalizations.delegate,
+              ],
+              //Todo implement own loc solution with maps resolving to title: string (Map<Locale, Map<String, String>>)
+              supportedLocales: const [
+                Locale.fromSubtags(countryCode: "GB", languageCode: "en"),
+                Locale.fromSubtags(countryCode: "DE", languageCode: "de"),
+              ],
+              home: Localizer(child: MainPage(setupComplete: state.setupComplete)),
             );
           },
       ),
