@@ -67,14 +67,14 @@ class SettingsPanel extends StatelessWidget {
               return Scaffold(
                   appBar: AppBar(
                     centerTitle: true,
-                    title: const Text("Einstellungen"),
+                    title: Text(Localizer.of(context).menuSettings),
                   ),
                   body: SingleChildScrollView(
                     child: Column(
                       children: [
                         ListTile(
-                          title: const Text("Faktoren Anpassen"),
-                          subtitle: const Text("Passen Sie die Faktoren für die Performance-Berechnung an."),
+                          title: Text(Localizer.of(context).facAdjustTitle),
+                          subtitle: Text(Localizer.of(context).facAdjustSubTitle),
                           onTap: () => context.read<_SettingsPanelCubit>().setCorrections(context: context),
                         ),
                         //Divider(color: Colors.white.withOpacity(0.35), height: 0.5),
@@ -103,7 +103,8 @@ class _SettingsPanelState{
 }
 
 class _SettingsPanelCubit extends Cubit<_SettingsPanelState>{
-  _SettingsPanelCubit({required this.appCubit, Settings? settings}) : super(_SettingsPanelState.initial(settings: settings ?? Settings()));
+  _SettingsPanelCubit({required this.appCubit, Settings? settings}) :
+        super(_SettingsPanelState.initial(settings: settings ?? Settings()));
 
   ApplicationCubit appCubit;
 

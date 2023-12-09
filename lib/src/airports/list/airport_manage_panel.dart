@@ -20,14 +20,14 @@ class AirportManagePanel extends StatelessWidget {
           builder: (context, state) => Scaffold(
             appBar: AppBar(
               centerTitle: true,
-              title: const Text("Flugplätze Verwalten"),
+              title: Text(Localizer.of(context).menuAirports),
             ),
             body: FutureBuilder<List<Airport>>(
               future: appCubit.airportManager.getAirports(),
               builder: (context, snapshot) {
 
                 if(snapshot.hasError) return _ErrorScreen(error: snapshot.error!,);
-                if(snapshot.hasData == false) return const _ErrorScreen(error: "No Airports found!");
+                if(snapshot.hasData == false) return _ErrorScreen(error: Localizer.of(context).apManageNotFound);
 
                 return Column(
                   children: [

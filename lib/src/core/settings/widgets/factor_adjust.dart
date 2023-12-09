@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:ultra_light_performance_tool/src/core/core.dart';
 import 'package:ultra_light_performance_tool/src/performance%20calculation/calculations.dart';
 import 'factor_adjust_field.dart';
 
@@ -29,7 +30,7 @@ class FactorAdjustPanel extends StatelessWidget {
                     Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 16),
                       child: Tooltip(
-                        message: "Zurücksetzen",
+                        message: Localizer.of(context).reset,
                         child: IconButton(
                             onPressed: () => context.read<FactorAdjustCubit>().reset(),
                             icon: const Icon(Icons.restart_alt_outlined),
@@ -37,7 +38,7 @@ class FactorAdjustPanel extends StatelessWidget {
                       ),
                     ),
                   ],
-                  title: const Text("Faktoren Anpassen"),
+                  title: Text(Localizer.of(context).facAdjustTitle),
                 ),
                 body: Padding(
                     padding: Platform.isIOS ? const EdgeInsets.fromLTRB(16, 16, 16, 24) :
@@ -50,92 +51,92 @@ class FactorAdjustPanel extends StatelessWidget {
                             padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
                             child: Column(
                               children: [
-                                const ListTile(
-                                  title: Text("Windeinfluss in %", textAlign: TextAlign.center),
+                                ListTile(
+                                  title: Text(Localizer.of(context).faWindTitle, textAlign: TextAlign.center),
                                   titleAlignment: ListTileTitleAlignment.center,
                                 ),
                                 Divider(color: Colors.white.withOpacity(0.35), height: 0.5),
                                 const SizedBox(height: 16),
                                 FactorAdjustField(
-                                  message: "Gegenwind pro 10kt (minus)",
+                                  message: Localizer.of(context).faHw,
                                   value: ((state.corrections.headWindFactor - 1) * 100).round(),
                                   onFactorSet: (value) => context.read<FactorAdjustCubit>().adjustHeadwindFactor(factor: value),
                                 ),
                                 const SizedBox(height: 16),
                                 FactorAdjustField(
-                                  message: "Rückenwind pro 10kt (plus)",
+                                  message: Localizer.of(context).faTw,
                                   value: ((state.corrections.tailWindFactor - 1) * 100).round(),
                                   onFactorSet: (value) => context.read<FactorAdjustCubit>().adjustTailwindFactor(factor: value),
                                 ),
                                 const SizedBox(height: 16),
-                                const ListTile(
-                                  title: Text("Korrektur Grasbahn in %", textAlign: TextAlign.center),
+                                ListTile(
+                                  title: Text(Localizer.of(context).faGrassTitle, textAlign: TextAlign.center),
                                   titleAlignment: ListTileTitleAlignment.center,
                                 ),
                                 Divider(color: Colors.white.withOpacity(0.35), height: 0.5),
                                 const SizedBox(height: 16),
                                 FactorAdjustField(
-                                  message: "Grasbahn: fest, trocken, eben (Bewuchs bis 3cm)",
+                                  message: Localizer.of(context).faGrassFirm,
                                   value: ((state.corrections.grassFactorFirm - 1) * 100).round(),
                                   onFactorSet: (value) => context.read<FactorAdjustCubit>().adjustGrassFirmFactor(factor: value),
                                 ),
                                 const SizedBox(height: 16),
                                 FactorAdjustField(
-                                  message: "Grasbahn: feucht",
+                                  message: Localizer.of(context).faGrassWet,
                                   value: ((state.corrections.grassFactorWet - 1) * 100).round(),
                                   onFactorSet: (value) => context.read<FactorAdjustCubit>().adjustGrassWetFactor(factor: value),
                                 ),
                                 const SizedBox(height: 16),
                                 FactorAdjustField(
-                                  message: "Grasbahn: aufgeweicht",
+                                  message: Localizer.of(context).faGrassSoftened,
                                   value: ((state.corrections.grassFactorSoftened - 1) * 100).round(),
                                   onFactorSet: (value) => context.read<FactorAdjustCubit>().adjustGrassSoftenedFactor(factor: value),
                                 ),
                                 const SizedBox(height: 16),
                                 FactorAdjustField(
-                                  message: "Grasnarbe beschädigt",
+                                  message: Localizer.of(context).faGrassSodDamaged,
                                   value: ((state.corrections.sodDamagedFactor - 1) * 100).round(),
                                   onFactorSet: (value) => context.read<FactorAdjustCubit>().adjustSodDamagedFactor(factor: value),
                                 ),
                                 const SizedBox(height: 16),
                                 FactorAdjustField(
-                                  message: "Hohes Gras (3-8cm)",
+                                  message: Localizer.of(context).faGrassSodDamaged,
                                   value: ((state.corrections.highGrassFactor - 1) * 100).round(),
                                   onFactorSet: (value) => context.read<FactorAdjustCubit>().adjustHighGrassFactor(factor: value),
                                 ),
                                 const SizedBox(height: 16),
-                                const ListTile(
-                                  title: Text("Korrektur Pistenzustand in %", textAlign: TextAlign.center),
+                                ListTile(
+                                  title: Text(Localizer.of(context).faConditionTitle, textAlign: TextAlign.center),
                                   titleAlignment: ListTileTitleAlignment.center,
                                 ),
                                 Divider(color: Colors.white.withOpacity(0.35), height: 0.5),
                                 const SizedBox(height: 16),
                                 FactorAdjustField(
-                                  message: "Nass",
+                                  message: Localizer.of(context).faConWet,
                                   value: ((state.corrections.conditionFactorWet - 1) * 100).round(),
                                   onFactorSet: (value) => context.read<FactorAdjustCubit>().adjustWetFactor(factor: value),
                                 ),
                                 const SizedBox(height: 16),
                                 FactorAdjustField(
-                                  message: "Stehendes Wasser",
+                                  message: Localizer.of(context).faConStandWater,
                                   value: ((state.corrections.conditionFactorStandingWater - 1) * 100).round(),
                                   onFactorSet: (value) => context.read<FactorAdjustCubit>().adjustStandingWaterFactor(factor: value),
                                 ),
                                 const SizedBox(height: 16),
                                 FactorAdjustField(
-                                  message: "Schneematsch (max 1cm)",
+                                  message: Localizer.of(context).faConSlush,
                                   value: ((state.corrections.conditionFactorSlush - 1) * 100).round(),
                                   onFactorSet: (value) => context.read<FactorAdjustCubit>().adjustSlushFactor(factor: value),
                                 ),
                                 const SizedBox(height: 16),
                                 FactorAdjustField(
-                                  message: "Normalfeuchter Schnee (max 5cm)",
+                                  message: Localizer.of(context).faConWetSnow,
                                   value: ((state.corrections.conditionFactorWetSnow - 1) * 100).round(),
                                   onFactorSet: (value) => context.read<FactorAdjustCubit>().adjustWetSnowFactor(factor: value),
                                 ),
                                 const SizedBox(height: 16),
                                 FactorAdjustField(
-                                  message: "Pulverschnee (max 8cm)",
+                                  message: Localizer.of(context).faConDrySnow,
                                   value: ((state.corrections.conditionFactorDrySnow - 1) * 100).round(),
                                   onFactorSet: (value) => context.read<FactorAdjustCubit>().adjustDrySnowFactor(factor: value),
                                   isLastInGroup: true,

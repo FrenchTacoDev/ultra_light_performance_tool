@@ -30,7 +30,7 @@ class AircraftSelectPanel extends StatelessWidget {
             builder: (context, snapshot) {
 
               if(snapshot.hasError) return _ErrorScreen(error: snapshot.error!,);
-              if(snapshot.hasData == false) return _ErrorScreen(error: Localizer.of(context).acSelectError);
+              if(snapshot.hasData == false) return _ErrorScreen(error: Localizer.of(context).acSelectNotFound);
 
               return Column(
                 children: [

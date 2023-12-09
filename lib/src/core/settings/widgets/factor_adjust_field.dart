@@ -104,7 +104,7 @@ class _FactorAdjustFieldState extends State<FactorAdjustField> {
                 focusNode: focusNode,
                 tec: tec,
                 alignRight: true,
-                hintText: "Faktor in %",
+                hintText: "",
                 inputFormatter: PFInputFormatter(),
                 isOnlyNumbers: true,
                 isLastInFocusGroup: widget.isLastInGroup,

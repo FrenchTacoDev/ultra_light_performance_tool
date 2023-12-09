@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ultra_light_performance_tool/src/airports/add%20airport/add_airport_page.dart';
 import 'package:ultra_light_performance_tool/src/airports/airports.dart';
+import 'package:ultra_light_performance_tool/src/core/core.dart';
 import 'package:ultra_light_performance_tool/src/shared%20widgets/ulpt_confirmation.dart';
 
 class AirportManageState{
@@ -49,8 +50,8 @@ class AirportManageCubit extends Cubit<AirportManageState>{
 
     var res = await ULPTConfirmation.show(
       context: context,
-      title: const Text(
-          "Flugplatz wiklich löschen?",
+      title: Text(
+          Localizer.of(context).apManageDeleteConfirm,
           textAlign: TextAlign.center
       ),
     );
