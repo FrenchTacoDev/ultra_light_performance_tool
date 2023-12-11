@@ -14,6 +14,14 @@ class DE extends Dictionary{
   String get save => "Speichern";
   @override
   String get reset => "Zurücksetzen";
+  @override
+  String get runway => "Piste";
+  @override
+  String get runways => "Pisten";
+  @override
+  String get full => "Voll";
+  @override
+  String get toda => "Verfügbare Startdistanz";
   //endregion
   //region Menu
   @override
@@ -83,5 +91,47 @@ class DE extends Dictionary{
   String get apManageDeleteConfirm => "Flugplatz wiklich löschen?";
   @override
   String get apManageNotFound => "Keine Flugplätze gefunden!";
+  //endregion
+  //region AddAP
+  @override
+  String get apAddTitle => "Flugplatz hinzufügen";
+  @override
+  String get apEditTitle => "Flugplatz bearbeiten";
+  @override
+  String get apNameHint => "Name des Flugplatzes";
+  @override
+  String get apElevHint => "Flugplatzhöhe";
+  @override
+  String get deleteRunwayConfirm => "Piste löschen?";
+  //endregion
+  //region AddRunway
+  @override
+  String get rwyAddTitle => "Piste hinzufügen";
+  @override
+  String get rwyEditTitle => "Piste bearbeiten";
+  @override
+  String get rwyNameHint => "Pistenbezeichnung";
+  @override
+  String get rwyDirHint => "Pistenausrichtung in Grad";
+  @override
+  String get rwySrfcDropdownHint => "Bahnbelag";
+  @override
+  String get rwyAsphalt => "Asphalt";
+  @override
+  String get rwyGrass => "Gras";
+  @override
+  String get rwyStartElevHint => "Pistenanfangshöhe";
+  @override
+  String get rwyEndElevHint => "Pistenendhöhe";
+  @override
+  String get rwySlopeHint => "Pistenneigung";
+  @override
+  String get rwyIntersectNameHint => "Pistenkreuzungsbezeichnung";
+  @override
+  String get rwyIntersectDelConfirm => "Pistenkreuzung löschen?";
+  @override
+  String get rwyCrsErrorTitle => "Ungültiger Kurs";
+  @override
+  String get rwyCrsErrorText => "Der Kurs muss zwischen 0 und 360° liegen!";
   //endregion
 }

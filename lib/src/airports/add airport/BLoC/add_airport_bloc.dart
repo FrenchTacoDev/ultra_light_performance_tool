@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ultra_light_performance_tool/src/airports/add%20runway/add_runway_page.dart';
 import 'package:ultra_light_performance_tool/src/airports/airports.dart';
+import 'package:ultra_light_performance_tool/src/core/core.dart';
 import 'package:ultra_light_performance_tool/src/shared%20widgets/ulpt_confirmation.dart';
 
 class AddAirportState{
@@ -102,8 +103,8 @@ class AddAirportCubit extends Cubit<AddAirportState>{
 
     var res = await ULPTConfirmation.show(
       context: context,
-      title: const Text(
-        "Piste löschen?",
+      title: Text(
+        Localizer.of(context).deleteRunwayConfirm,
         textAlign: TextAlign.center,
       ),
     );

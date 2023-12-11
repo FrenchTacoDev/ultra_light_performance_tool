@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:ultra_light_performance_tool/src/shared widgets/ulpt_textfield.dart';
+import 'package:ultra_light_performance_tool/src/localization/localizer.dart';
+
 
 ///Text entry to set runway course.
 class RunwayCourseEntry extends StatefulWidget {
@@ -75,7 +77,7 @@ class _RunwayCourseEntryState extends State<RunwayCourseEntry>{
       focusNode: focusNode,
       tec: tec,
       isOnlyNumbers: true,
-      hintText: "Pistenausrichtung in Grad",
+      hintText: Localizer.of(context).rwyDirHint,
       inputFormatter: _ElevFormatter(),
     );
   }
@@ -96,13 +98,13 @@ class _RunwayCourseEntryState extends State<RunwayCourseEntry>{
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
-        title: const Text("Ungültiger Kurs", textAlign: TextAlign.center,),
-        content: const Text("Der Kurs muss zwischen 0 und 360° liegen!", textAlign: TextAlign.center),
+        title: Text(Localizer.of(context).rwyCrsErrorTitle, textAlign: TextAlign.center,),
+        content: Text(Localizer.of(context).rwyCrsErrorText, textAlign: TextAlign.center),
         actionsAlignment: MainAxisAlignment.center,
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(context),
-            child: const Text("OK"),
+            child: Text(Localizer.of(context).ok),
           )
         ],
       ),

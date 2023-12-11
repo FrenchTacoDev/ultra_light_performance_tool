@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:ultra_light_performance_tool/src/shared widgets/ulpt_textfield.dart';
+import 'package:ultra_light_performance_tool/src/localization/localizer.dart';
 
 ///Text entry to add airport elevation.
 class ElevationEntry extends StatefulWidget {
@@ -70,7 +71,7 @@ class _ElevationEntryState extends State<ElevationEntry>{
       focusNode: focusNode,
       tec: tec,
       isOnlyNumbers: true,
-      hintText: "Flugplatzhöhe",
+      hintText: Localizer.of(context).apElevHint,
       inputFormatter: _ElevFormatter(),
     );
   }

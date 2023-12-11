@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:ultra_light_performance_tool/src/airports/airports.dart';
+import 'package:ultra_light_performance_tool/src/localization/localizer.dart';
 import 'package:ultra_light_performance_tool/src/shared%20widgets/ulpt_dropdown.dart';
 
 ///[ULPTDropdown] to handle the runway surface selection.
@@ -16,7 +17,8 @@ class RunwaySurfaceDropdown extends StatelessWidget {
     return ULPTDropdown<Surface>(
       value: value ?? Surface.asphalt,
       items: Surface.values,
-      hint: "Bahnbelag",
+      parseItem: (item) => item.toLocString(context),
+      hint: Localizer.of(context).rwySrfcDropdownHint,
       onChanged: onSurfaceChanged,
     );
   }

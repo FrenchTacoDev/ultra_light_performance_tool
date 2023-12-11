@@ -1,4 +1,6 @@
+import 'package:flutter/material.dart';
 import 'package:flutter/foundation.dart';
+import 'package:ultra_light_performance_tool/src/localization/localizer.dart';
 
 ///Data representation of Runway
 class Runway{
@@ -151,14 +153,12 @@ class Intersection{
 ///Currently only asphalt and grass
 enum Surface{
   asphalt, grass;
-
-  @override
-  toString() => _surfaceMap[this]!;
+  toLocString(BuildContext context) => _surfaceMap[this]!(context);
 }
 
-const _surfaceMap = <Surface, String>{
-  Surface.asphalt : "Asphalt",
-  Surface.grass : "Gras",
+final _surfaceMap = <Surface, String Function(BuildContext context)>{
+  Surface.asphalt : (context) => Localizer.of(context).rwyAsphalt,
+  Surface.grass : (context) => Localizer.of(context).rwyGrass,
 };
 
 ///How grass is conditioned in case of grass runways. Currently considered as

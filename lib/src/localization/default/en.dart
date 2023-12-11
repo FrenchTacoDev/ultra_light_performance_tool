@@ -3,10 +3,15 @@ abstract class Dictionary{
   //region General
   String get yes;
   String get no;
+  String get ok => "OK";
   String get edit;
   String get delete;
   String get save;
   String get reset;
+  String get runway;
+  String get runways;
+  String get full;
+  String get toda;
   //endregion
 
   //region Menu
@@ -55,6 +60,33 @@ abstract class Dictionary{
   String get apManageDeleteConfirm;
   String get apManageNotFound;
   //endregion
+
+  //region AddAP
+  String get apAddTitle;
+  String get apEditTitle;
+  String get apNameHint;
+  String get apIcaoHint => "ICAO Code";
+  String get apIataHint => "IATA Code";
+  String get apElevHint;
+  String get deleteRunwayConfirm;
+  //endregion
+
+  //region AddRunway
+  String get rwyAddTitle;
+  String get rwyEditTitle;
+  String get rwyNameHint;
+  String get rwyDirHint;
+  String get rwySrfcDropdownHint;
+  String get rwyAsphalt;
+  String get rwyGrass;
+  String get rwyStartElevHint;
+  String get rwyEndElevHint;
+  String get rwySlopeHint;
+  String get rwyIntersectNameHint;
+  String get rwyIntersectDelConfirm;
+  String get rwyCrsErrorTitle;
+  String get rwyCrsErrorText;
+  //endregion
 }
 
 class EN extends Dictionary{
@@ -71,6 +103,14 @@ class EN extends Dictionary{
   String get save => "Save";
   @override
   String get reset => "Reset";
+  @override
+  String get runway => "Runway";
+  @override
+  String get runways => "Runways";
+  @override
+  String get full => "Full";
+  @override
+  String get toda => "Takeoff Distance Available";
   //endregion
 
   //region Menu
@@ -141,5 +181,47 @@ class EN extends Dictionary{
   String get apManageDeleteConfirm => "Delete Airport?";
   @override
   String get apManageNotFound => "No Airports found!";
+  //endregion
+  //region AddAP
+  @override
+  String get apAddTitle => "Add Airport";
+  @override
+  String get apEditTitle => "Edit Airport";
+  @override
+  String get apNameHint => "Airport Name";
+  @override
+  String get apElevHint => "Airport Elevation";
+  @override
+  String get deleteRunwayConfirm => "Delete Runway?";
+  //endregion
+  //region AddRunway
+  @override
+  String get rwyAddTitle => "Add Runway";
+  @override
+  String get rwyEditTitle => "Edit Runway";
+  @override
+  String get rwyNameHint => "Runway Name";
+  @override
+  String get rwyDirHint => "Runway Direction";
+  @override
+  String get rwySrfcDropdownHint => "Runway Surface";
+  @override
+  String get rwyAsphalt => "Asphalt";
+  @override
+  String get rwyGrass => "Grass";
+  @override
+  String get rwyStartElevHint => "Runway Start Elevation";
+  @override
+  String get rwyEndElevHint => "Runway End Elevation";
+  @override
+  String get rwySlopeHint => "Runway Slope";
+  @override
+  String get rwyIntersectNameHint => "Intersection Name";
+  @override
+  String get rwyIntersectDelConfirm => "Delete Intersection?";
+  @override
+  String get rwyCrsErrorTitle => "Invalid Course";
+  @override
+  String get rwyCrsErrorText => "The course must be within 0 to 360 degrees!";
   //endregion
 }
