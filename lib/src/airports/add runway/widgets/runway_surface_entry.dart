@@ -18,6 +18,7 @@ class RunwaySurfaceDropdown extends StatelessWidget {
       value: value ?? Surface.asphalt,
       items: Surface.values,
       parseItem: (item) => item.toLocString(context),
+      fromString: (s) => Surface.values.where((element) => element.toLocString(context) == s).first,
       hint: Localizer.of(context).rwySrfcDropdownHint,
       onChanged: onSurfaceChanged,
     );

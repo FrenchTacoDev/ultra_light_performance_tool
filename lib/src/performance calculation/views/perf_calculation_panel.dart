@@ -7,6 +7,7 @@ import 'package:ultra_light_performance_tool/src/airports/airports.dart';
 import 'package:ultra_light_performance_tool/src/performance%20calculation/BLoC/calculation_bloc.dart';
 import 'package:ultra_light_performance_tool/src/shared%20widgets/ulpt_button.dart';
 import 'package:ultra_light_performance_tool/src/shared%20widgets/ulpt_min_size_scrollview.dart';
+import 'package:ultra_light_performance_tool/src/core/core.dart';
 import 'widgets/widgets.dart';
 
 class PerformanceCalculationPanel extends StatelessWidget {
@@ -217,7 +218,7 @@ class _ButtonComponent extends StatelessWidget {
           padding: const EdgeInsets.all(16),
           child: ULPTButton(
             onTap: () => cubit.calculate(context: context),
-            title: "BERECHNEN",
+            title: Localizer.of(context).pcCalc,
             enabled: cubit.canCalc,
           )
         ),

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:ultra_light_performance_tool/src/res/themes.dart';
+import 'package:ultra_light_performance_tool/src/localization/localizer.dart';
 
 ///Dialog to show if the calculation resulted in not enough runway to be left.
 class NotEnoughRunwayDialog extends StatelessWidget {
@@ -16,7 +17,6 @@ class NotEnoughRunwayDialog extends StatelessWidget {
         return NotEnoughRunwayDialog(factorizedNotEnough: factorized, overshoot: overshoot,);
       },
     );
-
   }
 
   final bool factorizedNotEnough;
@@ -33,8 +33,8 @@ class NotEnoughRunwayDialog extends StatelessWidget {
 
     return AlertDialog(
       title: Text(
-        factorizedNotEnough ? "Startdistanz mit Aufschlag nicht ausreichend.\n${overshoot}m mehr benötigt!" :
-        "Startdistanz nicht ausreichend.\n${overshoot}m mehr benötigt!",
+        factorizedNotEnough ? Localizer.of(context).pcNotEnoughRunwayMargin(overshoot)
+            : Localizer.of(context).pcNotEnoughRunway(overshoot),
         textAlign: TextAlign.center,
       ),
       actionsAlignment: MainAxisAlignment.center,
@@ -42,7 +42,7 @@ class NotEnoughRunwayDialog extends StatelessWidget {
         OutlinedButton(
           onPressed: () => Navigator.pop(context, true),
           style: buttonStyle,
-          child: Text("OK", style: textStyle,),
+          child: Text(Localizer.of(context).ok, style: textStyle,),
         ),
       ],
     );

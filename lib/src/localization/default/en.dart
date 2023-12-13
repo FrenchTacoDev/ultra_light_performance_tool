@@ -7,6 +7,8 @@ abstract class Dictionary{
   String get edit;
   String get delete;
   String get save;
+  String get enter;
+  String get select;
   String get reset;
   String get runway;
   String get runways;
@@ -14,6 +16,7 @@ abstract class Dictionary{
   String get toda;
   //endregion
 
+  //region Menu
   //region Menu
   String get menuAirports;
   String get menuSettings;
@@ -77,8 +80,6 @@ abstract class Dictionary{
   String get rwyNameHint;
   String get rwyDirHint;
   String get rwySrfcDropdownHint;
-  String get rwyAsphalt;
-  String get rwyGrass;
   String get rwyStartElevHint;
   String get rwyEndElevHint;
   String get rwySlopeHint;
@@ -86,6 +87,60 @@ abstract class Dictionary{
   String get rwyIntersectDelConfirm;
   String get rwyCrsErrorTitle;
   String get rwyCrsErrorText;
+  //endregion
+
+  //region Surface
+  String get rwyAsphalt;
+  String get rwyGrass;
+  //endregion
+
+  //region Underground
+  String get firm;
+  String get wet;
+  String get softened;
+  //endregion
+
+  //region RunwayCondition
+  String get condDry;
+  String get condWet;
+  String get condStandingWater;
+  String get condSlush;
+  String get condWetSnow;
+  String get condDrySnow;
+  //endregion
+
+  //region PerfCalc
+  String get pcCalc;
+  String get pcEnterData;
+  String get pcAPTitle;
+  String get pcRwyTitle;
+  String get pcIntersectTitle;
+  String get pcGrasCondTitle;
+  String get pcGrasCondHint;
+  String get pcSodDamaged;
+  String get pcHighGrass;
+  String get pcCondTitle;
+  String get pcTempTitle;
+  String get pcTempInvalidTitle;
+  String get pcTempTooHigh;
+  String get pcTempTooLow;
+  String get pcWindTitle;
+  String get pcWindErrorTitle;
+  String get pcWindFormatError;
+  String get pcWindDirError;
+  String get pcWindSpdError;
+  String get pcQnhTitle;
+  String get pcQnhError;
+  String get pcQnhTooHigh;
+  String get pcQnhTooLow;
+  String get pcMarginTitle;
+  String get pcMarginHint;
+  String get pcToda;
+  String get pcTod;
+  String get pcTodMargin;
+  String get pcRunwayRemain;
+  String pcNotEnoughRunway(int overshoot);
+  String pcNotEnoughRunwayMargin(int overshoot);
   //endregion
 }
 
@@ -101,6 +156,10 @@ class EN extends Dictionary{
   String get delete => "Delete";
   @override
   String get save => "Save";
+  @override
+  String get enter => "Enter";
+  @override
+  String get select => "Select";
   @override
   String get reset => "Reset";
   @override
@@ -206,10 +265,6 @@ class EN extends Dictionary{
   @override
   String get rwySrfcDropdownHint => "Runway Surface";
   @override
-  String get rwyAsphalt => "Asphalt";
-  @override
-  String get rwyGrass => "Grass";
-  @override
   String get rwyStartElevHint => "Runway Start Elevation";
   @override
   String get rwyEndElevHint => "Runway End Elevation";
@@ -223,5 +278,97 @@ class EN extends Dictionary{
   String get rwyCrsErrorTitle => "Invalid Course";
   @override
   String get rwyCrsErrorText => "The course must be within 0 to 360 degrees!";
+  //endregion
+  //region Surface
+  @override
+  String get rwyAsphalt => "Asphalt";
+  @override
+  String get rwyGrass => "Grass";
+  //endregion
+  //region Underground
+  @override
+  String get firm => "firm, dry, flat";
+  @override
+  String get wet => "wet";
+  @override
+  String get softened => "softened";
+  //endregion
+  //region RunwayCondition
+  @override
+  String get condDry => "Dry";
+  @override
+  String get condWet => "Wet";
+  @override
+  String get condStandingWater => "Standing Water";
+  @override
+  String get condSlush => "Slush";
+  @override
+  String get condWetSnow => "Wet Snow";
+  @override
+  String get condDrySnow => "Dry Snow";
+  //endregion
+  //region PerfCalc
+  @override
+  String get pcCalc => "CALCULATE";
+  @override
+  String get pcEnterData => "Insert Data";
+  @override
+  String get pcAPTitle => "Airport";
+  @override
+  String get pcRwyTitle => runway;
+  @override
+  String get pcIntersectTitle => "Intersection";
+  @override
+  String get pcGrasCondTitle => "Grass";
+  @override
+  String get pcGrasCondHint => "Underground";
+  @override
+  String get pcSodDamaged => "Sod damaged?";
+  @override
+  String get pcHighGrass => "High grass?";
+  @override
+  String get pcCondTitle => "Condition";
+  @override
+  String get pcTempTitle => "Temperature";
+  @override
+  String get pcTempInvalidTitle => "Invalid Temperature";
+  @override
+  String get pcTempTooHigh => "The temperature is too high.\nPlease check.";
+  @override
+  String get pcTempTooLow => "The temperature is to low.\nPlease check.";
+  @override
+  String get pcWindTitle => "Wind";
+  @override
+  String get pcWindErrorTitle => "Invalid Wind";
+  @override
+  String get pcWindFormatError => "Wind format is wrong!\nPlease check.";
+  @override
+  String get pcWindDirError => "Wind direction must be within 0° to 360°!";
+  @override
+  String get pcWindSpdError => "Wind velocity must be positive!";
+  @override
+  String get pcQnhTitle => "QNH";
+  @override
+  String get pcQnhError => "Invalid QNH";
+  @override
+  String get pcQnhTooHigh => "QNH is too high.\nPlease check.";
+  @override
+  String get pcQnhTooLow => "QNH is too low.\nPlease check.";
+  @override
+  String get pcMarginTitle => "Margin";
+  @override
+  String get pcMarginHint => "Margin in %";
+  @override
+  String get pcToda => "Takeoff Distance Available";
+  @override
+  String get pcTod => "Takeoff Distance no Margin";
+  @override
+  String get pcTodMargin => "Takeoff Distance with Margin";
+  @override
+  String get pcRunwayRemain => "Remaining Runway";
+  @override
+  String pcNotEnoughRunway(int overshoot) => "Takeoff distance insufficient.\n${overshoot}m more needed!";
+  @override
+  String pcNotEnoughRunwayMargin(int overshoot) => "Takeoff distance with margin insufficient.\n${overshoot}m more needed!";
   //endregion
 }

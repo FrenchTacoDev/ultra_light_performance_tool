@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:ultra_light_performance_tool/src/airports/airports.dart';
 import 'package:ultra_light_performance_tool/src/res/themes.dart';
 import 'package:ultra_light_performance_tool/src/shared%20widgets/ulpt_dropdown.dart';
+import 'package:ultra_light_performance_tool/src/localization/localizer.dart';
 
 ///Dropdown to select the current runway conditions.
 class RunwayConditionDropdown extends StatelessWidget {
@@ -30,7 +31,7 @@ class RunwayConditionDropdown extends StatelessWidget {
           SizedBox(
             width: theme.perfTextWidth,
             child: Text(
-              "Zustand",
+              Localizer.of(context).pcCondTitle,
               textAlign: TextAlign.start,
               style: TextStyle(
                 fontSize: 18,
@@ -42,7 +43,9 @@ class RunwayConditionDropdown extends StatelessWidget {
             child: ULPTDropdown<RunwayCondition>(
               value: condition,
               items: RunwayCondition.values,
-              hint: "Auswählen",
+              parseItem: (item) => item.toLocString(context),
+              fromString: (s) => RunwayCondition.values.where((element) => element.toLocString(context) == s).first,
+              hint: Localizer.of(context).select,
               alignRight: false,
               onChanged: onChanged,
             ),
@@ -57,7 +60,9 @@ class RunwayConditionDropdown extends StatelessWidget {
           child: ULPTDropdown<RunwayCondition>(
             value: condition,
             items: RunwayCondition.values,
-            hint: "Auswählen",
+            parseItem: (item) => item.toLocString(context),
+            fromString: (s) => RunwayCondition.values.where((element) => element.toLocString(context) == s).first,
+            hint: Localizer.of(context).select,
             alignRight: true,
             onChanged: onChanged,
           ),
@@ -65,7 +70,7 @@ class RunwayConditionDropdown extends StatelessWidget {
         SizedBox(
           width: theme.perfTextWidth,
           child: Text(
-            "Zustand",
+            Localizer.of(context).pcCondTitle,
             textAlign: TextAlign.end,
             style: TextStyle(
               fontSize: 18,
