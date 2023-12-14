@@ -27,11 +27,7 @@ class ULPT extends StatelessWidget {
                   GlobalWidgetsLocalizations.delegate,
                   GlobalCupertinoLocalizations.delegate,
                 ],
-                //Todo implement own loc solution with maps resolving to title: string (Map<Locale, Map<String, String>>)
-                supportedLocales: const [
-                  Locale.fromSubtags(countryCode: "GB", languageCode: "en"),
-                  Locale.fromSubtags(countryCode: "DE", languageCode: "de"),
-                ],
+                supportedLocales: Settings.appLocals,
                 home: MainPage(setupComplete: state.setupComplete),
               ),
             );

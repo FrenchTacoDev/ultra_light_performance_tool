@@ -39,6 +39,7 @@ abstract class Dictionary{
   //Settings title is same as menuSettings
   String get facAdjustTitle;
   String get facAdjustSubTitle;
+  String get selectLanguage;
   //endregion
 
   //region FacAdjust
@@ -203,6 +204,8 @@ class EN extends Dictionary{
   String get facAdjustTitle => "Adjust Factors";
   @override
   String get facAdjustSubTitle => "Adjust the factors used in the performance calculation";
+  @override
+  String get selectLanguage => "Select Language:";
   //endregion
   //region FacAdjust
   @override

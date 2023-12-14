@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ultra_light_performance_tool/src/core/core.dart';
 import 'package:ultra_light_performance_tool/src/performance%20calculation/calculations.dart';
+import 'package:ultra_light_performance_tool/src/shared%20widgets/ulpt_dropdown.dart';
 import 'widgets/factor_adjust.dart';
 
 ///Used to bundle information about how the user wants the app to behave
@@ -11,14 +12,18 @@ class Settings{
 
   //json keys for Corrections
   static String correctionsFieldValue = "perfCorrections";
+  //json keys for language
+  static String languageFieldValue = "language";
 
   Settings();
 
   Corrections corrections = Corrections();
+  Locale? locale;
 
   Settings copy(){
     var settings = Settings();
     settings.corrections = corrections.copy();
+    settings.locale = locale;
     return settings;
   }
 
@@ -26,6 +31,7 @@ class Settings{
   Map<String, dynamic> serialize(){
     return {
       correctionsFieldValue : jsonEncode(corrections.serialize()),
+      languageFieldValue : locale?.languageCode,
     };
   }
 
@@ -35,6 +41,7 @@ class Settings{
     var corJson = map[correctionsFieldValue];
 
     settings.corrections = corJson == null ? settings.corrections : Corrections.deserialize(map: jsonDecode(corJson));
+    settings.locale = appLocals.where((l) => l.languageCode == map[languageFieldValue]).firstOrNull;
 
     return settings;
   }
@@ -42,12 +49,19 @@ class Settings{
   @override
   bool operator ==(Object other) {
     return other is Settings
-        && other.corrections == corrections;
+        && other.corrections == corrections
+        && other.locale == locale;
   }
 
-  //Todo for now only a const value as hash which is just a workaround and doesn't make sense. Resolve when more params are present.
   @override
-  int get hashCode => Object.hash(1, corrections);
+  int get hashCode => Object.hash(corrections, locale);
+
+  //Single point of acces for the app on what languages are supported.
+  static List<Locale> appLocals = [
+    const Locale.fromSubtags(countryCode: "GB", languageCode: "en"),
+    const Locale.fromSubtags(countryCode: "DE", languageCode: "de"),
+  ];
+
 }
 
 ///Panel to set the settings of the app
@@ -73,12 +87,24 @@ class SettingsPanel extends StatelessWidget {
                     child: Column(
                       children: [
                         ListTile(
+                          minVerticalPadding:16,
+                          title: Text(Localizer.of(context).selectLanguage),
+                          trailing: ConstrainedBox(
+                              constraints: const BoxConstraints(maxWidth: 230,),
+                              child: ULPTDropdown(
+                                items: languageLocalMap.keys.toList(),
+                                hint: Localizer.of(context).selectLanguage,
+                                value: _getLanguage(context: context, state: state),
+                                onChanged: (l) => context.read<_SettingsPanelCubit>().setLocal(locale: languageLocalMap[l]),
+                              )
+                          ),
+                        ),
+                        Divider(color: Colors.white.withOpacity(0.35), height: 0.5, indent: 16, endIndent: 16,),
+                        ListTile(
                           title: Text(Localizer.of(context).facAdjustTitle),
                           subtitle: Text(Localizer.of(context).facAdjustSubTitle),
                           onTap: () => context.read<_SettingsPanelCubit>().setCorrections(context: context),
                         ),
-                        //Divider(color: Colors.white.withOpacity(0.35), height: 0.5),
-                        //Divider(color: Colors.white.withOpacity(0.35), height: 0.5, indent: 16, endIndent: 16,),
                         const SizedBox(height: 16),
                       ],
                     ),
@@ -88,6 +114,16 @@ class SettingsPanel extends StatelessWidget {
           ),
         ),
     );
+  }
+
+  Map<String, Locale> get languageLocalMap => {
+    "English" : Settings.appLocals.where((l) => l.languageCode == "en").first,
+    "Deutsch" : Settings.appLocals.where((l) => l.languageCode == "de").first,
+  };
+
+  String _getLanguage({required BuildContext context, required _SettingsPanelState state}){
+    if(state.settings.locale != null) return languageLocalMap.entries.where((kv) => kv.value == state.settings.locale).firstOrNull?.key ?? "English";
+    return languageLocalMap.entries.where((kv) => kv.value.languageCode == Localizations.localeOf(context).languageCode).firstOrNull?.key ?? "English";
   }
 }
 
@@ -118,6 +154,14 @@ class _SettingsPanelCubit extends Cubit<_SettingsPanelState>{
 
     if(cor == null) return;
     var newSettings = state.settings.copy()..corrections = cor.copy();
+    appCubit.settings = newSettings;
+    emit(state.copyWidth(settings: newSettings));
+  }
+
+  Future<void> setLocal({required Locale? locale}) async{
+    if(locale == null) return;
+    if(locale == state.settings.locale) return;
+    var newSettings = state.settings.copy()..locale = locale;
     appCubit.settings = newSettings;
     emit(state.copyWidth(settings: newSettings));
   }

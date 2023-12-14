@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:ultra_light_performance_tool/src/core/core.dart';
 import 'default/en.dart';
 import 'de/de.dart';
 export 'default/en.dart' show Dictionary;
@@ -14,7 +16,7 @@ class Localizer extends InheritedWidget{
   const Localizer({super.key, required super.child});
 
   Dictionary std({required BuildContext context}){
-    var local = Localizations.localeOf(context);
+    var local = context.read<ApplicationCubit>().settings.locale ?? Localizations.localeOf(context);
     var res = _localMap[local.languageCode];
     if(res == null) return _defaultDict;
     return res;

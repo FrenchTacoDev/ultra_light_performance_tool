@@ -58,6 +58,8 @@ class DE extends Dictionary{
   String get facAdjustTitle => "Faktoren Anpassen";
   @override
   String get facAdjustSubTitle => "Passen Sie die Faktoren für die Performance-Berechnung an.";
+  @override
+  String get selectLanguage => "Sprache Wählen:";
   //endregion
   //region FacAdjust
   @override
