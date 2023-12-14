@@ -144,6 +144,7 @@ abstract class Dictionary{
   //endregion
 }
 
+///English translation. Works as default.
 class EN extends Dictionary{
   //region General
   @override

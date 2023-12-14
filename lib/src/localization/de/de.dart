@@ -1,5 +1,6 @@
 import '../localizer.dart';
 
+///German translation
 class DE extends Dictionary{
   //region General
   @override

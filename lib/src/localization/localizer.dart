@@ -8,6 +8,8 @@ Map<String, Dictionary> _localMap = {
   "de" : DE()
 };
 
+///Inherited Widget that is used to localize the app.
+///To get a localized string call [Localizer.of(context).exampleString]
 class Localizer extends InheritedWidget{
   const Localizer({super.key, required super.child});
 
