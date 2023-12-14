@@ -59,17 +59,17 @@ class DE extends Dictionary{
   @override
   String get facAdjustSubTitle => "Passen Sie die Faktoren für die Performance-Berechnung an.";
   @override
-  String get selectLanguage => "Sprache Wählen:";
+  String get language => "Sprache:";
   //endregion
   //region FacAdjust
   @override
-  String get faWindTitle => "Windeinfluss in %";
+  String get faWindTitle => "Windeinfluss";
   @override
   String get faHw => "Gegenwind pro 10kt (minus)";
   @override
   String get faTw => "Rückenwind pro 10kt (plus)";
   @override
-  String get faGrassTitle => "Korrektur Grasbahn in %";
+  String get faGrassTitle => "Korrektur Grasbahn";
   @override
   String get faGrassFirm => "Grasbahn: fest, trocken, eben (Bewuchs bis 3cm)";
   @override
@@ -81,7 +81,7 @@ class DE extends Dictionary{
   @override
   String get faGrassHigh => "Hohes Gras (3-8cm)";
   @override
-  String get faConditionTitle => "Korrektur Pistenzustand in %";
+  String get faConditionTitle => "Korrektur Pistenzustand";
   @override
   String get faConWet => "Nass";
   @override

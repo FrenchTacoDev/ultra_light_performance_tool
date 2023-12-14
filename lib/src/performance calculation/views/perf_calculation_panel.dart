@@ -181,7 +181,8 @@ class _SmallSizedScreen extends StatelessWidget {
           SizedBox(
             height: 100,
             child: _ButtonComponent(
-                state: state
+              state: state,
+              isSmallSize: true,
             ),
           ),
           Expanded(
@@ -200,10 +201,12 @@ class _SmallSizedScreen extends StatelessWidget {
 
 class _ButtonComponent extends StatelessWidget {
   const _ButtonComponent({
-    required this.state
+    required this.state,
+    this.isSmallSize = false,
   });
 
   final CalculationState state;
+  final bool isSmallSize;
 
   @override
   Widget build(BuildContext context) {
@@ -212,7 +215,7 @@ class _ButtonComponent extends StatelessWidget {
     //Todo can calc from state otherwise strange vis
 
     return Card(
-      margin: const EdgeInsets.fromLTRB(2, 4, 4, 2),
+      margin: isSmallSize ? const EdgeInsets.all(2) : const EdgeInsets.fromLTRB(2, 4, 4, 2),
       child: Center(
         child: Padding(
           padding: const EdgeInsets.all(16),
@@ -241,7 +244,7 @@ class _EntryPanelComponent extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Card(
-      margin: const EdgeInsets.fromLTRB(4, 4, 2, 2),
+      margin: isSmallSize ? const EdgeInsets.all(2) : const EdgeInsets.fromLTRB(4, 4, 2, 2),
       child: Padding(
         padding: const EdgeInsets.all(16),
         child: isSmallSize ? _SmallEntryPanel(state: state, airportsList: airportsList,)
@@ -423,7 +426,7 @@ class _ResultPanelComponent extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Card(
-      margin: const EdgeInsets.fromLTRB(4, 2, 4, 4),
+      margin: isSmallSize ? const EdgeInsets.all(2) : const EdgeInsets.fromLTRB(4, 2, 4, 4),
       child: Padding(
         padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 4),
         child: Center(

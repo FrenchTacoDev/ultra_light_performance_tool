@@ -39,7 +39,7 @@ abstract class Dictionary{
   //Settings title is same as menuSettings
   String get facAdjustTitle;
   String get facAdjustSubTitle;
-  String get selectLanguage;
+  String get language;
   //endregion
 
   //region FacAdjust
@@ -205,17 +205,17 @@ class EN extends Dictionary{
   @override
   String get facAdjustSubTitle => "Adjust the factors used in the performance calculation";
   @override
-  String get selectLanguage => "Select Language:";
+  String get language => "Language:";
   //endregion
   //region FacAdjust
   @override
-  String get faWindTitle => "Wind Influence in %";
+  String get faWindTitle => "Wind Influence";
   @override
   String get faHw => "Headwind per 10kt (minus)";
   @override
   String get faTw => "Tailwind per 10kt (plus)";
   @override
-  String get faGrassTitle => "Corrections Grass Runway in %";
+  String get faGrassTitle => "Corrections Grass Runway";
   @override
   String get faGrassFirm => "Grass Runway: firm, dry, flat (max 3cm)";
   @override
@@ -227,7 +227,7 @@ class EN extends Dictionary{
   @override
   String get faGrassHigh => "High Gras (3-8cm)";
   @override
-  String get faConditionTitle => "Corrections Runway Condition in %";
+  String get faConditionTitle => "Corrections Runway Condition";
   @override
   String get faConWet => "Wet";
   @override

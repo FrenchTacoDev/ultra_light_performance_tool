@@ -88,12 +88,12 @@ class SettingsPanel extends StatelessWidget {
                       children: [
                         ListTile(
                           minVerticalPadding:16,
-                          title: Text(Localizer.of(context).selectLanguage),
+                          title: Text(Localizer.of(context).language),
                           trailing: ConstrainedBox(
-                              constraints: const BoxConstraints(maxWidth: 230,),
+                              constraints: const BoxConstraints(maxWidth: 200,),
                               child: ULPTDropdown(
                                 items: languageLocalMap.keys.toList(),
-                                hint: Localizer.of(context).selectLanguage,
+                                hint: Localizer.of(context).select,
                                 value: _getLanguage(context: context, state: state),
                                 onChanged: (l) => context.read<_SettingsPanelCubit>().setLocal(locale: languageLocalMap[l]),
                               )

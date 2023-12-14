@@ -98,7 +98,7 @@ class _FactorAdjustFieldState extends State<FactorAdjustField> {
                 ),
               ),
             ),
-            const SizedBox(width: 8,),
+            const SizedBox(width: 4,),
             Expanded(
               child: ULPTTextField(
                 focusNode: focusNode,
