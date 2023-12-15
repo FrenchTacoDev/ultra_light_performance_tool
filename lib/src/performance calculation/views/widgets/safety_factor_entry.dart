@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:ultra_light_performance_tool/src/res/themes.dart';
 import 'package:ultra_light_performance_tool/src/shared%20widgets/ulpt_textfield.dart';
+import 'package:ultra_light_performance_tool/src/localization/localizer.dart';
 
 ///Text entry to add and adjust the safety factor.
 class SafetyFactorEntryField extends StatefulWidget {
@@ -88,7 +89,7 @@ class _SafetyFactorEntryFieldState extends State<SafetyFactorEntryField> {
           SizedBox(
             width: theme.perfTextWidth,
             child: Text(
-              "Aufschlag",
+              Localizer.of(context).pcMarginTitle,
               textAlign: TextAlign.start,
               style: TextStyle(
                 fontSize: 18,
@@ -101,7 +102,7 @@ class _SafetyFactorEntryFieldState extends State<SafetyFactorEntryField> {
               focusNode: focusNode,
               tec: tec,
               alignRight: false,
-              hintText: "Aufschlag in %",
+              hintText: Localizer.of(context).pcMarginHint,
               inputFormatter: SFInputFormatter(maxValue: widget.maxValue),
               isOnlyNumbers: true,
             ),
@@ -117,7 +118,7 @@ class _SafetyFactorEntryFieldState extends State<SafetyFactorEntryField> {
               focusNode: focusNode,
               tec: tec,
               alignRight: true,
-              hintText: "Aufschlag in %",
+              hintText: Localizer.of(context).pcMarginHint,
               inputFormatter: SFInputFormatter(maxValue: widget.maxValue),
               isOnlyNumbers: true,
           ),
@@ -125,7 +126,7 @@ class _SafetyFactorEntryFieldState extends State<SafetyFactorEntryField> {
         SizedBox(
           width: theme.perfTextWidth,
           child: Text(
-            "Aufschlag",
+            Localizer.of(context).pcMarginTitle,
             textAlign: TextAlign.end,
             style: TextStyle(
               fontSize: 18,

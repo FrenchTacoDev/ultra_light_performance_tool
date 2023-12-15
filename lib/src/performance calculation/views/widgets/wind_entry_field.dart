@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:ultra_light_performance_tool/src/res/themes.dart';
 import 'package:ultra_light_performance_tool/src/shared%20widgets/ulpt_textfield.dart';
 import 'package:ultra_light_performance_tool/src/utils/input_utils.dart';
+import 'package:ultra_light_performance_tool/src/localization/localizer.dart';
 
 typedef Wind = ({int direction, int speed});
 
@@ -61,7 +62,7 @@ class _WindEntryFieldState extends State<WindEntryField> {
     onSubmitted();
   }
 
-  void onSubmitted(){
+  void onSubmitted() async{
     if(tec.value.text.isEmpty) return;
 
     String valueText = "";
@@ -71,11 +72,11 @@ class _WindEntryFieldState extends State<WindEntryField> {
       valueText = "${value.direction < 100 ? "0${value.direction}" : value.direction} / ${value.speed} KT";
       widget.onWindSet(value);
     }on WindFormatError{
-      _showWindErrorDialog(message: "Windformat ist falsch!\n Bitte überprüfen.");
+      _showWindErrorDialog(message: Localizer.of(context).pcWindFormatError);
     }on WindDirectionError{
-      _showWindErrorDialog(message: "Windrichtung muss zwischen 0° und 360° sein!");
+      _showWindErrorDialog(message: Localizer.of(context).pcWindDirError);
     }on WindSpeedError{
-      _showWindErrorDialog(message: "Windgeschwindigkeit muss positiv sein!");
+      _showWindErrorDialog(message: Localizer.of(context).pcWindSpdError);
     }catch (e){
       rethrow;
     }
@@ -102,7 +103,7 @@ class _WindEntryFieldState extends State<WindEntryField> {
           SizedBox(
             width: theme.perfTextWidth,
             child: Text(
-              "Wind",
+              Localizer.of(context).pcWindTitle,
               textAlign: TextAlign.start,
               style: TextStyle(
                 fontSize: 18,
@@ -114,7 +115,7 @@ class _WindEntryFieldState extends State<WindEntryField> {
             child: ULPTTextField(
               enabled: widget.runwayCourse != null,
               focusNode: focusNode,
-              hintText: "Eingeben",
+              hintText: Localizer.of(context).enter,
               alignRight: false,
               tec: tec,
               inputFormatter: WindInputFormatter(),
@@ -131,7 +132,7 @@ class _WindEntryFieldState extends State<WindEntryField> {
           child: ULPTTextField(
             enabled: widget.runwayCourse != null,
             focusNode: focusNode,
-            hintText: "Eingeben",
+            hintText: Localizer.of(context).enter,
             alignRight: true,
             tec: tec,
             inputFormatter: WindInputFormatter(),
@@ -141,7 +142,7 @@ class _WindEntryFieldState extends State<WindEntryField> {
         SizedBox(
           width: theme.perfTextWidth,
           child: Text(
-            "Wind",
+            Localizer.of(context).pcWindTitle,
             textAlign: TextAlign.end,
             style: TextStyle(
               fontSize: 18,
@@ -166,21 +167,23 @@ class _WindEntryFieldState extends State<WindEntryField> {
     );
   }
 
-  void _showWindErrorDialog({required String message}){
-    showDialog(
+  void _showWindErrorDialog({required String message}) async{
+    await showDialog(
       context: context,
       builder: (context) => AlertDialog(
-        title: const Text("Ungültiger Wind", textAlign: TextAlign.center,),
+        title: Text(Localizer.of(context).pcWindErrorTitle, textAlign: TextAlign.center,),
         content: Text(message, textAlign: TextAlign.center,),
         actionsAlignment: MainAxisAlignment.center,
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(context),
-            child: const Text("OK"),
+            child: Text(Localizer.of(context).ok),
           )
         ],
       ),
     );
+
+    focusNode.requestFocus();
   }
 }
 

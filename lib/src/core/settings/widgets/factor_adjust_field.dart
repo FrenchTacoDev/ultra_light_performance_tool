@@ -98,13 +98,13 @@ class _FactorAdjustFieldState extends State<FactorAdjustField> {
                 ),
               ),
             ),
-            const SizedBox(width: 8,),
+            const SizedBox(width: 4,),
             Expanded(
               child: ULPTTextField(
                 focusNode: focusNode,
                 tec: tec,
                 alignRight: true,
-                hintText: "Faktor in %",
+                hintText: "",
                 inputFormatter: PFInputFormatter(),
                 isOnlyNumbers: true,
                 isLastInFocusGroup: widget.isLastInGroup,

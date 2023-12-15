@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:ultra_light_performance_tool/src/res/themes.dart';
 import 'package:ultra_light_performance_tool/src/shared%20widgets/ulpt_textfield.dart';
+import 'package:ultra_light_performance_tool/src/localization/localizer.dart';
 
 ///Text entry to set the QNH.
 class QNHEntryField extends StatefulWidget {
@@ -61,7 +62,7 @@ class _QNHEntryFieldState extends State<QNHEntryField> {
     onSubmitted();
   }
 
-  void onSubmitted(){
+  void onSubmitted() async{
     if(tec.value.text.isEmpty) return;
 
     String valueText = "";
@@ -78,7 +79,8 @@ class _QNHEntryFieldState extends State<QNHEntryField> {
     );
 
     if(isToHigh || isToLow){
-      _showQNHErrorDialog(toHigh: isToHigh);
+      await _showQNHErrorDialog(toHigh: isToHigh);
+      focusNode.requestFocus();
       return;
     }
 
@@ -97,7 +99,7 @@ class _QNHEntryFieldState extends State<QNHEntryField> {
           SizedBox(
             width: theme.perfTextWidth,
             child: Text(
-              "QNH",
+              Localizer.of(context).pcQnhTitle,
               textAlign: TextAlign.start,
               style: TextStyle(
                 fontSize: 18,
@@ -109,7 +111,7 @@ class _QNHEntryFieldState extends State<QNHEntryField> {
             child: ULPTTextField(
               focusNode: focusNode,
               tec: tec,
-              hintText: "Eingeben",
+              hintText: Localizer.of(context).enter,
               alignRight: false,
               inputFormatter: QNHInputFormatter(),
               isOnlyNumbers: true,
@@ -125,7 +127,7 @@ class _QNHEntryFieldState extends State<QNHEntryField> {
           child: ULPTTextField(
               focusNode: focusNode,
               tec: tec,
-              hintText: "Eingeben",
+              hintText: Localizer.of(context).enter,
               alignRight: true,
               inputFormatter: QNHInputFormatter(),
               isOnlyNumbers: true,
@@ -134,7 +136,7 @@ class _QNHEntryFieldState extends State<QNHEntryField> {
         SizedBox(
           width: theme.perfTextWidth,
           child: Text(
-            "QNH",
+            Localizer.of(context).pcQnhTitle,
             textAlign: TextAlign.end,
             style: TextStyle(
               fontSize: 18,
@@ -159,16 +161,16 @@ class _QNHEntryFieldState extends State<QNHEntryField> {
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
-        title: const Text("Ungültiges QNH", textAlign: TextAlign.center,),
+        title: Text(Localizer.of(context).pcQnhError, textAlign: TextAlign.center,),
         content: Text(
-            "QNH ist zu ${toHigh ? "hoch" : "niedrig"}.\nBitte überprüfen.",
+            toHigh ? Localizer.of(context).pcQnhTooHigh : Localizer.of(context).pcQnhTooLow,
             textAlign: TextAlign.center
         ),
         actionsAlignment: MainAxisAlignment.center,
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(context),
-            child: const Text("OK"),
+            child: Text(Localizer.of(context).ok),
           )
         ],
       ),

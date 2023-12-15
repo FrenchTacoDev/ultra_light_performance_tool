@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ultra_light_performance_tool/src/aircraft/add_aircraft/add_aircraft_page.dart';
 import 'package:ultra_light_performance_tool/src/aircraft/aircraft.dart';
+import 'package:ultra_light_performance_tool/src/core/core.dart';
 import 'package:ultra_light_performance_tool/src/shared%20widgets/ulpt_confirmation.dart';
 
 class ACSelectState{
@@ -50,7 +51,7 @@ class ACSelectCubit extends Cubit<ACSelectState>{
   Future<void> deleteAircraft({required BuildContext context, required Aircraft ac}) async{
     var res = await ULPTConfirmation.show(
         context: context,
-        title: Text("${ac.name} wirklich löschen?", textAlign: TextAlign.center,)
+        title: Text(Localizer.of(context).acDeleteConfirm(ac.name), textAlign: TextAlign.center,)
     );
 
     if(res == false) return;

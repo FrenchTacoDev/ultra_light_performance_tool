@@ -109,7 +109,8 @@ class ULPTDB{
     await db.execute(
         'CREATE TABLE $settingsTableName '
             '(id INTEGER PRIMARY KEY,'
-            ' ${Settings.correctionsFieldValue} TEXT)'
+            ' ${Settings.correctionsFieldValue} TEXT,'
+            ' ${Settings.languageFieldValue} TEXT)'
     );
   }
 

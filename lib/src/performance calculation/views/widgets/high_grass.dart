@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ultra_light_performance_tool/src/performance%20calculation/BLoC/calculation_bloc.dart';
 import 'package:ultra_light_performance_tool/src/res/themes.dart';
 import 'package:ultra_light_performance_tool/src/shared%20widgets/ulpt_check.dart';
+import 'package:ultra_light_performance_tool/src/localization/localizer.dart';
 
 ///Checkmark weather the grass is high or not
 class HighGrass extends StatelessWidget {
@@ -24,7 +25,7 @@ class HighGrass extends StatelessWidget {
           child: ULPTCheck(
               onChanged: (b) => cubit.setGrassIsHigh(highGrass: b),
               value: value,
-              hintText: "Hohes Gras?",
+              hintText: Localizer.of(context).pcHighGrass,
           ),
         ),
       ],

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:ultra_light_performance_tool/src/shared widgets/ulpt_textfield.dart';
+import 'package:ultra_light_performance_tool/src/localization/localizer.dart';
 
 ///Text entry to set the runway slope.
 class RunwaySlopeEntry extends StatefulWidget {
@@ -70,7 +71,7 @@ class _RunwaySlopeEntryState extends State<RunwaySlopeEntry>{
       focusNode: focusNode,
       tec: tec,
       isOnlyNumbers: true,
-      hintText: "Pistenneigung",
+      hintText: Localizer.of(context).rwySlopeHint,
       inputFormatter: _ElevFormatter(),
     );
   }

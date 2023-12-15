@@ -17,7 +17,7 @@ class ULPTTheme extends ThemeExtension<ULPTTheme>{
     required this.interactiveHintDisabledColor,
     required this.interactiveFocusBGColor,
     this.tabPageTheme = const TabPageTheme(),
-    this.perfTextWidth = 108,
+    this.perfTextWidth = 120,
   });
 
   ///Used for e.g. Appbar

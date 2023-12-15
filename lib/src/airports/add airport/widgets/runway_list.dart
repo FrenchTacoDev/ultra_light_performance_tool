@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ultra_light_performance_tool/src/airports/add%20airport/BLoC/add_airport_bloc.dart';
 import 'package:ultra_light_performance_tool/src/airports/airports.dart';
+import 'package:ultra_light_performance_tool/src/localization/localizer.dart';
 
 ///Lists an [Airport]s Runways as tiles to edit and add.
 class RunwayList extends StatelessWidget {
@@ -31,7 +32,7 @@ class RunwayList extends StatelessWidget {
           mainAxisSize: MainAxisSize.min,
           children: [
             ListTile(
-              title: Text("Piste ${rwy.designator}"),
+              title: Text("${Localizer.of(context).runway} ${rwy.designator}"),
               onTap: () => cubit.editRunway(context: context, original: rwy),
               trailing: IconButton(
                   onPressed: () => cubit.deleteRunway(context: context, runway: rwy),

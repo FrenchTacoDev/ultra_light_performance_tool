@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:ultra_light_performance_tool/src/shared widgets/ulpt_textfield.dart';
+import 'package:ultra_light_performance_tool/src/localization/localizer.dart';
 
 ///Text entry to add takeoff-distance for intersections.
 class IntersectionTodEntry extends StatefulWidget {
@@ -79,7 +80,7 @@ class _IntersectionTodEntryState extends State<IntersectionTodEntry>{
     return ULPTTextField(
       focusNode: focusNode,
       tec: tec,
-      hintText: "Verfügbare Startdistanz",
+      hintText: Localizer.of(context).toda,
       isOnlyNumbers: true,
       inputFormatter: _ElevFormatter(),
     );

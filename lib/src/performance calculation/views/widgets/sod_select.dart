@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ultra_light_performance_tool/src/performance%20calculation/BLoC/calculation_bloc.dart';
 import 'package:ultra_light_performance_tool/src/res/themes.dart';
 import 'package:ultra_light_performance_tool/src/shared%20widgets/ulpt_check.dart';
+import 'package:ultra_light_performance_tool/src/localization/localizer.dart';
 
 ///Checkmark weather the sod is damaged or not
 class SodSelect extends StatelessWidget {
@@ -23,7 +24,7 @@ class SodSelect extends StatelessWidget {
           child: ULPTCheck(
               onChanged: (b) => cubit.setSodDamaged(sodDamaged: b),
               value: value,
-              hintText: "Grasnarbe beschädigt?",
+              hintText: Localizer.of(context).pcSodDamaged,
           ),
         ),
       ],

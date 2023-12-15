@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:ultra_light_performance_tool/src/shared widgets/ulpt_textfield.dart';
+import 'package:ultra_light_performance_tool/src/localization/localizer.dart';
 
 ///Text entry to add airport name.
 class APNameEntry extends StatefulWidget {
@@ -51,7 +52,7 @@ class _APNameEntryState extends State<APNameEntry>{
     return ULPTTextField(
       focusNode: focusNode,
       tec: tec,
-      hintText: "Name des Flugplatzes",
+      hintText: Localizer.of(context).apNameHint,
     );
   }
 

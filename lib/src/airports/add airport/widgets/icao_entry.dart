@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:ultra_light_performance_tool/src/shared widgets/ulpt_textfield.dart';
+import 'package:ultra_light_performance_tool/src/localization/localizer.dart';
 
 ///Text entry to add airport icao code.
 ///ICAO code is supposed to be a 4-letter code
@@ -53,7 +54,7 @@ class _IcaoEntryState extends State<IcaoEntry>{
     return ULPTTextField(
       focusNode: focusNode,
       tec: tec,
-      hintText: "ICAO Code",
+      hintText: Localizer.of(context).apIcaoHint,
       inputFormatter: _IcaoInputFormatter(),
     );
   }
@@ -79,6 +80,7 @@ class _IcaoInputFormatter extends TextInputFormatter{
     if(isValidICAOCode(newValue.text)) return newValue.copyWith(text: newValue.text.toUpperCase());
     return oldValue;
 
+    //Todo check
     //    if(newValue.text.isEmpty) return newValue;
     //     if(newValue.text.length < oldValue.text.length) {
     //       return newValue.copyWith(

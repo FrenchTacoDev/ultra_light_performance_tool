@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ultra_light_performance_tool/src/aircraft/aircraft.dart';
 import 'package:ultra_light_performance_tool/src/shared%20widgets/ulpt_button.dart';
+import 'package:ultra_light_performance_tool/src/core/core.dart';
 import 'BLoC/add_aircraft_bloc.dart';
 import 'widgets/ac_widgets.dart';
 
@@ -17,7 +18,9 @@ class AddAircraftPage extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
-        title: original == null ? const Text("Luftfahrzeug hinzufügen") : const Text("Luftfahrzeug bearbeiten"),
+        title: original == null ?
+          Text(Localizer.of(context).addACTitleCreate) :
+          Text(Localizer.of(context).addACTitleEdit),
       ),
       body: BlocProvider<AddAircraftCubit>(
         create: (context) => AddAircraftCubit(acManager: acManager, original: original),
@@ -43,14 +46,17 @@ class AddAircraftPage extends StatelessWidget {
                         value: state.tod,
                       ),
                       const SizedBox(height: 16,),
-                      ULPTButton(
-                          enabled: cubit.canSave(),
-                          title: "Speichern",
-                          onTap: () async{
-                            //To avoid context over async gap
-                            closeFunc() => Navigator.pop(context);
-                            if(await cubit.save()) closeFunc();
-                          }
+                      ConstrainedBox(
+                        constraints: const BoxConstraints(minWidth: 100),
+                        child: ULPTButton(
+                            enabled: cubit.canSave(),
+                            title: Localizer.of(context).save,
+                            onTap: () async{
+                              //To avoid context over async gap
+                              closeFunc() => Navigator.pop(context);
+                              if(await cubit.save()) closeFunc();
+                            }
+                        ),
                       )
                     ],
                   ),

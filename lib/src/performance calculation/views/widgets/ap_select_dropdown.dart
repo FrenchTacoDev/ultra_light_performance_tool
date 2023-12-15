@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:ultra_light_performance_tool/src/airports/airports.dart';
 import 'package:ultra_light_performance_tool/src/res/themes.dart';
 import 'package:ultra_light_performance_tool/src/shared%20widgets/ulpt_dropdown.dart';
+import 'package:ultra_light_performance_tool/src/localization/localizer.dart';
 
 ///Dropdown to select the airport.
 class APSelectDropDown extends StatelessWidget {
@@ -24,7 +25,7 @@ class APSelectDropDown extends StatelessWidget {
         SizedBox(
           width: theme.perfTextWidth,
           child: Text(
-            "Flugplatz",
+            Localizer.of(context).pcAPTitle,
             style: TextStyle(
               fontSize: 18,
               color: theme.interactiveHintTextColor,
@@ -35,7 +36,7 @@ class APSelectDropDown extends StatelessWidget {
           child: ULPTDropdown<Airport>(
               value: value,
               items: airportList,
-              hint: "Auswählen",
+              hint: Localizer.of(context).select,
               onChanged: (ap) {
                 if(ap == null) return;
                 onAirportSet(ap);

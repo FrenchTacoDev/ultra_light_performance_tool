@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:ultra_light_performance_tool/src/airports/airports.dart';
 import 'package:ultra_light_performance_tool/src/res/themes.dart';
 import 'package:ultra_light_performance_tool/src/shared%20widgets/ulpt_dropdown.dart';
+import 'package:ultra_light_performance_tool/src/localization/localizer.dart';
 
 ///Dropdown to select the runway.
 class RwySelectDropdown extends StatelessWidget {
@@ -30,7 +31,7 @@ class RwySelectDropdown extends StatelessWidget {
         SizedBox(
           width: theme.perfTextWidth,
           child: Text(
-            "Piste",
+            Localizer.of(context).pcRwyTitle,
             style: TextStyle(
               fontSize: 18,
               color: theme.interactiveHintTextColor,
@@ -40,7 +41,7 @@ class RwySelectDropdown extends StatelessWidget {
         Expanded(
           child: ULPTDropdown<Runway>(
             value: value,
-            hint: "Auswählen",
+            hint: Localizer.of(context).select,
             items: airport == null ? [] : airport!.runways,
             onChanged: onChanged,
           ),

@@ -4,6 +4,7 @@ import 'package:ultra_light_performance_tool/src/airports/airports.dart';
 import 'package:ultra_light_performance_tool/src/performance%20calculation/BLoC/calculation_bloc.dart';
 import 'package:ultra_light_performance_tool/src/res/themes.dart';
 import 'package:ultra_light_performance_tool/src/shared%20widgets/ulpt_dropdown.dart';
+import 'package:ultra_light_performance_tool/src/localization/localizer.dart';
 
 ///Dropdown to select the current grass conditions.
 class GrassConditionDropdown extends StatelessWidget {
@@ -25,7 +26,7 @@ class GrassConditionDropdown extends StatelessWidget {
         SizedBox(
           width: theme.perfTextWidth,
           child: Text(
-            "Gras",
+            Localizer.of(context).pcGrasCondTitle,
             style: TextStyle(
               fontSize: 18,
               color: theme.interactiveHintTextColor,
@@ -36,7 +37,9 @@ class GrassConditionDropdown extends StatelessWidget {
           child: ULPTDropdown<Underground>(
             value: value ?? Underground.firm,
             items: runway == null ? [] : Underground.values,
-            hint: "Untergrund",
+            parseItem: (item) => item.toLocString(context),
+            fromString: (s) => Underground.values.where((element) => element.toLocString(context) == s).first,
+            hint: Localizer.of(context).pcGrasCondHint,
             onChanged: (value){
               if(value == null) return;
               cubit.setGrassSurface(underground: value);
