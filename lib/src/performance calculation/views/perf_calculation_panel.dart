@@ -7,6 +7,7 @@ import 'package:ultra_light_performance_tool/src/airports/airports.dart';
 import 'package:ultra_light_performance_tool/src/performance%20calculation/BLoC/calculation_bloc.dart';
 import 'package:ultra_light_performance_tool/src/shared%20widgets/ulpt_button.dart';
 import 'package:ultra_light_performance_tool/src/shared%20widgets/ulpt_min_size_scrollview.dart';
+import 'package:ultra_light_performance_tool/src/core/core.dart';
 import 'widgets/widgets.dart';
 
 class PerformanceCalculationPanel extends StatelessWidget {
@@ -180,7 +181,8 @@ class _SmallSizedScreen extends StatelessWidget {
           SizedBox(
             height: 100,
             child: _ButtonComponent(
-                state: state
+              state: state,
+              isSmallSize: true,
             ),
           ),
           Expanded(
@@ -199,10 +201,12 @@ class _SmallSizedScreen extends StatelessWidget {
 
 class _ButtonComponent extends StatelessWidget {
   const _ButtonComponent({
-    required this.state
+    required this.state,
+    this.isSmallSize = false,
   });
 
   final CalculationState state;
+  final bool isSmallSize;
 
   @override
   Widget build(BuildContext context) {
@@ -211,13 +215,13 @@ class _ButtonComponent extends StatelessWidget {
     //Todo can calc from state otherwise strange vis
 
     return Card(
-      margin: const EdgeInsets.fromLTRB(2, 4, 4, 2),
+      margin: isSmallSize ? const EdgeInsets.all(2) : const EdgeInsets.fromLTRB(2, 4, 4, 2),
       child: Center(
         child: Padding(
           padding: const EdgeInsets.all(16),
           child: ULPTButton(
             onTap: () => cubit.calculate(context: context),
-            title: "BERECHNEN",
+            title: Localizer.of(context).pcCalc,
             enabled: cubit.canCalc,
           )
         ),
@@ -240,7 +244,7 @@ class _EntryPanelComponent extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Card(
-      margin: const EdgeInsets.fromLTRB(4, 4, 2, 2),
+      margin: isSmallSize ? const EdgeInsets.all(2) : const EdgeInsets.fromLTRB(4, 4, 2, 2),
       child: Padding(
         padding: const EdgeInsets.all(16),
         child: isSmallSize ? _SmallEntryPanel(state: state, airportsList: airportsList,)
@@ -422,7 +426,7 @@ class _ResultPanelComponent extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Card(
-      margin: const EdgeInsets.fromLTRB(4, 2, 4, 4),
+      margin: isSmallSize ? const EdgeInsets.all(2) : const EdgeInsets.fromLTRB(4, 2, 4, 4),
       child: Padding(
         padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 4),
         child: Center(

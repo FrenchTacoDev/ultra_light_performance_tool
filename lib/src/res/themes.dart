@@ -17,7 +17,7 @@ class ULPTTheme extends ThemeExtension<ULPTTheme>{
     required this.interactiveHintDisabledColor,
     required this.interactiveFocusBGColor,
     this.tabPageTheme = const TabPageTheme(),
-    this.perfTextWidth = 108,
+    this.perfTextWidth = 120,
   });
 
   ///Used for e.g. Appbar
@@ -69,6 +69,7 @@ final darkTheme = ThemeData(
   cardColor: _darkULPTTheme.backgroundColor,
   listTileTheme: ListTileThemeData(
     titleTextStyle: TextStyle(color: _darkULPTTheme.interactiveHintTextColor, fontSize: 20),
+    subtitleTextStyle: TextStyle(color: _darkULPTTheme.interactiveHintTextColor, fontSize: 14,),
     leadingAndTrailingTextStyle: TextStyle(color: _darkULPTTheme.interactiveHintTextColor),
     tileColor: _darkULPTTheme.backgroundColor,
     iconColor: _darkULPTTheme.interactiveHintTextColor,

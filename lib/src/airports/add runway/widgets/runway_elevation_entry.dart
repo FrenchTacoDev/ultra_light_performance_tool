@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:ultra_light_performance_tool/src/shared widgets/ulpt_textfield.dart';
+import 'package:ultra_light_performance_tool/src/localization/localizer.dart';
 
 ///Text entry to set runway elevation.
 class RunwayElevationEntry extends StatefulWidget {
@@ -73,7 +74,7 @@ class _RunwayElevationEntryState extends State<RunwayElevationEntry>{
       focusNode: focusNode,
       tec: tec,
       isOnlyNumbers: true,
-      hintText: widget.endElev ? "Pistenendhöhe" : "Pistenanfangshöhe",
+      hintText: widget.endElev ? Localizer.of(context).rwyEndElevHint : Localizer.of(context).rwyStartElevHint,
       inputFormatter: _ElevFormatter(),
     );
   }

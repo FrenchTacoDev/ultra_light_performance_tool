@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:ultra_light_performance_tool/src/res/themes.dart';
 import 'package:ultra_light_performance_tool/src/shared%20widgets/ulpt_tab_page.dart';
+import 'package:ultra_light_performance_tool/src/localization/localizer.dart';
 
 ///Panel to show the calc results
 class Results extends StatelessWidget {
@@ -28,7 +29,7 @@ class _NoData extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Text(
-      "Daten Eingeben",
+      Localizer.of(context).pcEnterData,
       style: TextStyle(
         fontSize: 40,
         color: Colors.white.withOpacity(0.2),
@@ -69,7 +70,7 @@ class _Data extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               Text(
-                "Verfügbare Startdistanz: ${availTod}m",
+                "${Localizer.of(context).pcToda}: ${availTod}m",
                 style: TextStyle(
                   fontSize: fontSize,
                   color: remainTod >= 0 ? theme.interactiveHintTextColor : Colors.redAccent,
@@ -77,7 +78,7 @@ class _Data extends StatelessWidget {
               ),
               const SizedBox(height: 16,),
               Text(
-                "Startstrecke mit Aufschlag: ${factorizedTod}m",
+                "${Localizer.of(context).pcTodMargin}: ${factorizedTod}m",
                 style: TextStyle(
                     color: remainTod >= 0 ? Colors.green : Colors.redAccent,
                     fontSize: fontSize,
@@ -89,7 +90,7 @@ class _Data extends StatelessWidget {
                 size: arrowSize, color: remainTod >= 0 ? Colors.green : Colors.redAccent,
               ),
               Text(
-                "Verbleibende Pistenlänge: ${remainTod}m",
+                "${Localizer.of(context).pcRunwayRemain}: ${remainTod}m",
                 style: TextStyle(
                     color: remainTod >= 0 ? Colors.green : Colors.redAccent,
                     fontSize: fontSize,
@@ -102,7 +103,7 @@ class _Data extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               Text(
-                "Verfügbare Startdistanz: ${availTod}m",
+                "${Localizer.of(context).pcToda}: ${availTod}m",
                 style: TextStyle(
                   fontSize: fontSize,
                   color: remainTodUnfactored >= 0 ? theme.interactiveHintTextColor : Colors.redAccent,
@@ -110,7 +111,7 @@ class _Data extends StatelessWidget {
               ),
               const SizedBox(height: 16,),
               Text(
-                "Startstrecke ohne Aufschlag: ${tod}m",
+                "${Localizer.of(context).pcTod}: ${tod}m",
                 style: TextStyle(
                     color: remainTodUnfactored >= 0 ? theme.interactiveHintTextColor : Colors.redAccent,
                     fontSize: fontSize,
@@ -123,7 +124,7 @@ class _Data extends StatelessWidget {
                 color: remainTodUnfactored >= 0 ? theme.interactiveHintTextColor : Colors.redAccent,
               ),
               Text(
-                "Verbleibende Pistenlänge: ${remainTodUnfactored}m",
+                "${Localizer.of(context).pcRunwayRemain}: ${remainTodUnfactored}m",
                 style: TextStyle(
                     color: remainTodUnfactored >= 0 ? theme.interactiveHintTextColor : Colors.redAccent,
                     fontSize: fontSize,
@@ -143,7 +144,7 @@ class _Data extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
               Text(
-                "Verfügbare Startdistanz: ${availTod}m",
+                "${Localizer.of(context).pcToda}: ${availTod}m",
                 style: TextStyle(
                   fontSize: fontSize,
                   color: remainTod >= 0 ? theme.interactiveHintTextColor : Colors.redAccent,
@@ -154,7 +155,7 @@ class _Data extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   Text(
-                    "Startstrecke mit Aufschlag: ${factorizedTod}m",
+                    "${Localizer.of(context).pcTodMargin}: ${factorizedTod}m",
                     style: TextStyle(
                         color: remainTod >= 0 ? Colors.green : Colors.redAccent,
                         fontSize: fontSize,
@@ -166,7 +167,7 @@ class _Data extends StatelessWidget {
                     size: arrowSize, color: remainTod >= 0 ? Colors.green : Colors.redAccent,
                   ),
                   Text(
-                    "Verbleibende Pistenlänge: ${remainTod}m",
+                    "${Localizer.of(context).pcRunwayRemain}: ${remainTod}m",
                     style: TextStyle(
                         color: remainTod >= 0 ? Colors.green : Colors.redAccent,
                         fontSize: fontSize,
@@ -180,7 +181,7 @@ class _Data extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
               Text(
-                "Verfügbare Startdistanz: ${availTod}m",
+                "${Localizer.of(context).pcToda}: ${availTod}m",
                 style: TextStyle(
                   fontSize: fontSize,
                   color: remainTodUnfactored >= 0 ? theme.interactiveHintTextColor : Colors.redAccent,
@@ -191,7 +192,7 @@ class _Data extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   Text(
-                    "Startstrecke ohne Aufschlag: ${tod}m",
+                    "${Localizer.of(context).pcTod}: ${tod}m",
                     style: TextStyle(
                         color: remainTodUnfactored >= 0 ? theme.interactiveHintTextColor : Colors.redAccent,
                         fontSize: fontSize,
@@ -204,7 +205,7 @@ class _Data extends StatelessWidget {
                     color: remainTodUnfactored >= 0 ? theme.interactiveHintTextColor : Colors.redAccent,
                   ),
                   Text(
-                    "Verbleibende Pistenlänge: ${remainTodUnfactored}m",
+                    "${Localizer.of(context).pcRunwayRemain}: ${remainTodUnfactored}m",
                     style: TextStyle(
                         color: remainTodUnfactored >= 0 ? theme.interactiveHintTextColor : Colors.redAccent,
                         fontSize: fontSize,

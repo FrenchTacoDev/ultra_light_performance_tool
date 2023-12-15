@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:ultra_light_performance_tool/src/core/core.dart';
 import 'package:ultra_light_performance_tool/src/shared widgets/ulpt_textfield.dart';
 
 ///Text entry to add aircraft takeoff-distance.
@@ -70,7 +71,7 @@ class _ACTodEntryState extends State<ACTodEntry>{
       focusNode: focusNode,
       tec: tec,
       isOnlyNumbers: true,
-      hintText: "Startstrecke auf trockener Bahn",
+      hintText: Localizer.of(context).addACTodHint,
       inputFormatter: _TodInputFormatter(),
     );
   }

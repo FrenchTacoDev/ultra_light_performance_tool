@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:ultra_light_performance_tool/src/shared widgets/ulpt_textfield.dart';
+import 'package:ultra_light_performance_tool/src/localization/localizer.dart';
 
 ///Text entry to add airport iata code.
 ///IATA code is supposed to be a 3-letter code
@@ -53,7 +54,7 @@ class _IataEntryState extends State<IataEntry>{
     return ULPTTextField(
       focusNode: focusNode,
       tec: tec,
-      hintText: "IATA Code",
+      hintText: Localizer.of(context).apIataHint,
       inputFormatter: _IcaoInputFormatter(),
     );
   }

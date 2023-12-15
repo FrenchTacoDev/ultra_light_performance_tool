@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:ultra_light_performance_tool/src/res/themes.dart';
 import 'package:ultra_light_performance_tool/src/shared%20widgets/ulpt_textfield.dart';
 import 'package:ultra_light_performance_tool/src/utils/input_utils.dart';
+import 'package:ultra_light_performance_tool/src/localization/localizer.dart';
 
 ///Text entry to set the temperature.
 class TemperatureEntryField extends StatefulWidget {
@@ -62,15 +63,16 @@ class _TemperatureEntryFieldState extends State<TemperatureEntryField> {
     onSubmitted();
   }
 
-  void onSubmitted(){
+  void onSubmitted() async{
     if(tec.value.text.isEmpty) return;
     var value = InputUtils.parseTemperature(tec.value.text);
     
     String valueText = "";
     
     if(value != null && (value > widget.maxTemp || value < widget.minTemp)){
-      _showTempErrorDialog(toHigh: value > widget.maxTemp);
+      await _showTempErrorDialog(toHigh: value > widget.maxTemp);
       value = null;
+      focusNode.requestFocus();
     }else{
       valueText = "${value ?? 15} °C";
     }
@@ -97,7 +99,7 @@ class _TemperatureEntryFieldState extends State<TemperatureEntryField> {
           SizedBox(
             width: theme.perfTextWidth,
             child: Text(
-              "Temperatur",
+              Localizer.of(context).pcTempTitle,
               textAlign: TextAlign.start,
               style: TextStyle(
                 fontSize: 18,
@@ -110,7 +112,7 @@ class _TemperatureEntryFieldState extends State<TemperatureEntryField> {
               focusNode: focusNode,
               tec: tec,
               alignRight: false,
-              hintText: "Eingeben",
+              hintText: Localizer.of(context).enter,
               inputFormatter: TempInputFormatter(),
               isOnlyNumbers: true,
             ),
@@ -126,7 +128,7 @@ class _TemperatureEntryFieldState extends State<TemperatureEntryField> {
               focusNode: focusNode,
               tec: tec,
               alignRight: true,
-              hintText: "Eingeben",
+              hintText: Localizer.of(context).enter,
               inputFormatter: TempInputFormatter(),
               isOnlyNumbers: true,
           ),
@@ -134,7 +136,7 @@ class _TemperatureEntryFieldState extends State<TemperatureEntryField> {
         SizedBox(
           width: theme.perfTextWidth,
           child: Text(
-            "Temperatur",
+            Localizer.of(context).pcTempTitle,
             textAlign: TextAlign.end,
             style: TextStyle(
               fontSize: 18,
@@ -159,13 +161,16 @@ class _TemperatureEntryFieldState extends State<TemperatureEntryField> {
     showDialog(
         context: context, 
         builder: (context) => AlertDialog(
-          title: const Text("Ungültige Temperatur", textAlign: TextAlign.center,),
-          content: Text("Die Temperatur ist zu ${toHigh ? "hoch" : "niedrig"}.\nBitte überprüfen.", textAlign: TextAlign.center),
+          title: Text(Localizer.of(context).pcTempInvalidTitle, textAlign: TextAlign.center,),
+          content: Text(
+              toHigh ? Localizer.of(context).pcTempTooHigh : Localizer.of(context).pcTempTooLow,
+              textAlign: TextAlign.center
+          ),
           actionsAlignment: MainAxisAlignment.center,
           actions: [
             TextButton(
                 onPressed: () => Navigator.pop(context),
-                child: const Text("OK"),
+                child: Text(Localizer.of(context).ok),
             )
           ],
         ),

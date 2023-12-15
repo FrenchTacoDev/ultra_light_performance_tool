@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:ultra_light_performance_tool/src/res/themes.dart';
+import 'package:ultra_light_performance_tool/src/core/core.dart';
 
 ///Confirmation Dialog using the [ULPTTheme]
 class ULPTConfirmation extends StatelessWidget {
@@ -36,12 +37,12 @@ class ULPTConfirmation extends StatelessWidget {
         OutlinedButton(
             onPressed: () => Navigator.pop(context, true),
             style: buttonStyle,
-            child: Text("Ja", style: textStyle,),
+            child: Text(Localizer.of(context).yes, style: textStyle,),
         ),
         OutlinedButton(
           onPressed: () => Navigator.pop(context, false),
           style: buttonStyle,
-          child: Text("Nein", style: textStyle,),
+          child: Text(Localizer.of(context).no, style: textStyle,),
         ),
       ],
     );

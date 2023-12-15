@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:ultra_light_performance_tool/src/shared widgets/ulpt_textfield.dart';
+import 'package:ultra_light_performance_tool/src/localization/localizer.dart';
 
 class DesignatorEntry extends StatefulWidget {
   const DesignatorEntry({
@@ -53,7 +54,8 @@ class _DesignatorEntryState extends State<DesignatorEntry>{
     return ULPTTextField(
       focusNode: focusNode,
       tec: tec,
-      hintText: widget.isIntersect ? "Pistenkreuzungsbezeichnung" : "Pistenbezeichnung",
+      hintText: widget.isIntersect ? Localizer.of(context).rwyIntersectNameHint
+          : Localizer.of(context).rwyNameHint,
     );
   }
 

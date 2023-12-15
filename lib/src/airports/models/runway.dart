@@ -1,4 +1,6 @@
+import 'package:flutter/material.dart';
 import 'package:flutter/foundation.dart';
+import 'package:ultra_light_performance_tool/src/localization/localizer.dart';
 
 ///Data representation of Runway
 class Runway{
@@ -151,44 +153,38 @@ class Intersection{
 ///Currently only asphalt and grass
 enum Surface{
   asphalt, grass;
-
-  @override
-  toString() => _surfaceMap[this]!;
+  toLocString(BuildContext context) => _surfaceMap[this]!(context);
 }
 
-const _surfaceMap = <Surface, String>{
-  Surface.asphalt : "Asphalt",
-  Surface.grass : "Gras",
+final _surfaceMap = <Surface, String Function(BuildContext context)>{
+  Surface.asphalt : (context) => Localizer.of(context).rwyAsphalt,
+  Surface.grass : (context) => Localizer.of(context).rwyGrass,
 };
 
 ///How grass is conditioned in case of grass runways. Currently considered as
 ///firm, wet and softened
 enum Underground{
   firm, wet, softened;
-
-  @override
-  toString() => _undergroundMap[this]!;
+  toLocString(BuildContext context) => _undergroundMap[this]!(context);
 }
 
-const _undergroundMap = <Underground, String>{
-  Underground.firm : "fest, trocken, eben", //Todo "fest, trocken, eben, kurzer Bewuchs bis 3cm",
-  Underground.wet : "feucht",
-  Underground.softened : "aufgeweicht"
+final _undergroundMap = <Underground, String Function(BuildContext context)>{
+  Underground.firm : (context) => Localizer.of(context).firm,
+  Underground.wet : (context) => Localizer.of(context).wet,
+  Underground.softened : (context) => Localizer.of(context).softened,
 };
 
 ///currently dry, wet, standing water, slush, wet snow and dry snow are considered
 enum RunwayCondition{
   dry, wet, standingWater, slush, wetSnow, drySnow;
-
-  @override
-  toString() => _rwyConditionMap[this]!;
+  toLocString(BuildContext context) => _rwyConditionMap[this]!(context);
 }
 
-const _rwyConditionMap = <RunwayCondition, String>{
-  RunwayCondition.dry : "Trocken",
-  RunwayCondition.wet : "Nass",
-  RunwayCondition.standingWater : "Stehendes Wasser",
-  RunwayCondition.slush : "Schneematsch",
-  RunwayCondition.wetSnow : "Normalfeuchter Schnee",
-  RunwayCondition.drySnow : "Pulver Schnee",
+final _rwyConditionMap = <RunwayCondition, String Function(BuildContext context)>{
+  RunwayCondition.dry : (context) => Localizer.of(context).condDry,
+  RunwayCondition.wet : (context) => Localizer.of(context).condWet,
+  RunwayCondition.standingWater : (context) => Localizer.of(context).condStandingWater,
+  RunwayCondition.slush : (context) => Localizer.of(context).condSlush,
+  RunwayCondition.wetSnow : (context) => Localizer.of(context).condWetSnow,
+  RunwayCondition.drySnow : (context) => Localizer.of(context).condDrySnow,
 };

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:ultra_light_performance_tool/src/core/core.dart';
 import 'package:ultra_light_performance_tool/src/airports/airports.dart';
 import 'package:ultra_light_performance_tool/src/shared%20widgets/ulpt_button.dart';
 import 'BLoC/add_runway_bloc.dart';
@@ -13,10 +14,13 @@ class AddRunwayPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+
+    var dict = Localizer.of(context);
+
     return Scaffold(
         appBar: AppBar(
           centerTitle: true,
-          title: original == null ? const Text("Piste hinzufügen") : const Text("Piste bearbeiten"),
+          title: original == null ? Text(dict.rwyAddTitle) : Text(dict.rwyEditTitle),
         ),
         body: BlocProvider<AddRunwayCubit>(
           create: (context) => AddRunwayCubit(original: original),
@@ -83,10 +87,13 @@ class AddRunwayPage extends StatelessWidget {
                             },
                           ),
                           const SizedBox(height: 16,),
-                          ULPTButton(
-                              enabled: cubit.canSave(),
-                              title: "Speichern",
-                              onTap: () => cubit.save(context: context),
+                          ConstrainedBox(
+                            constraints: const BoxConstraints(minWidth: 100),
+                            child: ULPTButton(
+                                enabled: cubit.canSave(),
+                                title: dict.save,
+                                onTap: () => cubit.save(context: context),
+                            ),
                           )
                         ],
                       ),
@@ -119,7 +126,7 @@ class _NonEditableIntersect extends StatelessWidget {
           title: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              Text(intersection.designator),
+              Text(Localizer.of(context).full),
               const SizedBox(height: 8,),
               IntersectionTodEntry(
                   value: intersection.toda > 0 ? intersection.toda : null,

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ultra_light_performance_tool/src/airports/airports.dart';
+import 'package:ultra_light_performance_tool/src/core/core.dart';
 import 'package:ultra_light_performance_tool/src/shared%20widgets/ulpt_confirmation.dart';
 
 class AddRunwayState{
@@ -35,7 +36,9 @@ class AddRunwayState{
       endElevation: rwy?.endElevation,
       slope: rwy?.slope,
       surface: rwy?.surface ?? Surface.asphalt,
-      intersections: rwy?.intersections ?? [const Intersection(designator: "Voll", toda: 0)],
+      //Uses placeholder Full for first intersect as this resembles full runway. Text shown to the user is however resolved by localization.
+      //See AddRunwayPage for this.
+      intersections: rwy?.intersections ?? [const Intersection(designator: "Full", toda: 0)],
     );
   }
 
@@ -63,7 +66,6 @@ class AddRunwayCubit extends Cubit<AddRunwayState>{
         super(AddRunwayState.initial(rwy: original));
 
   final Runway? original;
-
   bool get isEdit => original != null;
 
   void setDesignator({String? designator}){
@@ -148,8 +150,8 @@ class AddRunwayCubit extends Cubit<AddRunwayState>{
 
     var res = await ULPTConfirmation.show(
       context: context,
-      title: const Text(
-        "Pistenkreuzung löschen?",
+      title: Text(
+        Localizer.of(context).rwyIntersectDelConfirm,
         textAlign: TextAlign.center,
       ),
     );

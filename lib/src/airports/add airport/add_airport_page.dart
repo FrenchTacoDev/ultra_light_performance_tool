@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:ultra_light_performance_tool/src/core/core.dart';
 import 'package:ultra_light_performance_tool/src/airports/airports.dart';
 import 'package:ultra_light_performance_tool/src/shared%20widgets/ulpt_button.dart';
 
@@ -18,7 +19,7 @@ class AddAirportPage extends StatelessWidget {
     return Scaffold(
         appBar: AppBar(
           centerTitle: true,
-          title: original == null ? const Text("Flugplatz hinzufügen") : const Text("Flugplatz bearbeiten"),
+          title: original == null ? Text(Localizer.of(context).apAddTitle) : Text(Localizer.of(context).apEditTitle),
         ),
         body: BlocProvider<AddAirportCubit>(
           create: (context) => AddAirportCubit(original: original),
@@ -56,7 +57,7 @@ class AddAirportPage extends StatelessWidget {
                           ),
                           const SizedBox(height: 8,),
                           Text(
-                            "Pisten",
+                            Localizer.of(context).runways,
                             style: TextStyle(
                                 color: Theme.of(context).listTileTheme.titleTextStyle!.color,
                                 fontSize: 22
@@ -67,10 +68,13 @@ class AddAirportPage extends StatelessWidget {
                             runways: state.runways ?? [],
                           ),
                           const SizedBox(height: 16,),
-                          ULPTButton(
-                              enabled: cubit.canSave(),
-                              title: "Speichern",
-                              onTap: () => cubit.save(context: context),
+                          ConstrainedBox(
+                            constraints: const BoxConstraints(minWidth: 100),
+                            child: ULPTButton(
+                                enabled: cubit.canSave(),
+                                title: Localizer.of(context).save,
+                                onTap: () => cubit.save(context: context),
+                            ),
                           )
                         ],
                       ),
