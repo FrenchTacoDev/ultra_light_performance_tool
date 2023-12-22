@@ -1,0 +1,50 @@
+import 'dart:io';
+import 'dart:typed_data';
+import 'package:file_picker/file_picker.dart';
+import 'package:path/path.dart';
+import 'package:path_provider/path_provider.dart';
+import 'package:share_plus/share_plus.dart';
+import 'package:ultra_light_performance_tool/src/core/core.dart';
+
+class ULPTFileExporter{
+
+  Future<void> exportULPTData({required Uint8List data, Dictionary? dict}) async{
+    if(Platform.isWindows || Platform.isMacOS) return _DesktopExporter().exportULPTData(data: data);
+    var filePath = join((await getTemporaryDirectory()).path, "PerfData.ulpt");
+
+    var file = File(filePath);
+    if(await file.exists()) await file.delete(recursive: true);
+    await file.create(recursive: true);
+
+    await file.writeAsBytes(data);
+
+    var res = await Share.shareXFiles(
+      [XFile(filePath)],
+      //Todo for ipad sharePositionOrigin:
+    );
+
+    print(res.status);
+  }
+}
+
+class _DesktopExporter extends ULPTFileExporter{
+
+  @override
+  Future<void> exportULPTData({required Uint8List data, Dictionary? dict}) async{
+    //Todo localize
+    var filePath = await FilePicker.platform.saveFile(
+        dialogTitle: dict?.saveFileTitle ?? "Save ULPT Data",
+        fileName: "PerfData.ulpt",
+        allowedExtensions: ["ulpt"]
+    );
+
+    if(filePath == null) return;
+
+    if(filePath.endsWith(".ulpt") == false) filePath += ".ulpt";
+    var file = File(filePath);
+    if(await file.exists()) await file.delete(recursive: true);
+    await file.create(recursive: true);
+    await file.writeAsBytes(data);
+  }
+
+}

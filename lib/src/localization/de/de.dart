@@ -229,4 +229,32 @@ class DE extends Dictionary{
   @override
   String pcNotEnoughRunwayMargin(int overshoot) => "Startdistanz mit Aufschlag nicht ausreichend.\n${overshoot}m mehr benötigt!";
   //endregion
+  //region Import/Export
+  @override
+  String get saveFileTitle => "ULPT-Daten speichern";
+  @override
+  String get importFileTitle => ".ulpt Datei auswählen um Daten zu importieren.";
+  @override
+  String get fileExportError => "Beim Export ist ein Fehler aufgetreten!";
+  @override
+  String get fileImportError => "Beim Import ist ein Fehler aufgetreten!";
+  @override
+  String get optionsTitle => "Option auswählen";
+  @override
+  String get exportOptionSettings => "Mit Einstellungen exportieren";
+  @override
+  String get importOptionSettings => "Mit Einstellungen importieren";
+  @override
+  String get exportOptionNoSettings => "Ohne Einstellungen exportieren";
+  @override
+  String get importOptionNoSettings => "Ohne Einstellungen importieren";
+  @override
+  String get importOperationTitle => "Verarbeite Daten";
+  @override
+  String get exportOperationTitle => "Erstelle Datei";
+  @override
+  String get importFinishedTitle => "Import Abgeschlossen";
+  @override
+  String get exportFinishedTitle => "Export Abgeschlossen";
+  //endregion
 }

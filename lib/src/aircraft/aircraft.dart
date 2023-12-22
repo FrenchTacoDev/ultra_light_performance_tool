@@ -41,6 +41,16 @@ class Aircraft{
         todr: map[todFieldValue] ?? 0,
     );
   }
+
+  @override
+  bool operator ==(Object other) {
+    return other is Aircraft
+        && other.name == name
+        && other.todr == todr;
+  }
+
+  @override
+  int get hashCode => Object.hash(name, todr);
 }
 
 ///Class to handle all [Aircraft]

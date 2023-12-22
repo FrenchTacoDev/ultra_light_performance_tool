@@ -25,10 +25,10 @@ class ULPTConfirmation extends StatelessWidget {
   Widget build(BuildContext context) {
 
     var theme = Theme.of(context).extensions[ULPTTheme]! as ULPTTheme;
-    var buttonStyle = ButtonStyle(
-      textStyle: MaterialStateProperty.all(TextStyle(color: theme.interactiveFocusedColor)),
-    );
     var textStyle = TextStyle(color: theme.interactiveFocusedColor);
+    var buttonStyle = ButtonStyle(
+      textStyle: MaterialStateProperty.all(textStyle),
+    );
 
     return AlertDialog(
       title: title,
