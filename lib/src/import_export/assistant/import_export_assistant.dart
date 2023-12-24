@@ -69,8 +69,9 @@ class _AssistantCubit extends Cubit<_AssistantState>{
     var appCubit = context.read<ApplicationCubit>();
     var dict = Localizer.of(context);
     try{
+      var size = MediaQuery.of(context).size;
       var data = await ExportProcessor.createExportData(saveManager: appCubit.saveManager, exportSettings: state.withSettings);
-      await ULPTFileExporter().exportULPTData(data: data);
+      await ULPTFileExporter().exportULPTData(data: data, screenSize: size);
     } catch (e){
       //Todo log e
       return emit(state.copyWith(phase: Phase.error, errorText: dict.fileExportError));

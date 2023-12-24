@@ -1,6 +1,7 @@
 import 'dart:io';
 import 'dart:typed_data';
 import 'package:file_picker/file_picker.dart';
+import 'package:flutter/material.dart';
 import 'package:path/path.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:share_plus/share_plus.dart';
@@ -10,8 +11,8 @@ import 'package:ultra_light_performance_tool/src/core/core.dart';
 class ULPTFileExporter{
 
   ///If [dict] is provided, will localize the export message for the user.
-  Future<void> exportULPTData({required Uint8List data, Dictionary? dict}) async{
-    if(Platform.isWindows || Platform.isMacOS) return _DesktopExporter().exportULPTData(data: data);
+  Future<void> exportULPTData({required Uint8List data, required Size screenSize, Dictionary? dict}) async{
+    if(Platform.isWindows || Platform.isMacOS) return _DesktopExporter().exportULPTData(data: data, screenSize: screenSize);
     var filePath = join((await getTemporaryDirectory()).path, "PerfData.ulpt");
 
     var file = File(filePath);
@@ -22,7 +23,7 @@ class ULPTFileExporter{
 
     var res = await Share.shareXFiles(
       [XFile(filePath)],
-      //Todo for ipad sharePositionOrigin:
+      sharePositionOrigin: Rect.fromLTWH(screenSize.width / 2, 32, screenSize.width * 0.66, screenSize.height - 64),
     );
 
     print(res.status);
@@ -33,7 +34,7 @@ class ULPTFileExporter{
 class _DesktopExporter extends ULPTFileExporter{
 
   @override
-  Future<void> exportULPTData({required Uint8List data, Dictionary? dict}) async{
+  Future<void> exportULPTData({required Uint8List data,  required Size screenSize, Dictionary? dict}) async{
     var filePath = await FilePicker.platform.saveFile(
         dialogTitle: dict?.saveFileTitle ?? "Save ULPT Data",
         fileName: "PerfData.ulpt",
