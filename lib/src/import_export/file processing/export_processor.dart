@@ -4,6 +4,7 @@ import 'dart:io';
 import 'package:flutter/foundation.dart';
 import 'package:ultra_light_performance_tool/src/database/savemanager.dart';
 
+///This class takes the internal ULPT data and serializes it into json format before compressing it using zlib.
 class ExportProcessor{
 
   static Future<Uint8List> createExportData({

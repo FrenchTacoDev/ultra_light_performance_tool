@@ -7,6 +7,8 @@ import 'package:ultra_light_performance_tool/src/airports/airports.dart';
 import 'package:ultra_light_performance_tool/src/core/settings/settings.dart';
 import 'package:ultra_light_performance_tool/src/database/savemanager.dart';
 
+///This class uses ulpt data that has previously been serialized.
+///First decompresses zlib to deserialize from json afterwards.
 class ImportProcessor{
 
   static Future<void> processImportData({

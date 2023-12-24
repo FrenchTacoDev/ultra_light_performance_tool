@@ -6,8 +6,10 @@ import 'package:path_provider/path_provider.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:ultra_light_performance_tool/src/core/core.dart';
 
+///Class for writing data to a user selected file(path).
 class ULPTFileExporter{
 
+  ///If [dict] is provided, will localize the export message for the user.
   Future<void> exportULPTData({required Uint8List data, Dictionary? dict}) async{
     if(Platform.isWindows || Platform.isMacOS) return _DesktopExporter().exportULPTData(data: data);
     var filePath = join((await getTemporaryDirectory()).path, "PerfData.ulpt");
@@ -27,11 +29,11 @@ class ULPTFileExporter{
   }
 }
 
+///Subclass used on Desktop. Is private bc should only be selected by the main function
 class _DesktopExporter extends ULPTFileExporter{
 
   @override
   Future<void> exportULPTData({required Uint8List data, Dictionary? dict}) async{
-    //Todo localize
     var filePath = await FilePicker.platform.saveFile(
         dialogTitle: dict?.saveFileTitle ?? "Save ULPT Data",
         fileName: "PerfData.ulpt",

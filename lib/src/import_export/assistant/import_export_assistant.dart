@@ -5,10 +5,12 @@ import 'package:ultra_light_performance_tool/src/import_export/file%20processing
 import 'package:ultra_light_performance_tool/src/import_export/file%20selection/file_selection.dart';
 import 'package:ultra_light_performance_tool/src/res/themes.dart';
 
+///Defines the assistants mode
 enum Mode{
   import, export
 }
 
+///Defines the phase in which the assistant currently is
 enum Phase{
   optionsSelect, operation, finished, error
 }
@@ -17,7 +19,9 @@ class _AssistantState{
 
   Phase phase;
   Mode mode;
+  ///if true, will export/import settings to/from the .ulpt file
   bool withSettings;
+  ///if not null, error phase will display this text.
   String? errorText;
 
   _AssistantState._({required this.phase, required this.mode, required this.withSettings, this.errorText});
@@ -39,6 +43,7 @@ class _AssistantState{
 class _AssistantCubit extends Cubit<_AssistantState>{
   _AssistantCubit({required Mode mode}) : super(_AssistantState.initial(mode: mode));
 
+  ///If true will discard a new assistant build e.g. when tapping out and back to the app
   bool isFinished = false;
 
   @override
@@ -47,10 +52,12 @@ class _AssistantCubit extends Cubit<_AssistantState>{
     super.emit(state);
   }
 
+  ///Sets the export or import options
   void setOpsOptions({required bool withSettings}){
     emit(state.copyWith(phase: Phase.operation, withSettings: withSettings));
   }
 
+  ///Starts whatever operation is associated with the current state selections
   Future<void> startOperation({required BuildContext context}) async{
     if(isFinished) return Navigator.pop(context);
     if(state.mode == Mode.import) return await _startFileImport(context: context);
@@ -65,6 +72,7 @@ class _AssistantCubit extends Cubit<_AssistantState>{
       var data = await ExportProcessor.createExportData(saveManager: appCubit.saveManager, exportSettings: state.withSettings);
       await ULPTFileExporter().exportULPTData(data: data);
     } catch (e){
+      //Todo log e
       return emit(state.copyWith(phase: Phase.error, errorText: dict.fileExportError));
     }finally{
       isFinished = true;
@@ -86,6 +94,7 @@ class _AssistantCubit extends Cubit<_AssistantState>{
         );
       }
     }catch (e){
+      //Todo log e
       return emit(state.copyWith(phase: Phase.error, errorText: dict.fileImportError));
     }finally{
       isFinished = true;
@@ -96,7 +105,6 @@ class _AssistantCubit extends Cubit<_AssistantState>{
 }
 
 class ImportExportAssistant{
-
   static Future<void> startAssistant({required BuildContext context, required Mode mode}) async{
     await showDialog(
         context: context,
