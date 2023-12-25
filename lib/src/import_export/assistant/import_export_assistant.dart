@@ -141,15 +141,41 @@ class _OptionsSelect extends StatelessWidget {
       textStyle: MaterialStateProperty.all(textStyle),
     );
 
-    return IntrinsicWidth(
-      child: SimpleDialog(
-        title: Text(Localizer.of(context).optionsTitle , textAlign: TextAlign.center),
-        children: [
-          const SizedBox(height: 16,),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        Widget content = Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            const SizedBox(width: 4,),
+            OutlinedButton(
+                style: buttonStyle,
+                onPressed: () => context.read<_AssistantCubit>().setOpsOptions(withSettings: true),
+                child: Text(
+                  mode == Mode.export ?
+                  Localizer.of(context).exportOptionSettings :
+                  Localizer.of(context).importOptionSettings,
+                  style: textStyle,
+                )
+            ),
+            const SizedBox(width: 16,),
+            OutlinedButton(
+                style: buttonStyle,
+                onPressed: () => context.read<_AssistantCubit>().setOpsOptions(withSettings: false),
+                child: Text(
+                  mode == Mode.export ?
+                  Localizer.of(context).exportOptionNoSettings :
+                  Localizer.of(context).importOptionNoSettings,
+                  style: textStyle,
+                )
+            ),
+            const SizedBox(width: 4,),
+          ],
+        );
+
+        if(constraints.maxWidth < 580){
+          content = Column(
+            mainAxisSize: MainAxisSize.min,
             children: [
-              const SizedBox(width: 4,),
               OutlinedButton(
                   style: buttonStyle,
                   onPressed: () => context.read<_AssistantCubit>().setOpsOptions(withSettings: true),
@@ -160,7 +186,7 @@ class _OptionsSelect extends StatelessWidget {
                     style: textStyle,
                   )
               ),
-              const SizedBox(width: 16,),
+              const SizedBox(height: 8,),
               OutlinedButton(
                   style: buttonStyle,
                   onPressed: () => context.read<_AssistantCubit>().setOpsOptions(withSettings: false),
@@ -171,11 +197,21 @@ class _OptionsSelect extends StatelessWidget {
                     style: textStyle,
                   )
               ),
-              const SizedBox(width: 4,),
+              const SizedBox(height: 8,),
             ],
-          )
-        ],
-      ),
+          );
+        }
+
+        return IntrinsicWidth(
+          child: SimpleDialog(
+            title: Text(Localizer.of(context).optionsTitle , textAlign: TextAlign.center),
+            children: [
+              const SizedBox(height: 16,),
+              content,
+            ],
+          ),
+        );
+      },
     );
   }
 }
