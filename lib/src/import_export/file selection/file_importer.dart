@@ -9,7 +9,7 @@ class ULPTFileImporter{
   Future<Uint8List?> importULPTData({Dictionary? dict}) async{
 
     var file = await FilePicker.platform.pickFiles(
-      allowedExtensions: ["ulpt"],
+      type: FileType.any,
       allowMultiple: false,
       dialogTitle: dict?.importFileTitle ?? "Select .ulpt file to import performance data",
       withData: true,
@@ -17,7 +17,8 @@ class ULPTFileImporter{
 
     if(file == null || file.files.isEmpty) return null;
     assert(file.files.length == 1);
-    if(file.files.first.name.endsWith(".ulpt") == false) throw(const FormatException("File is no .ulpt file"));
-    return file.files.first.bytes;
+    Uint8List? bytes = file.files.first.bytes;
+    if(file.files.first.name.endsWith(".ulpt") == false) bytes = await importULPTData(dict: dict);
+    return bytes;
   }
 }

@@ -21,12 +21,10 @@ class ULPTFileExporter{
 
     await file.writeAsBytes(data);
 
-    var res = await Share.shareXFiles(
+    await Share.shareXFiles(
       [XFile(filePath)],
-      sharePositionOrigin: Rect.fromLTWH(screenSize.width / 2, 32, screenSize.width * 0.66, screenSize.height - 64),
+      sharePositionOrigin: Rect.fromLTRB(0, 0, screenSize.width, 16),
     );
-
-    print(res.status);
   }
 }
 
