@@ -61,6 +61,11 @@ class ApplicationCubit extends Cubit<ApplicationState>{
     emit(state.copyWith(setupComplete: true));
   }
 
+  ///Only called when there has been a change in saved data that is not accurately represented within the cache.
+  Future<void> refresh() async{
+    _settings = (await saveManager.getSettings()) ?? _settings;
+  }
+
   ///Will open a new [AirportManagePanel]
   Future<void> manageAirports({required BuildContext context}) async{
     await Navigator.push(

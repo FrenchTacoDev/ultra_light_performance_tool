@@ -1,8 +1,8 @@
 import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ultra_light_performance_tool/src/core/core.dart';
+import 'package:ultra_light_performance_tool/src/import_export/import_export.dart';
 import 'package:ultra_light_performance_tool/src/performance%20calculation/calculations.dart';
 import 'package:ultra_light_performance_tool/src/shared%20widgets/ulpt_dropdown.dart';
 import 'widgets/factor_adjust.dart';
@@ -105,6 +105,18 @@ class SettingsPanel extends StatelessWidget {
                           subtitle: Text(Localizer.of(context).facAdjustSubTitle),
                           onTap: () => context.read<_SettingsPanelCubit>().setCorrections(context: context),
                         ),
+                        Divider(color: Colors.white.withOpacity(0.35), height: 0.5, indent: 16, endIndent: 16,),
+                        ListTile(
+                          title: Text("Import"),
+                          subtitle: Text("Start the import of ULPT data"),
+                          onTap: () => context.read<_SettingsPanelCubit>().startImport(context: context),
+                        ),
+                        Divider(color: Colors.white.withOpacity(0.35), height: 0.5, indent: 16, endIndent: 16,),
+                        ListTile(
+                          title: Text("Export"),
+                          subtitle: Text("Start the export of ULPT data"),
+                          onTap: () => context.read<_SettingsPanelCubit>().startExport(context: context),
+                        ),
                         const SizedBox(height: 16),
                       ],
                     ),
@@ -164,5 +176,17 @@ class _SettingsPanelCubit extends Cubit<_SettingsPanelState>{
     var newSettings = state.settings.copy()..locale = locale;
     appCubit.settings = newSettings;
     emit(state.copyWidth(settings: newSettings));
+  }
+
+  Future<void> startExport({required BuildContext context}) async{
+    await ImportExport.startExport(context: context);
+    await appCubit.refresh();
+    emit(state.copyWidth(settings: appCubit.settings));
+  }
+
+  Future<void> startImport({required BuildContext context}) async{
+    await ImportExport.startImport(context: context);
+    await appCubit.refresh();
+    emit(state.copyWidth(settings: appCubit.settings));
   }
 }

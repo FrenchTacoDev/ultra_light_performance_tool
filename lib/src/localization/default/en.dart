@@ -17,7 +17,6 @@ abstract class Dictionary{
   //endregion
 
   //region Menu
-  //region Menu
   String get menuAirports;
   String get menuSettings;
   //endregion
@@ -142,6 +141,22 @@ abstract class Dictionary{
   String get pcRunwayRemain;
   String pcNotEnoughRunway(int overshoot);
   String pcNotEnoughRunwayMargin(int overshoot);
+  //endregion
+
+  //region Import/Export
+  String get saveFileTitle;
+  String get importFileTitle;
+  String get fileExportError;
+  String get fileImportError;
+  String get optionsTitle;
+  String get exportOptionSettings;
+  String get importOptionSettings;
+  String get exportOptionNoSettings;
+  String get importOptionNoSettings;
+  String get importOperationTitle;
+  String get exportOperationTitle;
+  String get importFinishedTitle;
+  String get exportFinishedTitle;
   //endregion
 }
 
@@ -374,5 +389,33 @@ class EN extends Dictionary{
   String pcNotEnoughRunway(int overshoot) => "Takeoff distance insufficient.\n${overshoot}m more needed!";
   @override
   String pcNotEnoughRunwayMargin(int overshoot) => "Takeoff distance with margin insufficient.\n${overshoot}m more needed!";
+  //endregion
+  //region Import/Export
+  @override
+  String get saveFileTitle => "Save ULPT Data";
+  @override
+  String get importFileTitle => "Select .ulpt file to import performance data";
+  @override
+  String get fileExportError => "An error occurred exporting the file!";
+  @override
+  String get fileImportError => "An error occurred importing the file!";
+  @override
+  String get optionsTitle => "Select Option";
+  @override
+  String get exportOptionSettings => "Export with Settings";
+  @override
+  String get importOptionSettings => "Import with Settings";
+  @override
+  String get exportOptionNoSettings => "Export without Settings";
+  @override
+  String get importOptionNoSettings => "Import without Settings";
+  @override
+  String get importOperationTitle => "Processing File";
+  @override
+  String get exportOperationTitle => "Creating File";
+  @override
+  String get importFinishedTitle => "Import Completed";
+  @override
+  String get exportFinishedTitle => "Export Completed";
   //endregion
 }
