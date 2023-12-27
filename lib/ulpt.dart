@@ -6,6 +6,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:ultra_light_performance_tool/src/core/core.dart';
+import 'package:ultra_light_performance_tool/src/import_export/import_export.dart';
 import 'src/aircraft/aircraft.dart';
 
 ///This is the main entry point for the App.
@@ -80,9 +81,13 @@ class MainPage extends StatelessWidget {
 
   void onAppStartArguments(BuildContext context, String args) async{
     var cubit = context.read<ApplicationCubit>();
+    args = args.replaceAll(r'"', "");
+    args = args.replaceAll(r'\', r'/');
+    if(args.endsWith(".ulpt") == false) return;
+
+    func() => ImportExport.startImportFromPath(context: context, filePath: args);
     await SchedulerBinding.instance.endOfFrame;
-    print(args);
-    showDialog(context: context, builder: (context) => SimpleDialog(title: Text(args)),);
+    await func();
     cubit.onAppStartArgumentsHandled();
   }
 }

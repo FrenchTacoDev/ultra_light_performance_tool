@@ -9,6 +9,11 @@ class ImportExport{
     await ImportExportAssistant.startAssistant(context: context, mode: Mode.import,);
   }
 
+  ///Call with context to start the assistant for importing ULPT Data
+  static Future<void> startImportFromPath({required BuildContext context, required String filePath}) async{
+    await ImportExportAssistant.startAssistant(context: context, mode: Mode.import, filePath: filePath);
+  }
+
   ///Call with context to start the assistant for exporting ULPT Data
   static Future<void> startExport({required BuildContext context}) async{
     await ImportExportAssistant.startAssistant(context: context, mode: Mode.export,);
