@@ -1,6 +1,7 @@
 library ulpt;
 
 import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
@@ -28,7 +29,7 @@ class ULPT extends StatelessWidget {
                   GlobalCupertinoLocalizations.delegate,
                 ],
                 supportedLocales: Settings.appLocals,
-                home: MainPage(setupComplete: state.setupComplete),
+                home: MainPage(appState: state),
               ),
             );
           },
@@ -40,16 +41,18 @@ class ULPT extends StatelessWidget {
 ///This is the main and starting page. Once the app setup is complete,
 ///this should show the collection of aircraft
 class MainPage extends StatelessWidget {
-  const MainPage({super.key, required this.setupComplete});
+  const MainPage({super.key, required this.appState});
 
-  final bool setupComplete;
+  final ApplicationState appState;
 
   @override
   Widget build(BuildContext context) {
 
-    if(setupComplete == false) return const _WaitScreen();
+    if(appState.setupComplete == false) return const _WaitScreen();
 
     var appCubit = context.read<ApplicationCubit>();
+
+    if(appState.appStartArgs != null) onAppStartArguments(context, appState.appStartArgs!);
 
     return SafeArea(
         child: Scaffold(
@@ -73,6 +76,14 @@ class MainPage extends StatelessWidget {
           ),
         )
     );
+  }
+
+  void onAppStartArguments(BuildContext context, String args) async{
+    var cubit = context.read<ApplicationCubit>();
+    await SchedulerBinding.instance.endOfFrame;
+    print(args);
+    showDialog(context: context, builder: (context) => SimpleDialog(title: Text(args)),);
+    cubit.onAppStartArgumentsHandled();
   }
 }
 
