@@ -1,3 +1,4 @@
+import 'dart:io';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/foundation.dart';
 import 'package:ultra_light_performance_tool/src/core/core.dart';
@@ -6,7 +7,9 @@ import 'package:ultra_light_performance_tool/src/core/core.dart';
 ///Only for .ulpt files
 class ULPTFileImporter{
 
-  Future<Uint8List?> importULPTData({Dictionary? dict}) async{
+  Future<Uint8List?> importULPTData({Dictionary? dict, String? filePath}) async{
+
+    if(filePath != null) return importULPTDataFromGivenPath(filePath: filePath);
 
     var file = await FilePicker.platform.pickFiles(
       type: FileType.any,
@@ -19,6 +22,15 @@ class ULPTFileImporter{
     assert(file.files.length == 1);
     Uint8List? bytes = file.files.first.bytes;
     if(file.files.first.name.endsWith(".ulpt") == false) bytes = await importULPTData(dict: dict);
+    return bytes;
+  }
+
+  Future<Uint8List?> importULPTDataFromGivenPath({required String filePath}) async{
+    if(filePath.endsWith(".ulpt") == false) throw FormatException("File at $filePath is not a valid .ulpt file");
+    var file = File(filePath);
+    if((await file.exists()) == false) throw FileSystemException("File does not exist at $filePath");
+    var bytes = await file.readAsBytes();
+    if(Platform.isIOS || Platform.isMacOS) await file.delete(recursive: true);
     return bytes;
   }
 }

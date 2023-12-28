@@ -23,25 +23,28 @@ class _AssistantState{
   bool withSettings;
   ///if not null, error phase will display this text.
   String? errorText;
+  ///If opened directly from path, this path must be provided in the initial state!
+  String? filePath;
 
-  _AssistantState._({required this.phase, required this.mode, required this.withSettings, this.errorText});
+  _AssistantState._({required this.phase, required this.mode, required this.withSettings, this.errorText, this.filePath});
 
-  factory _AssistantState.initial({required Mode mode}){
-    return _AssistantState._(phase: Phase.optionsSelect, mode: mode, withSettings: false);
+  factory _AssistantState.initial({required Mode mode, String? filePath}){
+    return _AssistantState._(phase: Phase.optionsSelect, mode: mode, withSettings: false, filePath: filePath);
   }
 
-  copyWith({Phase? phase, Mode? mode, bool? withSettings, String? errorText}){
+  copyWith({Phase? phase, Mode? mode, bool? withSettings, String? errorText,}){
     return _AssistantState._(
       phase: phase ?? this.phase,
       mode: mode ?? this.mode,
       withSettings: withSettings ?? this.withSettings,
       errorText: errorText ?? this.errorText,
+      filePath: filePath,
     );
   }
 }
 
 class _AssistantCubit extends Cubit<_AssistantState>{
-  _AssistantCubit({required Mode mode}) : super(_AssistantState.initial(mode: mode));
+  _AssistantCubit({required Mode mode, String? filePath}) : super(_AssistantState.initial(mode: mode, filePath: filePath));
 
   ///If true will discard a new assistant build e.g. when tapping out and back to the app
   bool isFinished = false;
@@ -84,9 +87,9 @@ class _AssistantCubit extends Cubit<_AssistantState>{
   Future<void> _startFileImport({required BuildContext context}) async{
     var appCubit = context.read<ApplicationCubit>();
     var dict = Localizer.of(context);
-
+    
     try{
-      var data = await ULPTFileImporter().importULPTData();
+      var data = await ULPTFileImporter().importULPTData(dict: dict, filePath: state.filePath);
       if(data != null) {
         await ImportProcessor.processImportData(
             data: data,
@@ -106,12 +109,12 @@ class _AssistantCubit extends Cubit<_AssistantState>{
 }
 
 class ImportExportAssistant{
-  static Future<void> startAssistant({required BuildContext context, required Mode mode}) async{
+  static Future<void> startAssistant({required BuildContext context, required Mode mode, String? filePath}) async{
     await showDialog(
         context: context,
         builder: (context) {
           return BlocProvider<_AssistantCubit>(
-            create: (context) => _AssistantCubit(mode: mode),
+            create: (context) => _AssistantCubit(mode: mode, filePath: filePath),
             child: BlocBuilder<_AssistantCubit, _AssistantState>(
               builder: (context, state) {
                 if(state.phase == Phase.optionsSelect) return _OptionsSelect(mode: state.mode,);

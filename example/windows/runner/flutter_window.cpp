@@ -1,11 +1,11 @@
 #include "flutter_window.h"
-
-#include <optional>
-
+#include <flutter/method_channel.h>
+#include <flutter/standard_method_codec.h>
 #include "flutter/generated_plugin_registrant.h"
 
-FlutterWindow::FlutterWindow(const flutter::DartProject& project)
-    : project_(project) {}
+FlutterWindow::FlutterWindow(const flutter::DartProject& project, const wchar_t* args) : project_(project){
+    args_ = ConvertArgsToString(args);
+}
 
 FlutterWindow::~FlutterWindow() {}
 
@@ -35,6 +35,11 @@ bool FlutterWindow::OnCreate() {
   // registered. The following call ensures a frame is pending to ensure the
   // window is shown. It is a no-op if the first frame hasn't completed yet.
   flutter_controller_->ForceRedraw();
+
+  //Create and Invoke the Communication Channel to the flutter app letting it know about arguments if there are any 
+  if (args_ == "") return true;
+  flutter::MethodChannel channel(flutter_controller_->engine()->messenger(), "nativeCommChannel", &flutter::StandardMethodCodec::GetInstance());
+  channel.InvokeMethod(std::string("onArgsFromNative"), std::make_unique<flutter::EncodableValue>(flutter::EncodableValue(args_)));
 
   return true;
 }
@@ -68,4 +73,20 @@ FlutterWindow::MessageHandler(HWND hwnd, UINT const message,
   }
 
   return Win32Window::MessageHandler(hwnd, message, wparam, lparam);
+}
+
+//Converts the arguments passed in from the command line that are represented as a wchar_t pointer. 
+//Since flutter can only handle std::strings in method communication, conversion is needed.
+std::string FlutterWindow::ConvertArgsToString(const wchar_t* args)
+{
+    std::string result = std::string();
+
+    if (args == nullptr) return result;
+
+    int length = WideCharToMultiByte(CP_UTF8, 0, args, -1, nullptr, 0, nullptr, nullptr);
+    char* buffer = new char[length];
+    WideCharToMultiByte(CP_UTF8, 0, args, -1, buffer, length, nullptr, nullptr);
+    result = std::string(buffer);
+    delete[] buffer;
+    return result;   
 }
