@@ -88,7 +88,7 @@ class MainPage extends StatelessWidget {
     func() => ImportExport.startImportFromPath(context: context, filePath: args);
     await SchedulerBinding.instance.endOfFrame;
     await func();
-    cubit.onAppStartArgumentsHandled();
+    await cubit.onAppStartArgumentsHandled();
   }
 }
 

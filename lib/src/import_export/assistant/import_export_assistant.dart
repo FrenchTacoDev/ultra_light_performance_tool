@@ -87,7 +87,7 @@ class _AssistantCubit extends Cubit<_AssistantState>{
   Future<void> _startFileImport({required BuildContext context}) async{
     var appCubit = context.read<ApplicationCubit>();
     var dict = Localizer.of(context);
-
+    
     try{
       var data = await ULPTFileImporter().importULPTData(dict: dict, filePath: state.filePath);
       if(data != null) {

@@ -87,7 +87,8 @@ class ApplicationCubit extends Cubit<ApplicationState>{
     emit(state.copyWith(appStartArgs: args));
   }
 
-  void onAppStartArgumentsHandled(){
+  Future<void> onAppStartArgumentsHandled() async{
+    await refresh();
     var state = ApplicationState(theme: this.state.theme, setupComplete: this.state.setupComplete);
     emit(state);
   }

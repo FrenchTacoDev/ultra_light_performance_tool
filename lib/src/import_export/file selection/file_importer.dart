@@ -28,7 +28,9 @@ class ULPTFileImporter{
   Future<Uint8List?> importULPTDataFromGivenPath({required String filePath}) async{
     if(filePath.endsWith(".ulpt") == false) throw FormatException("File at $filePath is not a valid .ulpt file");
     var file = File(filePath);
-    if((await file.exists()) == false) return null;
-    return file.readAsBytes();
+    if((await file.exists()) == false) throw FileSystemException("File does not exist at $filePath");
+    var bytes = await file.readAsBytes();
+    if(Platform.isIOS || Platform.isMacOS) await file.delete(recursive: true);
+    return bytes;
   }
 }
