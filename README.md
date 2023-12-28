@@ -34,9 +34,16 @@ void main() {
 }
 ```
 
+### Opening .ulpt files for import
+
+ULPT supports the import and export of saved data from within the app. Optionally support to open a file in place can be added.
+Because this is a pure dart package and this type of information is relayed from the native side on the app-build level, this has to be implemented when building the app using this package.
+
+The example App fully supports opening .ulpt files in place to import saved data. If you want to implement this function, read [this guide](documentation/how_to_import_files.md).
+
 ## Additional information
 
-Currently the app is only in German as testing is done with selected testers.
+Currently the app is only in English and German as testing is done with selected testers.
 If you like to be part of the testing team, please leave a message.
 
 ULPT is meant to be an open source / free to use prodcut.
