@@ -112,14 +112,14 @@ class SettingsPanel extends StatelessWidget {
                           ),
                           Divider(color: Colors.white.withOpacity(0.35), height: 0.5, indent: 16, endIndent: 16,),
                           ListTile(
-                            title: Text("Import"),
-                            subtitle: Text("Start the import of ULPT data"),
+                            title: Text(Localizer.of(context).settingsImportTitle),
+                            subtitle: Text(Localizer.of(context).settingsImportSubTitle),
                             onTap: () => context.read<_SettingsPanelCubit>().startImport(context: context),
                           ),
                           Divider(color: Colors.white.withOpacity(0.35), height: 0.5, indent: 16, endIndent: 16,),
                           ListTile(
-                            title: Text("Export"),
-                            subtitle: Text("Start the export of ULPT data"),
+                            title: Text(Localizer.of(context).settingsExportTitle),
+                            subtitle: Text(Localizer.of(context).settingsExportSubTitle),
                             onTap: () => context.read<_SettingsPanelCubit>().startExport(context: context),
                           ),
                           const SizedBox(height: 16),

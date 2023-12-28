@@ -144,6 +144,10 @@ abstract class Dictionary{
   //endregion
 
   //region Import/Export
+  String get settingsImportTitle;
+  String get settingsImportSubTitle;
+  String get settingsExportTitle;
+  String get settingsExportSubTitle;
   String get saveFileTitle;
   String get importFileTitle;
   String get fileExportError;
@@ -391,6 +395,14 @@ class EN extends Dictionary{
   String pcNotEnoughRunwayMargin(int overshoot) => "Takeoff distance with margin insufficient.\n${overshoot}m more needed!";
   //endregion
   //region Import/Export
+  @override
+  String get settingsImportTitle => "Import";
+  @override
+  String get settingsImportSubTitle => "Start the import of ULPT data";
+  @override
+  String get settingsExportTitle => "Export";
+  @override
+  String get settingsExportSubTitle => "Start the export of ULPT data";
   @override
   String get saveFileTitle => "Save ULPT Data";
   @override
