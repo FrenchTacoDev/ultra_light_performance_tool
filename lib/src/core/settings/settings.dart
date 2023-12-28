@@ -1,8 +1,8 @@
 import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ultra_light_performance_tool/src/core/core.dart';
+import 'package:ultra_light_performance_tool/src/import_export/import_export.dart';
 import 'package:ultra_light_performance_tool/src/performance%20calculation/calculations.dart';
 import 'package:ultra_light_performance_tool/src/shared%20widgets/ulpt_dropdown.dart';
 import 'widgets/factor_adjust.dart';
@@ -78,37 +78,55 @@ class SettingsPanel extends StatelessWidget {
           create: (context) => _SettingsPanelCubit(appCubit: appCubit, settings: appCubit.settings),
           child: BlocBuilder<_SettingsPanelCubit, _SettingsPanelState>(
             builder: (context, state) {
-              return Scaffold(
-                  appBar: AppBar(
-                    centerTitle: true,
-                    title: Text(Localizer.of(context).menuSettings),
-                  ),
-                  body: SingleChildScrollView(
-                    child: Column(
-                      children: [
-                        ListTile(
-                          minVerticalPadding:16,
-                          title: Text(Localizer.of(context).language),
-                          trailing: ConstrainedBox(
-                              constraints: const BoxConstraints(maxWidth: 200,),
-                              child: ULPTDropdown(
-                                items: languageLocalMap.keys.toList(),
-                                hint: Localizer.of(context).select,
-                                value: _getLanguage(context: context, state: state),
-                                onChanged: (l) => context.read<_SettingsPanelCubit>().setLocal(locale: languageLocalMap[l]),
-                              )
-                          ),
-                        ),
-                        Divider(color: Colors.white.withOpacity(0.35), height: 0.5, indent: 16, endIndent: 16,),
-                        ListTile(
-                          title: Text(Localizer.of(context).facAdjustTitle),
-                          subtitle: Text(Localizer.of(context).facAdjustSubTitle),
-                          onTap: () => context.read<_SettingsPanelCubit>().setCorrections(context: context),
-                        ),
-                        const SizedBox(height: 16),
-                      ],
+              return BlocListener<ApplicationCubit, ApplicationState>(
+                listener: (context, appState) {
+                  if(appCubit.settings == state.settings) return;
+                  context.read<_SettingsPanelCubit>().onSettingsChangedExt(settings: appCubit.settings);
+                },
+                child: Scaffold(
+                    appBar: AppBar(
+                      centerTitle: true,
+                      title: Text(Localizer.of(context).menuSettings),
                     ),
-                  )
+                    body: SingleChildScrollView(
+                      child: Column(
+                        children: [
+                          ListTile(
+                            minVerticalPadding:16,
+                            title: Text(Localizer.of(context).language),
+                            trailing: ConstrainedBox(
+                                constraints: const BoxConstraints(maxWidth: 200,),
+                                child: ULPTDropdown(
+                                  items: languageLocalMap.keys.toList(),
+                                  hint: Localizer.of(context).select,
+                                  value: _getLanguage(context: context, state: state),
+                                  onChanged: (l) => context.read<_SettingsPanelCubit>().setLocal(locale: languageLocalMap[l]),
+                                )
+                            ),
+                          ),
+                          Divider(color: Colors.white.withOpacity(0.35), height: 0.5, indent: 16, endIndent: 16,),
+                          ListTile(
+                            title: Text(Localizer.of(context).facAdjustTitle),
+                            subtitle: Text(Localizer.of(context).facAdjustSubTitle),
+                            onTap: () => context.read<_SettingsPanelCubit>().setCorrections(context: context),
+                          ),
+                          Divider(color: Colors.white.withOpacity(0.35), height: 0.5, indent: 16, endIndent: 16,),
+                          ListTile(
+                            title: Text(Localizer.of(context).settingsImportTitle),
+                            subtitle: Text(Localizer.of(context).settingsImportSubTitle),
+                            onTap: () => context.read<_SettingsPanelCubit>().startImport(context: context),
+                          ),
+                          Divider(color: Colors.white.withOpacity(0.35), height: 0.5, indent: 16, endIndent: 16,),
+                          ListTile(
+                            title: Text(Localizer.of(context).settingsExportTitle),
+                            subtitle: Text(Localizer.of(context).settingsExportSubTitle),
+                            onTap: () => context.read<_SettingsPanelCubit>().startExport(context: context),
+                          ),
+                          const SizedBox(height: 16),
+                        ],
+                      ),
+                    )
+                ),
               );
             },
           ),
@@ -144,6 +162,10 @@ class _SettingsPanelCubit extends Cubit<_SettingsPanelState>{
 
   ApplicationCubit appCubit;
 
+  void onSettingsChangedExt({required Settings settings}){
+    emit(state.copyWidth(settings: settings));
+  }
+
   Future<void> setCorrections({required BuildContext context}) async{
     var cor = await Navigator.push<Corrections?>(
         context,
@@ -164,5 +186,15 @@ class _SettingsPanelCubit extends Cubit<_SettingsPanelState>{
     var newSettings = state.settings.copy()..locale = locale;
     appCubit.settings = newSettings;
     emit(state.copyWidth(settings: newSettings));
+  }
+
+  Future<void> startExport({required BuildContext context}) async{
+    await ImportExport.startExport(context: context);
+  }
+
+  Future<void> startImport({required BuildContext context}) async{
+    await ImportExport.startImport(context: context);
+    await appCubit.refresh();
+    emit(state.copyWidth(settings: appCubit.settings));
   }
 }

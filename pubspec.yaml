@@ -1,6 +1,6 @@
 name: ultra_light_performance_tool
 description: ulpt description
-version: 0.3.0+3
+version: 0.4.0+4
 #homepage:
 
 environment:
@@ -19,6 +19,10 @@ dependencies:
   sqflite_common_ffi: ^2.3.0
   path_provider: ^2.1.1
   path: ^1.8.3
+
+  #For import and export
+  share_plus: ^7.2.1
+  file_picker: ^6.1.1
 
 dev_dependencies:
   flutter_test:
