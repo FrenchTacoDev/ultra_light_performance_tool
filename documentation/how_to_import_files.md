@@ -188,4 +188,6 @@ flutter::MethodChannel channel(flutter_controller_->engine()->messenger(), "nati
 channel.InvokeMethod(std::string("onArgsFromNative"), std::make_unique<flutter::EncodableValue>(flutter::EncodableValue(args_)));
 ```
 
+- in  `main.cpp` function exchange `FlutterWindow window(project);` for `FlutterWindow window(project, command_line);` to call the constructor with the command line arguments.
+
 Now when ULPT is opened from a file, the c++ side provides the path and the import should work.
