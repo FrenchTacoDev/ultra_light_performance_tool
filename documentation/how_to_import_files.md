@@ -79,6 +79,23 @@
 
 Add the following code to the `AppDelegate.swift` file in the Flutter Project:
 
+Define this variable within the file:
+
+```swift
+private var commChannel: FlutterMethodChannel? = nil;
+```
+
+Add this to the `override func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?`
+
+```swift
+ 	//GeneratedPluginRegistrant.register(with: self)
+	let controller: FlutterViewController = window?.rootViewController as! FlutterViewController;
+        commChannel = FlutterMethodChannel(name: "nativeCommChannel", binaryMessenger: controller.binaryMessenger);
+        //return super.application(application, didFinishLaunchingWithOptions: launchOptions)
+```
+
+Override this funtion within the file:
+
 ```swift
 override func application(_ app: UIApplication, open url: URL, options:[UIApplication.OpenURLOptionsKey : Any] = [:]) -> Bool {
         
