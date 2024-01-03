@@ -25,7 +25,7 @@ Add the ULPT Widget to your App or your main method.
 void main() {
 
   //This is needed to setup SQLite FFI so the database library can work on desktop!
-  if(io.Platform.isWindows ||io.Platform.isMacOS){
+  if(io.Platform.isWindows || io.Platform.isMacOS){
     sqfliteFfiInit();
     databaseFactory = databaseFactoryFfi;
   }
