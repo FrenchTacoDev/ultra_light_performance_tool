@@ -17,93 +17,94 @@ class AddRunwayPage extends StatelessWidget {
 
     var dict = Localizer.of(context);
 
-    return Scaffold(
-        appBar: AppBar(
-          centerTitle: true,
-          title: original == null ? Text(dict.rwyAddTitle) : Text(dict.rwyEditTitle),
-        ),
-        body: BlocProvider<AddRunwayCubit>(
-          create: (context) => AddRunwayCubit(original: original),
-          child: BlocBuilder<AddRunwayCubit, AddRunwayState>(
-            builder: (context, state) {
+    return BlocProvider<AddRunwayCubit>(
+      create: (context) => AddRunwayCubit(original: original),
+      child: BlocBuilder<AddRunwayCubit, AddRunwayState>(
+        builder: (context, state) {
 
-              var cubit = context.read<AddRunwayCubit>();
+          var cubit = context.read<AddRunwayCubit>();
 
-              return SingleChildScrollView(
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 32),
-                  child: Center(
-                    child: ConstrainedBox(
-                      constraints: const BoxConstraints(maxWidth: 500),
-                      child: Column(
-                        children: [
-                          DesignatorEntry(
-                              value: state.designator,
-                              onDesignatorSet: (d) => cubit.setDesignator(designator: d),
-                          ),
-                          const SizedBox(height: 8,),
-                          RunwayCourseEntry(
-                              value: state.direction,
-                              onCourseSet: (d) => cubit.setDirection(direction: d),
-                          ),
-                          const SizedBox(height: 8,),
-                          RunwaySurfaceDropdown(
-                              value: state.surface,
-                              onSurfaceChanged: (s) => cubit.setSurface(surface: s),
-                          ),
-                          const SizedBox(height: 8,),
-                          RunwayElevationEntry(
-                              value: state.startElevation,
-                              onElevationSet: (e) => cubit.setStartElevation(elevation: e),
-                          ),
-                          const SizedBox(height: 8,),
-                          RunwayElevationEntry(
-                              value: state.endElevation,
-                              onElevationSet: (e) => cubit.setEndElevation(elevation: e),
-                              endElev: true
-                          ),
-                          const SizedBox(height: 8,),
-                          RunwaySlopeEntry(
-                              value: state.slope,
-                              onSlopeSet: (s) => cubit.setSlope(slope: s),
-                          ),
-                          const SizedBox(height: 8,),
-                          ListView.builder(
-                            shrinkWrap: true,
-                            itemCount: state.intersections == null ? 1 : state.intersections!.length + 1,
-                            itemBuilder: (context, index) {
-                              bool isAdd = state.intersections == null || index == state.intersections!.length;
+          return Scaffold(
+            appBar: AppBar(
+              centerTitle: true,
+              title: original == null ? Text(dict.rwyAddTitle) : Text(dict.rwyEditTitle),
+              leading: BackButton(onPressed: () => cubit.onClose(context: context),),
+            ),
+            body: SingleChildScrollView(
+              child: Padding(
+                padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 32),
+                child: Center(
+                  child: ConstrainedBox(
+                    constraints: const BoxConstraints(maxWidth: 500),
+                    child: Column(
+                      children: [
+                        DesignatorEntry(
+                          value: state.designator,
+                          onDesignatorSet: (d) => cubit.setDesignator(designator: d),
+                        ),
+                        const SizedBox(height: 8,),
+                        RunwayCourseEntry(
+                          value: state.direction,
+                          onCourseSet: (d) => cubit.setDirection(direction: d),
+                        ),
+                        const SizedBox(height: 8,),
+                        RunwaySurfaceDropdown(
+                          value: state.surface,
+                          onSurfaceChanged: (s) => cubit.setSurface(surface: s),
+                        ),
+                        const SizedBox(height: 8,),
+                        RunwayElevationEntry(
+                          value: state.startElevation,
+                          onElevationSet: (e) => cubit.setStartElevation(elevation: e),
+                        ),
+                        const SizedBox(height: 8,),
+                        RunwayElevationEntry(
+                            value: state.endElevation,
+                            onElevationSet: (e) => cubit.setEndElevation(elevation: e),
+                            endElev: true
+                        ),
+                        const SizedBox(height: 8,),
+                        RunwaySlopeEntry(
+                          value: state.slope,
+                          onSlopeSet: (s) => cubit.setSlope(slope: s),
+                        ),
+                        const SizedBox(height: 8,),
+                        ListView.builder(
+                          shrinkWrap: true,
+                          itemCount: state.intersections == null ? 1 : state.intersections!.length + 1,
+                          itemBuilder: (context, index) {
+                            bool isAdd = state.intersections == null || index == state.intersections!.length;
 
-                              if(isAdd) return const _AddIntersect();
-                              if(index == 0) {
-                                return _NonEditableIntersect(
-                                  intersection: state.intersections!.first,
-                                );
-                              }
-
-                              return _EditableIntersect(
-                                  intersection: state.intersections![index],
+                            if(isAdd) return const _AddIntersect();
+                            if(index == 0) {
+                              return _NonEditableIntersect(
+                                intersection: state.intersections!.first,
                               );
-                            },
+                            }
+
+                            return _EditableIntersect(
+                              intersection: state.intersections![index],
+                            );
+                          },
+                        ),
+                        const SizedBox(height: 16,),
+                        ConstrainedBox(
+                          constraints: const BoxConstraints(minWidth: 100),
+                          child: ULPTButton(
+                            enabled: cubit.canSave(),
+                            title: dict.save,
+                            onTap: () => cubit.save(context: context),
                           ),
-                          const SizedBox(height: 16,),
-                          ConstrainedBox(
-                            constraints: const BoxConstraints(minWidth: 100),
-                            child: ULPTButton(
-                                enabled: cubit.canSave(),
-                                title: dict.save,
-                                onTap: () => cubit.save(context: context),
-                            ),
-                          )
-                        ],
-                      ),
+                        )
+                      ],
                     ),
                   ),
                 ),
-              );
-            },
-          ),
-        )
+              ),
+            ),
+          );
+        },
+      ),
     );
   }
 }

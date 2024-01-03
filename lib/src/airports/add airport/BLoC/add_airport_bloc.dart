@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ultra_light_performance_tool/src/airports/add%20runway/add_runway_page.dart';
@@ -48,6 +49,14 @@ class AddAirportState{
       elevation: elevation ?? this.elevation,
       runways: runways != null ? List.of(runways) : this.runways != null ? List.of(this.runways!) : null,
     );
+  }
+
+  bool hasEntries(){
+    return name != null || icao != null || iata != null || elevation != null || (runways != null && runways!.isNotEmpty);
+  }
+
+  bool matchesAirport(Airport ap){
+    return ap.name == name && ap.icao == icao && ap.iata == iata && ap.elevation == elevation && listEquals(ap.runways, runways);
   }
 }
 
@@ -122,6 +131,14 @@ class AddAirportCubit extends Cubit<AddAirportState>{
         && state.icao != null && state.icao!.isNotEmpty
         && state.elevation != null
         && state.runways != null && state.runways!.isNotEmpty;
+  }
+
+  Future<void> onClose({required BuildContext context}) async{
+    pop() => Navigator.pop(context);
+    if(state.hasEntries() == false) return pop();
+    if(original != null && state.matchesAirport(original!)) return pop();
+    var res = await ULPTConfirmation.show(context: context, title: Text(Localizer.of(context).entriesLostWarning, textAlign: TextAlign.center,));
+    if(res == true) pop();
   }
 
   ///Pops the Page and returns the airport to the caller
