@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ultra_light_performance_tool/src/airports/airports.dart';
@@ -57,6 +58,16 @@ class AddRunwayState{
       endElevation: endElevation ?? this.endElevation,
       intersections: intersections ?? this.intersections,
     );
+  }
+
+  bool hasEntries() {
+    return designator != null || direction != null || startElevation != null
+        || endElevation != null || slope != null || (intersections != null && intersections!.isNotEmpty && intersections!.first.toda != 0);
+  }
+
+  bool matchesRunway(Runway r) {
+    return r.designator == designator && r.direction == direction && r.startElevation == startElevation
+        && r.endElevation == endElevation && r.slope == slope && listEquals(r.intersections, intersections);
   }
 }
 
@@ -176,6 +187,14 @@ class AddRunwayCubit extends Cubit<AddRunwayState>{
     return state.designator != null && state.designator!.isNotEmpty
       && state.direction != null
       && state.surface != null;
+  }
+
+  Future<void> onClose({required BuildContext context}) async{
+    pop() => Navigator.pop(context);
+    if(state.hasEntries() == false) return pop();
+    if(original != null && state.matchesRunway(original!)) return pop();
+    var res = await ULPTConfirmation.show(context: context, title: Text(Localizer.of(context).entriesLostWarning, textAlign: TextAlign.center,));
+    if(res == true) pop();
   }
 
   Future<void> save({required BuildContext context}) async{

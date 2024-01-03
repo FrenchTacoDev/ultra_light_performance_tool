@@ -1,5 +1,8 @@
+import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ultra_light_performance_tool/src/aircraft/aircraft.dart';
+import 'package:ultra_light_performance_tool/src/localization/localizer.dart';
+import 'package:ultra_light_performance_tool/src/shared%20widgets/ulpt_confirmation.dart';
 
 class AddAircraftState{
 
@@ -14,6 +17,14 @@ class AddAircraftState{
 
   AddAircraftState copyWith({String? name, int? tod}){
     return AddAircraftState._(name: name ?? this.name, tod: tod ?? this.tod);
+  }
+
+  bool hasEntries() {
+    return name != null || tod != null;
+  }
+
+  bool matchesAircraft(Aircraft ac) {
+    return ac.name == name && ac.todr == tod;
   }
 }
 
@@ -37,6 +48,14 @@ class AddAircraftCubit extends Cubit<AddAircraftState>{
 
   bool canSave(){
     return state.name != null && state.name!.isNotEmpty && state.tod != null && state.tod! > 0;
+  }
+
+  Future<void> onClose({required BuildContext context}) async{
+    pop() => Navigator.pop(context);
+    if(state.hasEntries() == false) return pop();
+    if(original != null && state.matchesAircraft(original!)) return pop();
+    var res = await ULPTConfirmation.show(context: context, title: Text(Localizer.of(context).entriesLostWarning, textAlign: TextAlign.center,));
+    if(res == true) pop();
   }
 
   Future<bool> save() async{

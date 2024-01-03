@@ -26,7 +26,9 @@ class DE extends Dictionary{
   @override
   String get full => "Voll";
   @override
-  String get toda => "Verfügbare Startdistanz";
+  String get toda => "Verfügbare Startstrecke in m";
+  @override
+  String get entriesLostWarning => "Wollen Sie die Seite wirklich verlassen?\nEingaben gehen verloren!";
   //endregion
   //region Menu
   @override
@@ -50,7 +52,10 @@ class DE extends Dictionary{
   @override
   String get addACNameHint => "Name oder Registrierung des Luftfahrzeugs";
   @override
-  String get addACTodHint => "Startstrecke auf trockener Bahn";
+  String get addACTodHint => "Benötigte Startstrecke in m";
+  @override
+  String get addACTodExplain => "Hinweis\nBitte tragen Sie hier die Startstrecke für trockene Asphaltbahnen bei 0ft Platzhöhe, "
+      "15°C und 1013 hPa aus dem Handbuch des Luftfahrzeugs ein.";
   //endregion
   //region Settings
   //Settings title is same as menuSettings
@@ -107,7 +112,7 @@ class DE extends Dictionary{
   @override
   String get apNameHint => "Name des Flugplatzes";
   @override
-  String get apElevHint => "Flugplatzhöhe";
+  String get apElevHint => "Flugplatzhöhe in ft";
   @override
   String get deleteRunwayConfirm => "Piste löschen?";
   //endregion
@@ -123,11 +128,11 @@ class DE extends Dictionary{
   @override
   String get rwySrfcDropdownHint => "Bahnbelag";
   @override
-  String get rwyStartElevHint => "Pistenanfangshöhe";
+  String get rwyStartElevHint => "Pistenanfangshöhe in ft";
   @override
-  String get rwyEndElevHint => "Pistenendhöhe";
+  String get rwyEndElevHint => "Pistenendhöhe in ft";
   @override
-  String get rwySlopeHint => "Pistenneigung";
+  String get rwySlopeHint => "Pistenneigung in %";
   @override
   String get rwyIntersectNameHint => "Pistenkreuzungsbezeichnung";
   @override
