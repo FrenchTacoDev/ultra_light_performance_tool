@@ -47,13 +47,13 @@ class _RunwaySlopeEntryState extends State<RunwaySlopeEntry>{
 
     String valueText = tec.text;
 
-    if(tec.text.contains("°")) valueText = tec.text.split("°").first;
-    if(valueText.contains("°")) valueText = "";
+    if(tec.text.contains("%")) valueText = tec.text.split("%").first;
+    if(valueText.contains("%")) valueText = "";
     if(valueText.isEmpty) return widget.onSlopeSet(null);
 
     var value = double.tryParse(valueText);
 
-    if(value != null) valueText = "$value°";
+    if(value != null) valueText = "$value%";
 
     tec.value = tec.value.copyWith(
         text: valueText,
@@ -77,7 +77,7 @@ class _RunwaySlopeEntryState extends State<RunwaySlopeEntry>{
   }
 
   void _insertValue(){
-    var valueText = widget.value == null ? "" : "${widget.value}°";
+    var valueText = widget.value == null ? "" : "${widget.value}%";
     tec.value = tec.value.copyWith(
         text: valueText,
         selection: TextSelection(
@@ -98,18 +98,18 @@ class _ElevFormatter extends TextInputFormatter{
       return newValue.copyWith(
           text: newValue.text,
           selection: TextSelection(
-            baseOffset: newValue.text.contains("°") ? newValue.text.length - 1 : newValue.text.length,
-            extentOffset: newValue.text.contains("°") ? newValue.text.length - 1 : newValue.text.length,
+            baseOffset: newValue.text.contains("%") ? newValue.text.length - 1 : newValue.text.length,
+            extentOffset: newValue.text.contains("%") ? newValue.text.length - 1 : newValue.text.length,
           ),
           composing: TextRange.empty
       );
     }
-    if(RegExp(r'^$|^(-?\d+(\.\d*)?|-\s?)\s*°?$').hasMatch(newValue.text) == false) return oldValue;
+    if(RegExp(r'^$|^(-?\d+(\.\d*)?|-\s?)\s*%?$').hasMatch(newValue.text) == false) return oldValue;
     return newValue.copyWith(
         text: newValue.text,
         selection: TextSelection(
-          baseOffset: newValue.text.contains("°") ? newValue.text.length - 1 : newValue.text.length,
-          extentOffset: newValue.text.contains("°") ? newValue.text.length - 1 : newValue.text.length,
+          baseOffset: newValue.text.contains("%") ? newValue.text.length - 1 : newValue.text.length,
+          extentOffset: newValue.text.contains("%") ? newValue.text.length - 1 : newValue.text.length,
         ),
         composing: TextRange.empty
     );

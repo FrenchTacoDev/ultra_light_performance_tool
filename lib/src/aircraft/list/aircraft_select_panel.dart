@@ -86,6 +86,9 @@ class _ACListTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+
+    var _optionsKey = GlobalKey(debugLabel: "acListTileOptionsKey");
+
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: [
@@ -103,6 +106,19 @@ class _ACListTile extends StatelessWidget {
           ),
           child: ListTile(
             title: Text(ac.name),
+            trailing: IconButton(
+              key: _optionsKey,
+              onPressed: () => showMenuAt(
+                  context: context,
+                  pos: (_optionsKey.currentContext!.findRenderObject() as RenderBox).localToGlobal(Offset.zero),
+                  ac: ac
+              ),
+              iconSize: 20,
+              icon: const Icon(
+                Icons.edit,
+                size: 18,
+              ),
+            ),
             mouseCursor: SystemMouseCursors.click,
           ),
         ),

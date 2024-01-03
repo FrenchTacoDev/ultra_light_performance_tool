@@ -14,6 +14,7 @@ abstract class Dictionary{
   String get runways;
   String get full;
   String get toda;
+  String get entriesLostWarning;
   //endregion
 
   //region Menu
@@ -32,6 +33,7 @@ abstract class Dictionary{
   String get addACTitleEdit;
   String get addACNameHint;
   String get addACTodHint;
+  String get addACTodExplain;
   //endregion
 
   //region Settings
@@ -190,7 +192,9 @@ class EN extends Dictionary{
   @override
   String get full => "Full";
   @override
-  String get toda => "Takeoff Distance Available";
+  String get toda => "Takeoff Distance Available in m";
+  @override
+  String get entriesLostWarning => "Really leave this page?\nAll entries will be lost!";
   //endregion
 
   //region Menu
@@ -215,7 +219,9 @@ class EN extends Dictionary{
   @override
   String get addACNameHint => "AC Name or Registration";
   @override
-  String get addACTodHint => "Dry Runway Takeoff Distance";
+  String get addACTodHint => "Required Takeoff Distance in m";
+  @override
+  String get addACTodExplain => "Hint\nPlease insert the takeoff distance for dry asphalt runways, 0ft elevation, 15°C and 1013 hPa from the aircraft's manual.";
   //endregion
   //region Settings
   //Settings title is same as menuSettings
@@ -272,7 +278,7 @@ class EN extends Dictionary{
   @override
   String get apNameHint => "Airport Name";
   @override
-  String get apElevHint => "Airport Elevation";
+  String get apElevHint => "Airport Elevation in ft";
   @override
   String get deleteRunwayConfirm => "Delete Runway?";
   //endregion
@@ -284,15 +290,15 @@ class EN extends Dictionary{
   @override
   String get rwyNameHint => "Runway Name";
   @override
-  String get rwyDirHint => "Runway Direction";
+  String get rwyDirHint => "Runway Direction in Degrees";
   @override
   String get rwySrfcDropdownHint => "Runway Surface";
   @override
-  String get rwyStartElevHint => "Runway Start Elevation";
+  String get rwyStartElevHint => "Runway Start Elevation in ft";
   @override
-  String get rwyEndElevHint => "Runway End Elevation";
+  String get rwyEndElevHint => "Runway End Elevation in ft";
   @override
-  String get rwySlopeHint => "Runway Slope";
+  String get rwySlopeHint => "Runway Slope in %";
   @override
   String get rwyIntersectNameHint => "Intersection Name";
   @override

@@ -16,75 +16,77 @@ class AddAirportPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-        appBar: AppBar(
-          centerTitle: true,
-          title: original == null ? Text(Localizer.of(context).apAddTitle) : Text(Localizer.of(context).apEditTitle),
-        ),
-        body: BlocProvider<AddAirportCubit>(
-          create: (context) => AddAirportCubit(original: original),
-          child: BlocBuilder<AddAirportCubit, AddAirportState>(
-            builder: (context, state) {
 
-              var cubit = context.read<AddAirportCubit>();
+    return BlocProvider<AddAirportCubit>(
+      create: (context) => AddAirportCubit(original: original),
+      child: BlocBuilder<AddAirportCubit, AddAirportState>(
+        builder: (context, state) {
 
-              return SingleChildScrollView(
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 32),
-                  child: Center(
-                    child: ConstrainedBox(
-                      constraints: const BoxConstraints(maxWidth: 500),
-                      child: Column(
-                        children: [
-                          APNameEntry(
-                            onNameSet: (n) => cubit.setName(name: n),
-                            value: state.name,
+          var cubit = context.read<AddAirportCubit>();
+
+          return Scaffold(
+            appBar: AppBar(
+              centerTitle: true,
+              title: original == null ? Text(Localizer.of(context).apAddTitle) : Text(Localizer.of(context).apEditTitle),
+              leading: BackButton(onPressed: () => cubit.onClose(context: context),),
+            ),
+            body: SingleChildScrollView(
+              child: Padding(
+                padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 32),
+                child: Center(
+                  child: ConstrainedBox(
+                    constraints: const BoxConstraints(maxWidth: 500),
+                    child: Column(
+                      children: [
+                        APNameEntry(
+                          onNameSet: (n) => cubit.setName(name: n),
+                          value: state.name,
+                        ),
+                        const SizedBox(height: 8,),
+                        IcaoEntry(
+                          onIcaoSet: (icao) => cubit.setIcao(icao: icao),
+                          value: state.icao,
+                        ),
+                        const SizedBox(height: 8,),
+                        IataEntry(
+                          onIataSet: (iata) =>  cubit.setIata(iata: iata),
+                          value: state.iata,
+                        ),
+                        const SizedBox(height: 8,),
+                        ElevationEntry(
+                          onElevationSet: (e) => cubit.setElevation(value: e),
+                          value: state.elevation,
+                        ),
+                        const SizedBox(height: 8,),
+                        Text(
+                          Localizer.of(context).runways,
+                          style: TextStyle(
+                              color: Theme.of(context).listTileTheme.titleTextStyle!.color,
+                              fontSize: 22
                           ),
-                          const SizedBox(height: 8,),
-                          IcaoEntry(
-                            onIcaoSet: (icao) => cubit.setIcao(icao: icao),
-                            value: state.icao,
+                        ),
+                        const SizedBox(height: 8,),
+                        RunwayList(
+                          runways: state.runways ?? [],
+                        ),
+                        const SizedBox(height: 16,),
+                        ConstrainedBox(
+                          constraints: const BoxConstraints(minWidth: 100),
+                          child: ULPTButton(
+                            enabled: cubit.canSave(),
+                            title: Localizer.of(context).save,
+                            onTap: () => cubit.save(context: context),
                           ),
-                          const SizedBox(height: 8,),
-                          IataEntry(
-                            onIataSet: (iata) =>  cubit.setIata(iata: iata),
-                            value: state.iata,
-                          ),
-                          const SizedBox(height: 8,),
-                          ElevationEntry(
-                            onElevationSet: (e) => cubit.setElevation(value: e),
-                            value: state.elevation,
-                          ),
-                          const SizedBox(height: 8,),
-                          Text(
-                            Localizer.of(context).runways,
-                            style: TextStyle(
-                                color: Theme.of(context).listTileTheme.titleTextStyle!.color,
-                                fontSize: 22
-                            ),
-                          ),
-                          const SizedBox(height: 8,),
-                          RunwayList(
-                            runways: state.runways ?? [],
-                          ),
-                          const SizedBox(height: 16,),
-                          ConstrainedBox(
-                            constraints: const BoxConstraints(minWidth: 100),
-                            child: ULPTButton(
-                                enabled: cubit.canSave(),
-                                title: Localizer.of(context).save,
-                                onTap: () => cubit.save(context: context),
-                            ),
-                          )
-                        ],
-                      ),
+                        )
+                      ],
                     ),
                   ),
                 ),
-              );
-            },
-          ),
-        )
+              ),
+            ),
+          );
+        },
+      ),
     );
   }
 }
