@@ -100,7 +100,7 @@ class FactorAdjustPanel extends StatelessWidget {
                                 ),
                                 const SizedBox(height: 16),
                                 FactorAdjustField(
-                                  message: Localizer.of(context).faGrassSodDamaged,
+                                  message: Localizer.of(context).faGrassHigh,
                                   value: ((state.corrections.highGrassFactor - 1) * 100).round(),
                                   onFactorSet: (value) => context.read<FactorAdjustCubit>().adjustHighGrassFactor(factor: value),
                                 ),
