@@ -9,10 +9,26 @@ import 'package:ultra_light_performance_tool/src/core/core.dart';
 import 'package:ultra_light_performance_tool/src/import_export/import_export.dart';
 import 'src/aircraft/aircraft.dart';
 
+export 'package:ultra_light_performance_tool/src/shared widgets/ulpt_button.dart' show ULPTButton;
+export 'package:ultra_light_performance_tool/src/res/themes.dart' show ULPTTheme;
+export 'package:ultra_light_performance_tool/src/localization/localizer.dart' show Localizer, Dictionary, CustomDict;
+
 ///This is the main entry point for the App.
 ///When creating your own version of ULPT, just plug this widget into Flutters [runApp] function.
 class ULPT extends StatelessWidget {
-  const ULPT({super.key});
+  const ULPT({
+    super.key,
+    this.customMenuItems,
+    this.customDictionaries,
+  });
+
+  ///Pass your own [PopupMenuItem]s here to add items to the apps menu like an about page.
+  ///A [BuildContext] is delivered with the getter so Access to the [ApplicationCubit] is also provided!
+  final List<PopupMenuItem<dynamic>> Function(BuildContext context)? customMenuItems;
+
+  ///Pass your own dictionaries for translation here.
+  ///They are then available calling the [Localizer.of(context)] method.
+  final List<CustomDict>? customDictionaries;
 
   @override
   Widget build(BuildContext context) {
@@ -21,6 +37,7 @@ class ULPT extends StatelessWidget {
       child: BlocBuilder<ApplicationCubit, ApplicationState>(
           builder: (context, state) {
             return Localizer(
+              customDict: customDictionaries,
               child: MaterialApp(
                 title: "ULPT",
                 theme: state.theme,
@@ -30,7 +47,10 @@ class ULPT extends StatelessWidget {
                   GlobalCupertinoLocalizations.delegate,
                 ],
                 supportedLocales: Settings.appLocals,
-                home: MainPage(appState: state),
+                home: MainPage(
+                    appState: state,
+                    customMenuItems: customMenuItems
+                ),
               ),
             );
           },
@@ -42,9 +62,10 @@ class ULPT extends StatelessWidget {
 ///This is the main and starting page. Once the app setup is complete,
 ///this should show the collection of aircraft
 class MainPage extends StatelessWidget {
-  const MainPage({super.key, required this.appState});
+  const MainPage({super.key, required this.appState, this.customMenuItems});
 
   final ApplicationState appState;
+  final List<PopupMenuItem<dynamic>> Function(BuildContext context)? customMenuItems;
 
   @override
   Widget build(BuildContext context) {
@@ -61,14 +82,11 @@ class MainPage extends StatelessWidget {
             systemOverlayStyle: SystemUiOverlayStyle.dark,
             centerTitle: true,
             title: const Text("Ultra Light Performance Tool"),
-            actions: const [
-              //Todo add custom Menu Items to the API
+            actions:[
               AppMenu(
-                customMenuItems: [
-
-                ],
+                customMenuItems: customMenuItems == null ? [] : customMenuItems!(context),
               ),
-              SizedBox(width: 16,),
+              const SizedBox(width: 16,),
             ],
           ),
           body: AircraftSelectPanel(

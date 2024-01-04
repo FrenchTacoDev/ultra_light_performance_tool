@@ -2,6 +2,7 @@ import '../localizer.dart';
 
 ///German translation
 class DE extends Dictionary{
+  const DE({super.customDict});
   //region General
   @override
   String get yes => "Ja";

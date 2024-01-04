@@ -3,17 +3,26 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ultra_light_performance_tool/src/core/core.dart';
 import 'default/en.dart';
 import 'de/de.dart';
-export 'default/en.dart' show Dictionary;
+export 'default/en.dart' show Dictionary, CustomDict;
 
-Dictionary _defaultDict = EN();
+Dictionary _defaultDict = const EN();
 Map<String, Dictionary> _localMap = {
-  "de" : DE()
+  "de" : const DE()
 };
 
 ///Inherited Widget that is used to localize the app.
 ///To get a localized string call [Localizer.of(context).exampleString]
 class Localizer extends InheritedWidget{
-  const Localizer({super.key, required super.child});
+  const Localizer({super.key, required super.child, this.customDict});
+
+  final List<CustomDict>? customDict;
+
+  @override
+  InheritedElement createElement() {
+    _defaultDict = EN(customDict: customDict?.where((element) => element.languageTag.toLowerCase() == "en").firstOrNull);
+    _localMap["de"] = DE(customDict: customDict?.where((element) => element.languageTag.toLowerCase() == "de").firstOrNull);
+    return super.createElement();
+  }
 
   Dictionary std({required BuildContext context}){
     var local = context.read<ApplicationCubit>().settings.locale ?? Localizations.localeOf(context);

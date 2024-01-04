@@ -1,5 +1,16 @@
+abstract class CustomDict{
+
+  const CustomDict({required this.languageTag});
+
+  final String languageTag;
+}
+
 ///Data container for all Strings that will be implemented by the localization
 abstract class Dictionary{
+  const Dictionary({this.customDict});
+
+  final CustomDict? customDict;
+
   //region General
   String get yes;
   String get no;
@@ -168,6 +179,7 @@ abstract class Dictionary{
 
 ///English translation. Works as default.
 class EN extends Dictionary{
+  const EN({super.customDict});
   //region General
   @override
   String get yes => "Yes";
