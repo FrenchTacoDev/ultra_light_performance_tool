@@ -82,6 +82,15 @@ class CalculationCubit extends Cubit<CalculationState>{
   ///[Aircraft] that was selected previously by the user
   final Aircraft aircraft;
 
+  ///Used for controlling the scroll motion when view needs scrolling
+  final ScrollController scrollControl = ScrollController();
+
+  @override
+  Future<void> close() async{
+    scrollControl.dispose();
+    return super.close();
+  }
+
   ///checks on every state change if a calc can be done or not
   @override
   void emit(CalculationState state) {
@@ -243,11 +252,18 @@ class CalculationCubit extends Cubit<CalculationState>{
     );
 
     emit(state.copyWith(rawTod: calc.calculateUnfactored().ceil()));
-
+    FocusScope.of(context).focusedChild?.unfocus();
     if(state.factorizedTod == null && state.intersection?.toda == null) return;
 
     var remainingFac = state.intersection!.toda - state.factorizedTod!;
     var remainingUnFac = state.intersection!.toda - state.rawTod!;
+
+    if(scrollControl.positions.isNotEmpty) {
+      scrollControl.animateTo(
+          scrollControl.position.maxScrollExtent,
+          duration: const Duration(milliseconds: 200), curve: Curves.decelerate
+      );
+    }
 
     if(remainingFac >= 0) return;
 
