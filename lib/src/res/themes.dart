@@ -60,35 +60,41 @@ ULPTTheme _darkULPTTheme = ULPTTheme(
   ),
 );
 
-final darkTheme = ThemeData(
-  useMaterial3: false,
-  appBarTheme: AppBarTheme(
-    color: _darkULPTTheme.baseColor,
-  ),
-  scaffoldBackgroundColor: _darkULPTTheme.baseColor,
-  cardColor: _darkULPTTheme.backgroundColor,
-  listTileTheme: ListTileThemeData(
-    titleTextStyle: TextStyle(color: _darkULPTTheme.interactiveHintTextColor, fontSize: 20),
-    subtitleTextStyle: TextStyle(color: _darkULPTTheme.interactiveHintTextColor, fontSize: 14,),
-    leadingAndTrailingTextStyle: TextStyle(color: _darkULPTTheme.interactiveHintTextColor),
-    tileColor: _darkULPTTheme.backgroundColor,
-    iconColor: _darkULPTTheme.interactiveHintTextColor,
-  ),
-  popupMenuTheme: PopupMenuThemeData(
-    color: _darkULPTTheme.backgroundColor,
-    textStyle: TextStyle(color: _darkULPTTheme.interactiveHintTextColor, fontSize: 14),
-  ),
-  dialogTheme: DialogTheme(
-    backgroundColor: _darkULPTTheme.backgroundColor,
-    titleTextStyle: TextStyle(
-        fontSize: 24,
-        color: _darkULPTTheme.interactiveHintTextColor
+ThemeData createDarkTheme(BuildContext context){
+  return ThemeData(
+    useMaterial3: false,
+    appBarTheme: AppBarTheme(
+      color: _darkULPTTheme.baseColor,
     ),
-    contentTextStyle: TextStyle(
-        fontSize: 14,
-        color: _darkULPTTheme.interactiveHintTextColor
+    scaffoldBackgroundColor: _darkULPTTheme.baseColor,
+    cardColor: _darkULPTTheme.backgroundColor,
+    listTileTheme: ListTileThemeData(
+      titleTextStyle: TextStyle(color: _darkULPTTheme.interactiveHintTextColor, fontSize: 20),
+      subtitleTextStyle: TextStyle(color: _darkULPTTheme.interactiveHintTextColor, fontSize: 14,),
+      leadingAndTrailingTextStyle: TextStyle(color: _darkULPTTheme.interactiveHintTextColor),
+      tileColor: _darkULPTTheme.backgroundColor,
+      iconColor: _darkULPTTheme.interactiveHintTextColor,
     ),
-  ),
-  extensions: [_darkULPTTheme],
-);
+    popupMenuTheme: PopupMenuThemeData(
+      color: _darkULPTTheme.backgroundColor,
+      textStyle: TextStyle(color: _darkULPTTheme.interactiveHintTextColor, fontSize: 14),
+    ),
+    dialogTheme: DialogTheme(
+      backgroundColor: _darkULPTTheme.backgroundColor,
+      titleTextStyle: TextStyle(
+          fontSize: 24,
+          color: _darkULPTTheme.interactiveHintTextColor
+      ),
+      contentTextStyle: TextStyle(
+          fontSize: 14,
+          color: _darkULPTTheme.interactiveHintTextColor
+      ),
+    ),
+    extensions: [_darkULPTTheme],
+    textTheme: TextTheme(
+      titleLarge: Theme.of(context).textTheme.titleLarge!.merge(TextStyle(color: _darkULPTTheme.interactiveHintTextColor)),
+      bodyLarge: Theme.of(context).textTheme.bodyLarge!.merge(TextStyle(color: _darkULPTTheme.interactiveHintTextColor)),
+    ),
+  );
+}
 
