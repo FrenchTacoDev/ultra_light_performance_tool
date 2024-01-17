@@ -135,78 +135,170 @@ class TakeoffDetails extends StatelessWidget {
                   ],
                 ),
               ),
-              RichText(
-                text: TextSpan(
-                    style: ts,
-                    children: [
-                      TextSpan(text: "Wind: ",),
-                      TextSpan(text: "220/15"),
-                    ]
+              const SizedBox(height: 8,),
+              _BGCard(
+                child: Column(
+                  children: [
+                    Text("Wind Correction", style: titleS,),
+                    const SizedBox(height: 4,),
+                    RichText(
+                      text: TextSpan(
+                          children: [
+                            TextSpan(text: "Wind: ", style: bodyS),
+                            TextSpan(text: "220/15kt", style: bodySB),
+                          ]
+                      ),
+                    ),
+                    RichText(
+                      text: TextSpan(
+                          children: [
+                            TextSpan(text: "Wind Component: ", style: bodyS),
+                            TextSpan(text: "10kt Headwind", style: bodySB),
+                          ]
+                      ),
+                    ),
+                    RichText(
+                      text: TextSpan(
+                          children: [
+                            TextSpan(text: "ISA Deviation: ", style: bodyS),
+                            TextSpan(text: "+7°C", style: bodySB),
+                          ]
+                      ),
+                    ),
+                    RichText(
+                      text: TextSpan(
+                          children: [
+                            TextSpan(text: "Wind Factor: ", style: bodyS),
+                            TextSpan(text: "0.8", style: bodySB),
+                          ]
+                      ),
+                    ),
+                  ],
                 ),
               ),
-              RichText(
-                text: TextSpan(
-                    style: ts,
-                    children: [
-                      TextSpan(text: "Wind Component: ",),
-                      TextSpan(text: "10kt Headwind"),
-                    ]
+              const SizedBox(height: 8,),
+              _BGCard(
+                child: Column(
+                  children: [
+                    Text("Grass Factors", style: titleS,),
+                    const SizedBox(height: 4,),
+                    RichText(
+                      text: TextSpan(
+                          children: [
+                            TextSpan(text: "Grass Factor Firm: ", style: bodyS),
+                            TextSpan(text: "1.5", style: bodySB),
+                          ]
+                      ),
+                    ),
+                    RichText(
+                      text: TextSpan(
+                          children: [
+                            TextSpan(text: "Sod Damaged Factor: ", style: bodyS),
+                            TextSpan(text: "1.4", style: bodySB),
+                          ]
+                      ),
+                    ),
+                    RichText(
+                      text: TextSpan(
+                          children: [
+                            TextSpan(text: "High Grass Factor: ", style: bodyS),
+                            TextSpan(text: "1.8", style: bodySB),
+                          ]
+                      ),
+                    ),
+                  ],
                 ),
               ),
-              RichText(
-                text: TextSpan(
-                    style: ts,
-                    children: [
-                      TextSpan(text: "Wind Factor: ",),
-                      TextSpan(text: "0.8"),
-                    ]
+              const SizedBox(height: 8,),
+              _BGCard(
+                child: Column(
+                  children: [
+                    Text("Runway Condition", style: titleS,),
+                    const SizedBox(height: 4,),
+                    RichText(
+                      text: TextSpan(
+                          children: [
+                            TextSpan(text: "Runway Condition: ", style: bodyS),
+                            TextSpan(text: "Standing Water", style: bodySB),
+                          ]
+                      ),
+                    ),
+                    RichText(
+                      text: TextSpan(
+                          children: [
+                            TextSpan(text: "Condition Factor: ", style: bodyS),
+                            TextSpan(text: "2.0", style: bodySB),
+                          ]
+                      ),
+                    ),
+                  ],
                 ),
               ),
-              RichText(
-                text: TextSpan(
-                    style: ts,
-                    children: [
-                      TextSpan(text: "Grass Factor Firm: ",),
-                      TextSpan(text: "1.5"),
-                    ]
+              const SizedBox(height: 8,),
+              _BGCard(
+                child: RichText(
+                  textAlign: TextAlign.center,
+                  text: TextSpan(
+                      children: [
+                        TextSpan(text: "The calculation contains a general factor of ", style: bodyS),
+                        TextSpan(text: "1.1 (10%) ", style: bodySB),
+                        TextSpan(text: "for moist air.", style: bodyS),
+                      ]
+                  ),
                 ),
               ),
-              RichText(
-                text: TextSpan(
-                    style: ts,
-                    children: [
-                      TextSpan(text: "Sod Damaged Factor: ",),
-                      TextSpan(text: "1.5"),
-                    ]
+              const SizedBox(height: 8,),
+              _BGCard(
+                child: Column(
+                  children: [
+                    Text("Results", style: titleS,),
+                    const SizedBox(height: 4,),
+                    RichText(
+                      text: TextSpan(
+                          children: [
+                            TextSpan(text: "Factorized Takeoff Distance Required: ", style: bodyS),
+                            TextSpan(text: "1325m", style: bodySB),
+                          ]
+                      ),
+                    ),
+                    RichText(
+                      text: TextSpan(
+                          children: [
+                            TextSpan(text: "Safety Margin: ", style: bodyS),
+                            TextSpan(text: "1.15", style: bodySB),
+                          ]
+                      ),
+                    ),
+                    RichText(
+                      text: TextSpan(
+                          children: [
+                            TextSpan(text: "Takeoff Distance Required with Margin: ", style: bodyS),
+                            TextSpan(text: "1523m", style: bodySB),
+                          ]
+                      ),
+                    ),
+                    const SizedBox(height: 4,),
+                    Text("Runway 16L Full", style: titleS,),
+                    RichText(
+                      text: TextSpan(
+                          children: [
+                            TextSpan(text: "Takeoff Distance Available: ", style: bodyS),
+                            TextSpan(text: "2000m", style: bodySB),
+                          ]
+                      ),
+                    ),
+                    RichText(
+                      text: TextSpan(
+                          children: [
+                            TextSpan(text: "Remaining Runway: ", style: bodyS),
+                            TextSpan(text: "477m (675m)", style: bodySB),
+                          ]
+                      ),
+                    ),
+                  ],
                 ),
               ),
-              RichText(
-                text: TextSpan(
-                    style: ts,
-                    children: [
-                      TextSpan(text: "High Grass Factor: ",),
-                      TextSpan(text: "1.5"),
-                    ]
-                ),
-              ),
-              RichText(
-                text: TextSpan(
-                    style: ts,
-                    children: [
-                      TextSpan(text: "Contamination Factor Standing Water: ",),
-                      TextSpan(text: "2.0"),
-                    ]
-                ),
-              ),
-              RichText(
-                text: TextSpan(
-                    style: ts,
-                    children: [
-                      TextSpan(text: "General Factor for moist air: ",),
-                      TextSpan(text: "1.1"),
-                    ]
-                ),
-              ),
+              const SizedBox(height: 8,),
             ],
           ),
         )
@@ -233,8 +325,3 @@ class _BGCard extends StatelessWidget {
     );
   }
 }
-
-
-//const Center(
-//           child: Text("These are the takeoff details", style: TextStyle(color: Colors.white)),
-//         )

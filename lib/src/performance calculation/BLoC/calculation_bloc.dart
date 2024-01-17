@@ -238,17 +238,19 @@ class CalculationCubit extends Cubit<CalculationState>{
   void calculate({required BuildContext context}){
     var rawTod = aircraft.todr;
     var calc = PerformanceCalculator(
-        corrections: context.read<ApplicationCubit>().settings.corrections,
-        rawTod: rawTod,
-        runway: state.runway!,
-        airport: state.airport!,
-        qnh: state.qnh!,
-        temp: state.temp!,
-        wind: state.wind!,
-        underground: state.underground,
-        highGrass: state.highGrass ?? false,
-        sodDamaged: state.sodDamaged ?? false,
-        runwayCondition: state.runwayCondition!
+      parameters: CalculationParameters(
+          corrections: context.read<ApplicationCubit>().settings.corrections,
+          rawTod: rawTod,
+          runway: state.runway!,
+          airport: state.airport!,
+          qnh: state.qnh!,
+          temp: state.temp!,
+          wind: state.wind!,
+          underground: state.underground,
+          highGrass: state.highGrass ?? false,
+          sodDamaged: state.sodDamaged ?? false,
+          runwayCondition: state.runwayCondition!
+      ),
     );
 
     emit(state.copyWith(rawTod: calc.calculateUnfactored().ceil()));
