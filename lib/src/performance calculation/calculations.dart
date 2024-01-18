@@ -6,7 +6,7 @@ typedef Wind = ({int direction, int speed});
 ///Data Container for the performance calculation
 class CalculationParameters{
 
-  CalculationParameters({
+  const CalculationParameters({
     required this.corrections,
     required this.rawTod,
     required this.runway,
@@ -79,10 +79,10 @@ class PerformanceCalculator{
   }
 
   ///Assumes a decrease of 2°C per 1000ft alt
-  int calculateIsaDelta(double pressureAlt){
-    var isaTemp = pressureAlt <= 0 ? 15 : 15 - ((pressureAlt / 1000) * 2);
+  double calculateIsaDelta(double pressureAlt){
+    var isaTemp = pressureAlt <= 0 ? 15.0 : 15.0 - ((pressureAlt / 1000) * 2);
     var currentTemp = parameters.temp < 0 ? 0 : parameters.temp;
-    return (currentTemp - isaTemp).toInt();
+    return currentTemp - isaTemp;
   }
 
   double _calculateTempFactor(double pressureAlt){
@@ -101,24 +101,30 @@ class PerformanceCalculator{
   double calculateCrosswindComponent(){
     var angle = _getWindAngle();
     if(angle == 0 || angle == 180) return 0.0;
-    return parameters.wind.speed * sin((angle * pi) / 180);
+    var cwc = parameters.wind.speed * sin((angle * pi) / 180);
+    if(_windIsFromLeft()) return -cwc;
+    return cwc;
+
+  }
+
+  bool _windIsFromLeft(){
+    var wind = parameters.wind.direction * pi / 180;
+    var rwy = parameters.runway.direction * pi / 180;
+    var cp = cos(wind) * sin(rwy) - sin(wind) * cos(rwy);
+    if(cp > 0) return true;
+    return false;
   }
 
   double calculateWindFactor(double hwc){
     var windFac = 1.0;
     if(hwc < 0) windFac = (hwc / 10).abs() * (parameters.corrections.tailWindFactor - 1) + 1;
-    if(windFac > 0) 1 - (hwc / 10).abs() * (parameters.corrections.headWindFactor - 1);
+    if(hwc > 0) windFac = 1 - (hwc / 10).abs() * (parameters.corrections.headWindFactor - 1);
     return windFac < 0 ? 0 : windFac;
-  }
-
-  double _getWindAngle(){
-    var angularDiff = parameters.runway.direction - parameters.wind.direction;
-    if(angularDiff % 360 == 180) return 180;
-    if(angularDiff % 360 <= 180) return angularDiff % 180;
-    return (parameters.wind.direction - parameters.runway.direction) % 180;
     //Todo think about what makes sense when headwind is so strong that the tod is 0
     //Either 0 => all becomes 0 or 0.1 or 0.01 for a very small number
   }
+
+  double _getWindAngle() => (parameters.wind.direction - parameters.runway.direction + 360) % 360;
 
   double getUndergroundFactor() => {
     Underground.firm : parameters.corrections.grassFactorFirm,
@@ -157,10 +163,10 @@ class PerformanceCalculator{
         * sodDamagedFactor * highGrassFactor * contaminationFactor * 1.1;
     
 
-         print("rawTod: ${parameters.rawTod}, Slope: $slopeFactor, Pressure: $pressureFactor,"
+     /*    print("rawTod: ${parameters.rawTod}, Slope: $slopeFactor, Pressure: $pressureFactor,"
      "Temp: $tempFactor, Wind: $windFactor, "
      "underGround: $undergroundFactor, sod: $sodDamagedFactor,"
-     "highGrass: $highGrassFactor, contam: $contaminationFactor, * 1.1");
+     "highGrass: $highGrassFactor, contam: $contaminationFactor, * 1.1 = $tod");*/
 
 
     return tod;

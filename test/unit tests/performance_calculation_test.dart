@@ -22,7 +22,6 @@ void main(){
       )
     );
 
-    print(calc.calculateUnfactored());
     expect(calc.calculateUnfactored().ceil(), 371);
 
     calc = PerformanceCalculator(
@@ -229,6 +228,160 @@ void main(){
     );
 
     expect(calc.calculateUnfactored().ceil(), 4358);
+  });
+
+  test('Calculate Headwind Component with different winds', () async {
+
+    var params = CalculationParameters(
+        corrections: testCorrections,
+        rawTod: kiebitz.todr,
+        runway: edry.runways.first,
+        airport: edry,
+        qnh: 1008,
+        temp: 5,
+        wind: (direction: 163, speed: 10),
+        underground: Underground.firm,
+        highGrass: true,
+        sodDamaged: true,
+        runwayCondition: RunwayCondition.dry
+    );
+
+    var calc = PerformanceCalculator(
+      parameters: params
+    );
+
+    expect(calc.calculateHeadwindComponent(), 10);
+
+    params = CalculationParameters(
+        corrections: testCorrections,
+        rawTod: kiebitz.todr,
+        runway: edry.runways.first,
+        airport: edry,
+        qnh: 1008,
+        temp: 5,
+        wind: (direction: 253, speed: 10),
+        underground: Underground.firm,
+        highGrass: true,
+        sodDamaged: true,
+        runwayCondition: RunwayCondition.dry
+    );
+
+    expect(PerformanceCalculator(parameters: params).calculateHeadwindComponent(), 0);
+
+    params = CalculationParameters(
+        corrections: testCorrections,
+        rawTod: kiebitz.todr,
+        runway: edry.runways.first,
+        airport: edry,
+        qnh: 1008,
+        temp: 5,
+        wind: (direction: 193, speed: 10),
+        underground: Underground.firm,
+        highGrass: true,
+        sodDamaged: true,
+        runwayCondition: RunwayCondition.dry
+    );
+
+    expect(PerformanceCalculator(parameters: params).calculateHeadwindComponent().floor(), 8);
+
+    params = CalculationParameters(
+        corrections: testCorrections,
+        rawTod: kiebitz.todr,
+        runway: edry.runways.first,
+        airport: edry,
+        qnh: 1008,
+        temp: 5,
+        wind: (direction: 40, speed: 10),
+        underground: Underground.firm,
+        highGrass: true,
+        sodDamaged: true,
+        runwayCondition: RunwayCondition.dry
+    );
+
+    expect(PerformanceCalculator(parameters: params).calculateHeadwindComponent().floor(), -6);
+  });
+
+  test('Calculate Crosswind Component with different winds', () async {
+
+    var params = CalculationParameters(
+        corrections: testCorrections,
+        rawTod: kiebitz.todr,
+        runway: edry.runways.first,
+        airport: edry,
+        qnh: 1008,
+        temp: 5,
+        wind: (direction: 163, speed: 10),
+        underground: Underground.firm,
+        highGrass: true,
+        sodDamaged: true,
+        runwayCondition: RunwayCondition.dry
+    );
+
+    expect(PerformanceCalculator(parameters: params).calculateCrosswindComponent(), 0);
+
+    params = CalculationParameters(
+        corrections: testCorrections,
+        rawTod: kiebitz.todr,
+        runway: edry.runways.first,
+        airport: edry,
+        qnh: 1008,
+        temp: 5,
+        wind: (direction: 253, speed: 10),
+        underground: Underground.firm,
+        highGrass: true,
+        sodDamaged: true,
+        runwayCondition: RunwayCondition.dry
+    );
+
+    expect(PerformanceCalculator(parameters: params).calculateCrosswindComponent(), 10);
+
+    params = CalculationParameters(
+        corrections: testCorrections,
+        rawTod: kiebitz.todr,
+        runway: edry.runways.first,
+        airport: edry,
+        qnh: 1008,
+        temp: 5,
+        wind: (direction: 73, speed: 10),
+        underground: Underground.firm,
+        highGrass: true,
+        sodDamaged: true,
+        runwayCondition: RunwayCondition.dry
+    );
+
+    expect(PerformanceCalculator(parameters: params).calculateCrosswindComponent(), -10);
+
+    params = CalculationParameters(
+        corrections: testCorrections,
+        rawTod: kiebitz.todr,
+        runway: edry.runways.first,
+        airport: edry,
+        qnh: 1008,
+        temp: 5,
+        wind: (direction: 200, speed: 10),
+        underground: Underground.firm,
+        highGrass: true,
+        sodDamaged: true,
+        runwayCondition: RunwayCondition.dry
+    );
+
+    expect(PerformanceCalculator(parameters: params).calculateCrosswindComponent().ceil(), 7);
+
+    params = CalculationParameters(
+        corrections: testCorrections,
+        rawTod: kiebitz.todr,
+        runway: edry.runways.first,
+        airport: edry,
+        qnh: 1008,
+        temp: 5,
+        wind: (direction: 100, speed: 10),
+        underground: Underground.firm,
+        highGrass: true,
+        sodDamaged: true,
+        runwayCondition: RunwayCondition.dry
+    );
+
+    expect(PerformanceCalculator(parameters: params).calculateCrosswindComponent().floor(), -9);
   });
 }
 
