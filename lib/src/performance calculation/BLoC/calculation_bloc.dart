@@ -234,23 +234,27 @@ class CalculationCubit extends Cubit<CalculationState>{
     );
   }
 
+  CalculationParameters getParameters(BuildContext context){
+    if(canCalc == false) throw("Calculation State requires more values to be complete!");
+    return CalculationParameters(
+        corrections: context.read<ApplicationCubit>().settings.corrections,
+        rawTod:  aircraft.todr,
+        runway: state.runway!,
+        airport: state.airport!,
+        qnh: state.qnh!,
+        temp: state.temp!,
+        wind: state.wind!,
+        underground: state.underground,
+        highGrass: state.highGrass ?? false,
+        sodDamaged: state.sodDamaged ?? false,
+        runwayCondition: state.runwayCondition!
+    );
+  }
+
   ///Runs the calculation and will automatically warn the user if distance is not sufficient.
   void calculate({required BuildContext context}){
-    var rawTod = aircraft.todr;
     var calc = PerformanceCalculator(
-      parameters: CalculationParameters(
-          corrections: context.read<ApplicationCubit>().settings.corrections,
-          rawTod: rawTod,
-          runway: state.runway!,
-          airport: state.airport!,
-          qnh: state.qnh!,
-          temp: state.temp!,
-          wind: state.wind!,
-          underground: state.underground,
-          highGrass: state.highGrass ?? false,
-          sodDamaged: state.sodDamaged ?? false,
-          runwayCondition: state.runwayCondition!
-      ),
+      parameters: getParameters(context),
     );
 
     emit(state.copyWith(rawTod: calc.calculateUnfactored().ceil()));

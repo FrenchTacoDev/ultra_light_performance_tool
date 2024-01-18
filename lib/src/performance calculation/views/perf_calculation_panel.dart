@@ -78,10 +78,11 @@ class _LargeSizedScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ULPTMinSizeScrollView(
-      minHeight: 500,
+      scrollController: context.read<CalculationCubit>().scrollControl,
+      minHeight: 550,
       child: Column(
         children: [
-          const DetailsButtons(),
+          DetailsButtons(state: state),
           SizedBox(
             height: panelHeight,
             child: Row(
@@ -133,7 +134,7 @@ class _MediumSizedScreen extends StatelessWidget {
       minHeight: 650,
       child: Column(
         children: [
-          const DetailsButtons(isSmallSize: false),
+          DetailsButtons(state: state,),
           SizedBox(
             height: panelHeight,
             child: _EntryPanelComponent(
@@ -178,7 +179,7 @@ class _SmallSizedScreen extends StatelessWidget {
       minHeight: 750,
       child: Column(
         children: [
-          const DetailsButtons(isSmallSize: true),
+          DetailsButtons(isSmallSize: true, state: state),
           SizedBox(
             height: panelHeight,
             child: _EntryPanelComponent(

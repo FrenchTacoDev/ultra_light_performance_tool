@@ -1,32 +1,48 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:ultra_light_performance_tool/src/performance%20calculation/BLoC/calculation_bloc.dart';
 import 'package:ultra_light_performance_tool/src/res/themes.dart';
 
 import 'takeoff_details.dart';
 
 class DetailsButtons extends StatelessWidget {
-  const DetailsButtons({super.key, this.isSmallSize = false});
+  const DetailsButtons({super.key, required this.state, this.isSmallSize = false});
 
   final bool isSmallSize;
+  final CalculationState state;
 
   @override
   Widget build(BuildContext context) {
     return Card(
       margin: isSmallSize ? const EdgeInsets.all(2) : const EdgeInsets.fromLTRB(4, 0, 4, 2),
-      child: _ButtonBar(),
+      child: _ButtonBar(state: state),
     );
   }
 }
 
 class _ButtonBar extends StatelessWidget {
-  const _ButtonBar({super.key});
+  const _ButtonBar({required this.state});
+
+  final CalculationState state;
 
   @override
   Widget build(BuildContext context) {
+
     return ButtonBar(
       alignment: MainAxisAlignment.start,
       children: [
         _Button(
-            onTap: () => Navigator.push(context, MaterialPageRoute(builder: (context) => const TakeoffDetails(),)),
+            enabled: state.rawTod != null,
+            onTap: () => Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => TakeoffDetails(
+                    parameters: context.read<CalculationCubit>().getParameters(context),
+                    safetyFactor: 1 + (state.safetyFactor! / 100),
+                    intersection: state.intersection!,
+                  ),
+                )
+            ),
             text: "Details"
         ),
         _Button(onTap: () => print("2"), text: "Notes", enabled: false,),

@@ -1,20 +1,32 @@
 import 'package:flutter/material.dart';
-import 'package:ultra_light_performance_tool/src/res/themes.dart';
+import 'package:ultra_light_performance_tool/src/airports/models/runway.dart';
+import 'package:ultra_light_performance_tool/src/performance%20calculation/calculations.dart';
 
 class TakeoffDetails extends StatelessWidget {
-  const TakeoffDetails({super.key});
+  const TakeoffDetails({
+    super.key,
+    required this.parameters,
+    required this.safetyFactor,
+    required this.intersection,
+  });
+
+  final CalculationParameters parameters;
+  final double safetyFactor;
+  final Intersection intersection;
 
   @override
   Widget build(BuildContext context) {
 
     var theme = Theme.of(context);
-    var uTheme = theme.extensions[ULPTTheme] as ULPTTheme;
+    //var uTheme = theme.extensions[ULPTTheme] as ULPTTheme;
     var titleS = theme.textTheme.titleLarge;
     var bodyS = theme.textTheme.bodyLarge;
     var bodySB = bodyS!.merge(const TextStyle(fontWeight: FontWeight.bold));
-
-    var hdgSt = Theme.of(context).textTheme.titleLarge!.merge(const TextStyle(color: Colors.white));
-    const ts = TextStyle(color: Colors.white);
+    var calc = PerformanceCalculator(parameters: parameters);
+    var pa = calc.calculatePressureAltitude();
+    var isaDelta = calc.calculateIsaDelta(pa, parameters.temp).round();
+    var hwc = calc.calculateHeadwindComponent();
+    var facTod = calc.calculateUnfactored();
 
     return Scaffold(
       appBar: AppBar(title: const Text("Takeoff Details")),
@@ -28,14 +40,14 @@ class TakeoffDetails extends StatelessWidget {
                         children: [
                           TextSpan(text: "Raw Takeoff Distance is ", style: titleS),
                           TextSpan(
-                              text: "250m",
+                              text: "${parameters.rawTod}m",
                               style: titleS!.merge(const TextStyle(fontWeight: FontWeight.bold))
                           ),
                         ]
                     ),
                   )
               ),
-              const SizedBox(height: 8,),
+              const SizedBox(height: 4,),
               _BGCard(
                   child: Column(
                     children: [
@@ -43,10 +55,9 @@ class TakeoffDetails extends StatelessWidget {
                       const SizedBox(height: 4,),
                       RichText(
                         text: TextSpan(
-                            style: ts,
                             children: [
                               TextSpan(text: "Slope: ", style: bodyS),
-                              TextSpan(text: "1.2%", style: bodySB),
+                              TextSpan(text: "${parameters.runway.slope}%", style: bodySB),
                             ]
                         ),
                       ),
@@ -54,14 +65,14 @@ class TakeoffDetails extends StatelessWidget {
                         text: TextSpan(
                             children: [
                               TextSpan(text: "Slope Factor: ", style: bodyS),
-                              TextSpan(text: "1.12", style: bodySB),
+                              TextSpan(text: calc.calculateSlopeFactor().toStringAsPrecision(3), style: bodySB),
                             ]
                         ),
                       ),
                     ],
                   )
               ),
-              const SizedBox(height: 8,),
+              const SizedBox(height: 4,),
               _BGCard(
                 child: Column(
                   children: [
@@ -71,7 +82,7 @@ class TakeoffDetails extends StatelessWidget {
                       text: TextSpan(
                           children: [
                             TextSpan(text: "Airfield Elevation: ", style: bodyS),
-                            TextSpan(text: "1000ft", style: bodySB),
+                            TextSpan(text: "${parameters.airport.elevation}ft", style: bodySB),
                           ]
                       ),
                     ),
@@ -79,7 +90,7 @@ class TakeoffDetails extends StatelessWidget {
                       text: TextSpan(
                           children: [
                             TextSpan(text: "Pressure Altitude: ", style: bodyS),
-                            TextSpan(text: "1390ft", style: bodySB),
+                            TextSpan(text: "${pa.ceil()}ft", style: bodySB),
                           ]
                       ),
                     ),
@@ -87,14 +98,14 @@ class TakeoffDetails extends StatelessWidget {
                       text: TextSpan(
                           children: [
                             TextSpan(text: "Elevation Factor: ", style: bodyS),
-                            TextSpan(text: "1.18", style: bodySB),
+                            TextSpan(text: calc.calculatePressureFactor().toStringAsPrecision(3), style: bodySB),
                           ]
                       ),
                     ),
                   ],
                 ),
               ),
-              const SizedBox(height: 8,),
+              const SizedBox(height: 4,),
               _BGCard(
                 child: Column(
                   children: [
@@ -104,7 +115,7 @@ class TakeoffDetails extends StatelessWidget {
                       text: TextSpan(
                           children: [
                             TextSpan(text: "OAT: ", style: bodyS),
-                            TextSpan(text: "20°C", style: bodySB),
+                            TextSpan(text: "${parameters.temp}°C", style: bodySB),
                           ]
                       ),
                     ),
@@ -112,7 +123,7 @@ class TakeoffDetails extends StatelessWidget {
                       text: TextSpan(
                           children: [
                             TextSpan(text: "ISA Temperature: ", style: bodyS),
-                            TextSpan(text: "13°C", style: bodySB),
+                            TextSpan(text: "${calc.calculateIsaTemperature(pa).round()}°C", style: bodySB),
                           ]
                       ),
                     ),
@@ -120,7 +131,9 @@ class TakeoffDetails extends StatelessWidget {
                       text: TextSpan(
                           children: [
                             TextSpan(text: "ISA Deviation: ", style: bodyS),
-                            TextSpan(text: "+7°C", style: bodySB),
+                            if(isaDelta == 0) TextSpan(text: "0°C", style: bodySB),
+                            if(isaDelta < 0) TextSpan(text: "$isaDelta°C", style: bodySB),
+                            if(isaDelta > 0) TextSpan(text: "+$isaDelta°C", style: bodySB),
                           ]
                       ),
                     ),
@@ -128,14 +141,23 @@ class TakeoffDetails extends StatelessWidget {
                       text: TextSpan(
                           children: [
                             TextSpan(text: "Temperature Factor: ", style: bodyS),
-                            TextSpan(text: "1.07", style: bodySB),
+                            TextSpan(text: calc.calculateTempFactor(pa).toStringAsPrecision(3), style: bodySB),
+                          ]
+                      ),
+                    ),
+                    if(parameters.temp < 0) const SizedBox(height: 4,),
+                    if(parameters.temp < 0) RichText(
+                      textAlign: TextAlign.center,
+                      text: TextSpan(
+                          children: [
+                            TextSpan(text: "Hint: Temperatures below 0°C are not being corrected!", style: bodyS),
                           ]
                       ),
                     ),
                   ],
                 ),
               ),
-              const SizedBox(height: 8,),
+              const SizedBox(height: 4,),
               _BGCard(
                 child: Column(
                   children: [
@@ -145,7 +167,7 @@ class TakeoffDetails extends StatelessWidget {
                       text: TextSpan(
                           children: [
                             TextSpan(text: "Wind: ", style: bodyS),
-                            TextSpan(text: "220/15kt", style: bodySB),
+                            TextSpan(text: "${parameters.wind.direction}/${parameters.wind.speed}kt", style: bodySB),
                           ]
                       ),
                     ),
@@ -153,15 +175,8 @@ class TakeoffDetails extends StatelessWidget {
                       text: TextSpan(
                           children: [
                             TextSpan(text: "Wind Component: ", style: bodyS),
-                            TextSpan(text: "10kt Headwind", style: bodySB),
-                          ]
-                      ),
-                    ),
-                    RichText(
-                      text: TextSpan(
-                          children: [
-                            TextSpan(text: "ISA Deviation: ", style: bodyS),
-                            TextSpan(text: "+7°C", style: bodySB),
+                            if(hwc < 0) TextSpan(text: "${-hwc}kt Tailwind", style: bodySB),
+                            if(hwc >= 0) TextSpan(text: "${hwc}kt Headwind", style: bodySB),
                           ]
                       ),
                     ),
@@ -169,15 +184,15 @@ class TakeoffDetails extends StatelessWidget {
                       text: TextSpan(
                           children: [
                             TextSpan(text: "Wind Factor: ", style: bodyS),
-                            TextSpan(text: "0.8", style: bodySB),
+                            TextSpan(text: calc.calculateWindFactor(hwc).toStringAsPrecision(3), style: bodySB),
                           ]
                       ),
                     ),
                   ],
                 ),
               ),
-              const SizedBox(height: 8,),
-              _BGCard(
+              if(parameters.runway.surface == Surface.grass) const SizedBox(height: 4,),
+              if(parameters.runway.surface == Surface.grass) _BGCard(
                 child: Column(
                   children: [
                     Text("Grass Factors", style: titleS,),
@@ -185,31 +200,39 @@ class TakeoffDetails extends StatelessWidget {
                     RichText(
                       text: TextSpan(
                           children: [
-                            TextSpan(text: "Grass Factor Firm: ", style: bodyS),
-                            TextSpan(text: "1.5", style: bodySB),
+                            TextSpan(text: "Grass Condition: ", style: bodyS),
+                            TextSpan(text: "${parameters.underground?.toLocString(context) ?? "n.A."}", style: bodySB),
                           ]
                       ),
                     ),
                     RichText(
+                      text: TextSpan(
+                          children: [
+                            TextSpan(text: "Factor: ", style: bodyS),
+                            TextSpan(text: calc.getUndergroundFactor().toStringAsPrecision(3), style: bodySB),
+                          ]
+                      ),
+                    ),
+                    if(parameters.sodDamaged) RichText(
                       text: TextSpan(
                           children: [
                             TextSpan(text: "Sod Damaged Factor: ", style: bodyS),
-                            TextSpan(text: "1.4", style: bodySB),
+                            TextSpan(text: parameters.corrections.sodDamagedFactor.toStringAsPrecision(3), style: bodySB),
                           ]
                       ),
                     ),
-                    RichText(
+                    if(parameters.highGrass) RichText(
                       text: TextSpan(
                           children: [
                             TextSpan(text: "High Grass Factor: ", style: bodyS),
-                            TextSpan(text: "1.8", style: bodySB),
+                            TextSpan(text: parameters.corrections.highGrassFactor.toStringAsPrecision(3), style: bodySB),
                           ]
                       ),
                     ),
                   ],
                 ),
               ),
-              const SizedBox(height: 8,),
+              const SizedBox(height: 4,),
               _BGCard(
                 child: Column(
                   children: [
@@ -219,7 +242,7 @@ class TakeoffDetails extends StatelessWidget {
                       text: TextSpan(
                           children: [
                             TextSpan(text: "Runway Condition: ", style: bodyS),
-                            TextSpan(text: "Standing Water", style: bodySB),
+                            TextSpan(text: "${parameters.runwayCondition.toLocString(context)}", style: bodySB),
                           ]
                       ),
                     ),
@@ -227,27 +250,27 @@ class TakeoffDetails extends StatelessWidget {
                       text: TextSpan(
                           children: [
                             TextSpan(text: "Condition Factor: ", style: bodyS),
-                            TextSpan(text: "2.0", style: bodySB),
+                            TextSpan(text: calc.getContaminationFactor().toStringAsPrecision(3), style: bodySB),
                           ]
                       ),
                     ),
                   ],
                 ),
               ),
-              const SizedBox(height: 8,),
+              const SizedBox(height: 4,),
               _BGCard(
                 child: RichText(
                   textAlign: TextAlign.center,
                   text: TextSpan(
                       children: [
                         TextSpan(text: "The calculation contains a general factor of ", style: bodyS),
-                        TextSpan(text: "1.1 (10%) ", style: bodySB),
+                        TextSpan(text: "1.10 (10%) ", style: bodySB),
                         TextSpan(text: "for moist air.", style: bodyS),
                       ]
                   ),
                 ),
               ),
-              const SizedBox(height: 8,),
+              const SizedBox(height: 4,),
               _BGCard(
                 child: Column(
                   children: [
@@ -257,15 +280,15 @@ class TakeoffDetails extends StatelessWidget {
                       text: TextSpan(
                           children: [
                             TextSpan(text: "Factorized Takeoff Distance Required: ", style: bodyS),
-                            TextSpan(text: "1325m", style: bodySB),
+                            TextSpan(text: "${facTod.ceil()}m", style: bodySB),
                           ]
                       ),
                     ),
                     RichText(
                       text: TextSpan(
                           children: [
-                            TextSpan(text: "Safety Margin: ", style: bodyS),
-                            TextSpan(text: "1.15", style: bodySB),
+                            TextSpan(text: "Margin Factor: ", style: bodyS),
+                            TextSpan(text: "$safetyFactor", style: bodySB),
                           ]
                       ),
                     ),
@@ -273,7 +296,7 @@ class TakeoffDetails extends StatelessWidget {
                       text: TextSpan(
                           children: [
                             TextSpan(text: "Takeoff Distance Required with Margin: ", style: bodyS),
-                            TextSpan(text: "1523m", style: bodySB),
+                            TextSpan(text: "${(facTod * safetyFactor).ceil()}m", style: bodySB),
                           ]
                       ),
                     ),
@@ -283,7 +306,7 @@ class TakeoffDetails extends StatelessWidget {
                       text: TextSpan(
                           children: [
                             TextSpan(text: "Takeoff Distance Available: ", style: bodyS),
-                            TextSpan(text: "2000m", style: bodySB),
+                            TextSpan(text: "${intersection.toda}m", style: bodySB),
                           ]
                       ),
                     ),
@@ -291,7 +314,7 @@ class TakeoffDetails extends StatelessWidget {
                       text: TextSpan(
                           children: [
                             TextSpan(text: "Remaining Runway: ", style: bodyS),
-                            TextSpan(text: "477m (675m)", style: bodySB),
+                            TextSpan(text: "${(intersection.toda - (facTod * safetyFactor)).floor()}m (${(intersection.toda - facTod).floor()}m)", style: bodySB),
                           ]
                       ),
                     ),
@@ -307,7 +330,7 @@ class TakeoffDetails extends StatelessWidget {
 }
 
 class _BGCard extends StatelessWidget {
-  const _BGCard({super.key, required this.child});
+  const _BGCard({required this.child});
 
   final Widget child;
 

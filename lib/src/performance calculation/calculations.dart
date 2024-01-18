@@ -65,12 +65,14 @@ class PerformanceCalculator{
     required this.parameters,
   });
 
-  double _calculateSlopeFactor() => (parameters.runway.slope / 10) + 1;
+  ///Calculates the slope correction factor
+  double calculateSlopeFactor() => (parameters.runway.slope / 10) + 1;
 
   ///Calculates real pressure altitude
   double calculatePressureAltitude() => 30.0 * (1013.0 - parameters.qnh) + parameters.airport.elevation;
 
-  double _calculatePressureFactor(){
+  ///Calculates the pressure altitude correction factor
+  double calculatePressureFactor(){
     var pa = calculatePressureAltitude();
     if(pa <= 0) return 1.0;
     if(pa <= 1000) return (pa / 1000) * (1 / 10) + 1;
@@ -79,14 +81,17 @@ class PerformanceCalculator{
   }
 
   ///Assumes a decrease of 2°C per 1000ft alt
-  double calculateIsaDelta(double pressureAlt){
-    var isaTemp = pressureAlt <= 0 ? 15.0 : 15.0 - ((pressureAlt / 1000) * 2);
-    var currentTemp = parameters.temp < 0 ? 0 : parameters.temp;
+  double calculateIsaTemperature(double pressureAlt) => pressureAlt <= 0 ? 15.0 : 15.0 - ((pressureAlt / 1000) * 2);
+
+  ///Assumes a decrease of 2°C per 1000ft alt
+  double calculateIsaDelta(double pressureAlt, int currentTemp){
+    var isaTemp = calculateIsaTemperature(pressureAlt);
     return currentTemp - isaTemp;
   }
 
-  double _calculateTempFactor(double pressureAlt){
-    var deltaT = calculateIsaDelta(pressureAlt);
+  ///Calculates the temperature correction factor
+  double calculateTempFactor(double pressureAlt){
+    var deltaT = calculateIsaDelta(pressureAlt, parameters.temp < 0 ? 0 : parameters.temp);
     return deltaT >= 0 ? deltaT / 100 + 1 : 1 + deltaT / 100;
   }
 
@@ -148,9 +153,9 @@ class PerformanceCalculator{
 
   ///Results in takeoff distance without safety margin!
   double calculateUnfactored(){
-    var slopeFactor = _calculateSlopeFactor();
-    var pressureFactor = _calculatePressureFactor();
-    var tempFactor = _calculateTempFactor(calculatePressureAltitude());
+    var slopeFactor = calculateSlopeFactor();
+    var pressureFactor = calculatePressureFactor();
+    var tempFactor = calculateTempFactor(calculatePressureAltitude());
     var windFactor = calculateWindFactor(calculateHeadwindComponent());
 
     var undergroundFactor = parameters.runway.surface == Surface.grass ? getUndergroundFactor() : 1.0;
