@@ -42,7 +42,7 @@ class CalculationState{
   });
 
   factory CalculationState.initial() => CalculationState._();
-  copyWith({
+  CalculationState copyWith({
     Airport? airport,
     Runway? runway,
     Intersection? intersection,
@@ -69,6 +69,23 @@ class CalculationState{
       qnh: qnh ?? this.qnh,
       safetyFactor: safetyFactor ?? this.safetyFactor,
       rawTod: rawTod ?? this.rawTod,
+    );
+  }
+
+  CalculationState resetTod(){
+    return CalculationState._(
+      airport: airport,
+      runway: runway,
+      intersection: intersection,
+      underground: underground,
+      sodDamaged: sodDamaged,
+      highGrass: highGrass,
+      runwayCondition: runwayCondition,
+      temp: temp,
+      wind: wind,
+      qnh: qnh,
+      safetyFactor: safetyFactor,
+      rawTod: null,
     );
   }
 }
@@ -146,16 +163,19 @@ class CalculationCubit extends Cubit<CalculationState>{
   void setGrassIsHigh({bool? highGrass}){
     if(highGrass == null || state.highGrass == highGrass) return;
     emit(state.copyWith(highGrass: highGrass));
+    emit(state.resetTod());
   }
 
   void setSodDamaged({bool? sodDamaged}){
     if(sodDamaged == null || state.sodDamaged == sodDamaged) return;
     emit(state.copyWith(sodDamaged: sodDamaged));
+    emit(state.resetTod());
   }
 
   void setRunwayCondition({RunwayCondition? condition}){
     if(condition == null || state.runwayCondition == condition) return;
     emit(state.copyWith(runwayCondition: condition));
+    emit(state.resetTod());
   }
 
   void setTemperature({int? temp}){
