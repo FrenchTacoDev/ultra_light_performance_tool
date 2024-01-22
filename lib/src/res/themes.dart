@@ -94,6 +94,7 @@ ThemeData createDarkTheme(BuildContext context){
     textTheme: TextTheme(
       titleLarge: Theme.of(context).textTheme.titleLarge!.merge(TextStyle(color: _darkULPTTheme.interactiveHintTextColor)),
       bodyLarge: Theme.of(context).textTheme.bodyLarge!.merge(TextStyle(color: _darkULPTTheme.interactiveHintTextColor)),
+      bodySmall: Theme.of(context).textTheme.bodySmall!.merge(TextStyle(color: _darkULPTTheme.interactiveHintTextColor)),
     ),
   );
 }

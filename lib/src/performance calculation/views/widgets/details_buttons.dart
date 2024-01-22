@@ -33,16 +33,20 @@ class _ButtonBar extends StatelessWidget {
       children: [
         _Button(
             enabled: state.rawTod != null,
-            onTap: () => Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => TakeoffDetails(
-                    parameters: context.read<CalculationCubit>().getParameters(context),
-                    safetyFactor: 1 + (state.safetyFactor! / 100),
-                    intersection: state.intersection!,
-                  ),
-                )
-            ),
+            onTap: (){
+              var params = context.read<CalculationCubit>().getParameters(context);
+
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => TakeoffDetails(
+                      parameters: params,
+                      safetyFactor: 1 + (state.safetyFactor! / 100),
+                      intersection: state.intersection!,
+                    ),
+                  )
+              );
+            },
             text: "Details"
         ),
         _Button(onTap: () => print("2"), text: "Notes", enabled: false,),
@@ -52,7 +56,7 @@ class _ButtonBar extends StatelessWidget {
 }
 
 class _Button extends StatelessWidget {
-  const _Button({super.key, this.onTap, required this.text, this.enabled = true});
+  const _Button({this.onTap, required this.text, this.enabled = true});
 
   final bool enabled;
   final VoidCallback? onTap;
