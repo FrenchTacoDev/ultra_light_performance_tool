@@ -494,6 +494,7 @@ final eddf = Airport(name: "Frankfurt Airport", icao: "EDDF", iata: "FRA", eleva
             const Intersection(designator: "Full", toda: 4000),
             const Intersection(designator: "M25/R15", toda: 3085),
           ]
-      )
-    ]
+      ),
+    ],
+  notes: "Das ist Frankfurt\n•Junge"
 );

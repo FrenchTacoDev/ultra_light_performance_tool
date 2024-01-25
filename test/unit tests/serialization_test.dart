@@ -70,6 +70,7 @@ Airport testPort = Airport(
     icao: "TEST",
     runways: [runway, runway2],
     elevation: 1045,
+    notes: "Notiz\n•Stichpunkt"
 );
 
 Settings testSetting = Settings()..corrections = testCorrection;
