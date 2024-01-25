@@ -177,7 +177,7 @@ class DE extends Dictionary{
   @override
   String get condSlush => "Schneematsch";
   @override
-  String get condWetSnow => "Normalfeuchter Schnee";
+  String get condWetSnow => "Feuchter Schnee";
   @override
   String get condDrySnow => "Pulver Schnee";
   //endregion

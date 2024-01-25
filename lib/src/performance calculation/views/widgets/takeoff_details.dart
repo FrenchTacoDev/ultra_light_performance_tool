@@ -303,7 +303,7 @@ class TakeoffDetails extends StatelessWidget {
                           ]
                       ),
                     ),
-                    const SizedBox(height: 4,),
+                    const SizedBox(height: 8,),
                     Text("${Localizer.of(context).runway} ${parameters.runway.designator} $intersectDesignator", style: titleS,),
                     RichText(
                       text: TextSpan(
@@ -313,10 +313,12 @@ class TakeoffDetails extends StatelessWidget {
                           ]
                       ),
                     ),
+                    const SizedBox(height: 4,),
                     RichText(
+                      textAlign: TextAlign.center,
                       text: TextSpan(
                           children: [
-                            TextSpan(text: "${Localizer.of(context).pcRunwayRemain}: ", style: bodyS),
+                            TextSpan(text: "${Localizer.of(context).pcRunwayRemain}\n", style: bodyS),
                             TextSpan(text: "${(intersection.toda - (facTod * safetyFactor)).floor()}m (${(intersection.toda - facTod).floor()}m)", style: bodySB),
                           ]
                       ),

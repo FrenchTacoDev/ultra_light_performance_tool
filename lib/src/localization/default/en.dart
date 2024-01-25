@@ -251,7 +251,7 @@ class EN extends Dictionary{
   @override
   String get toda => "Takeoff Distance Available in m";
   @override
-  String get entriesLostWarning => "Really leave this page?\nAll entries will be lost!";
+  String get entriesLostWarning => "Leave this page?\nEntries will be lost!";
   @override
   String get factor => "Factor";
   @override
