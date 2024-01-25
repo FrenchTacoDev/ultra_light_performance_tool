@@ -119,6 +119,11 @@ class ULPTDB{
   //region Upgrade
   late final List<AsyncValueSetter<sq.Database>> _upgradeMethods;
 
+  Future<bool> _columnExists({required sq.Database db, required String tableName, required String columnName}) async{
+    var tableInfo = await db.rawQuery("PRAGMA table_info($tableName)");
+    return tableInfo.where((e) => e["name"] == columnName).isNotEmpty;
+  }
+
   void _fillUpgradeList(){
     _upgradeMethods = [
           (d) => _upgradeTo2(d),
@@ -142,8 +147,15 @@ class ULPTDB{
   }
 
   Future<void> _upgradeTo3(sq.Database d) async{
-    await d.execute("ALTER TABLE $acTableName ADD ${Aircraft.notesFieldValue} TEXT");
-    await d.execute("ALTER TABLE $apTableName ADD ${Airport.notesFieldValue} TEXT");
+
+    if(await _columnExists(db: d, tableName: acTableName, columnName: Aircraft.notesFieldValue) == false) {
+      await d.execute("ALTER TABLE $acTableName ADD ${Aircraft.notesFieldValue} TEXT");
+    }
+
+    if(await _columnExists(db: d, tableName: apTableName, columnName: Airport.notesFieldValue) == false) {
+      await d.execute("ALTER TABLE $apTableName ADD ${Airport.notesFieldValue} TEXT");
+    }
+
     d.setVersion(3);
   }
   //endregion
