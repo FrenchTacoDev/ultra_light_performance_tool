@@ -179,7 +179,10 @@ class _SmallSizedScreen extends StatelessWidget {
       minHeight: 750,
       child: Column(
         children: [
-          DetailsButtons(isSmallSize: true, state: state),
+          DetailsButtons(
+              isSmallSize: true,
+              state: state,
+          ),
           SizedBox(
             height: panelHeight,
             child: _EntryPanelComponent(

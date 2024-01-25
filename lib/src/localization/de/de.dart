@@ -25,6 +25,10 @@ class DE extends Dictionary{
   @override
   String get runways => "Pisten";
   @override
+  String get intersection => "Pistenkreuzung";
+  @override
+  String get intersections => "Pistenkreuzungen";
+  @override
   String get full => "Voll";
   @override
   String get toda => "Verfügbare Startstrecke in m";
@@ -32,6 +36,10 @@ class DE extends Dictionary{
   String get entriesLostWarning => "Wollen Sie die Seite wirklich verlassen?\nEingaben gehen verloren!";
   @override
   String get factor => "Faktor";
+  @override
+  String get notes => "Notizen";
+  @override
+  String get aircraft => "Luftfahrzeug";
   //endregion
   //region Menu
   @override

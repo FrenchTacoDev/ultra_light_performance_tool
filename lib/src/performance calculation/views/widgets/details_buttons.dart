@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:ultra_light_performance_tool/src/core/core.dart';
 import 'package:ultra_light_performance_tool/src/performance%20calculation/BLoC/calculation_bloc.dart';
+import 'package:ultra_light_performance_tool/src/performance%20calculation/views/widgets/calc_notes.dart';
 import 'package:ultra_light_performance_tool/src/res/themes.dart';
 
 import 'takeoff_details.dart';
 
+///Buttonbar that gives the user the ability to show calculation details and notes
 class DetailsButtons extends StatelessWidget {
   const DetailsButtons({super.key, required this.state, this.isSmallSize = false});
 
@@ -15,7 +18,7 @@ class DetailsButtons extends StatelessWidget {
   Widget build(BuildContext context) {
     return Card(
       margin: isSmallSize ? const EdgeInsets.all(2) : const EdgeInsets.fromLTRB(4, 0, 4, 2),
-      child: _ButtonBar(state: state),
+      child: _ButtonBar(state: state,),
     );
   }
 }
@@ -27,6 +30,8 @@ class _ButtonBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+
+    var aircraft = context.read<CalculationCubit>().aircraft;
 
     return ButtonBar(
       alignment: MainAxisAlignment.start,
@@ -47,9 +52,23 @@ class _ButtonBar extends StatelessWidget {
                   )
               );
             },
-            text: "Details"
+            text: Localizer.of(context).details,
         ),
-        _Button(onTap: () => print("2"), text: "Notes", enabled: false,),
+        _Button(
+          onTap: (){
+            showDialog(
+                context: context,
+                builder: (context) => CalculationNotes(
+                  aircraft: aircraft,
+                  airport: state.airport,
+                  runway: state.runway,
+                  intersect: state.intersection,
+                ),
+            );
+          },
+          text: Localizer.of(context).notes,
+          enabled: aircraft.notes != null || state.airport?.notes != null || state.runway?.notes != null || state.intersection?.notes != null,
+        ),
       ],
     );
   }

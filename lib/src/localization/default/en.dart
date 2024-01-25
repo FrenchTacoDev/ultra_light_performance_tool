@@ -23,10 +23,15 @@ abstract class Dictionary{
   String get reset;
   String get runway;
   String get runways;
+  String get intersection;
+  String get intersections;
   String get full;
   String get toda;
   String get entriesLostWarning;
   String get factor;
+  String get details => "Details";
+  String get notes;
+  String get aircraft;
   //endregion
 
   //region Menu
@@ -238,6 +243,10 @@ class EN extends Dictionary{
   @override
   String get runways => "Runways";
   @override
+  String get intersection => "Intersection";
+  @override
+  String get intersections => "Intersections";
+  @override
   String get full => "Full";
   @override
   String get toda => "Takeoff Distance Available in m";
@@ -245,6 +254,10 @@ class EN extends Dictionary{
   String get entriesLostWarning => "Really leave this page?\nAll entries will be lost!";
   @override
   String get factor => "Factor";
+  @override
+  String get notes => "Notes";
+  @override
+  String get aircraft => "Aircraft";
   //endregion
 
   //region Menu

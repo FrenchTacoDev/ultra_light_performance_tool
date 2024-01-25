@@ -89,7 +89,8 @@ class ULPTDB{
         'CREATE TABLE $acTableName '
             '(id INTEGER PRIMARY KEY,'
             ' ${Aircraft.nameFieldValue} TEXT,'
-            ' ${Aircraft.todFieldValue} INTEGER)'
+            ' ${Aircraft.todFieldValue} INTEGER,'
+            ' ${Aircraft.notesFieldValue} TEXT)'
     );
   }
 
@@ -101,6 +102,7 @@ class ULPTDB{
             ' ${Airport.icaoFieldValue} TEXT,'
             ' ${Airport.iataFieldValue} TEXT,'
             ' ${Airport.elevationFieldValue} INTEGER,'
+            ' ${Airport.notesFieldValue} TEXT,'
             ' ${Airport.runwayFieldValue} TEXT)'
     );
   }
@@ -120,6 +122,7 @@ class ULPTDB{
   void _fillUpgradeList(){
     _upgradeMethods = [
           (d) => _upgradeTo2(d),
+          (d) => _upgradeTo3(d),
     ];
   }
 
@@ -136,6 +139,12 @@ class ULPTDB{
   Future<void> _upgradeTo2(sq.Database d) async{
     _createSettingsTable(d);
     d.setVersion(2);
+  }
+
+  Future<void> _upgradeTo3(sq.Database d) async{
+    await d.execute("ALTER TABLE $acTableName ADD ${Aircraft.notesFieldValue} TEXT");
+    await d.execute("ALTER TABLE $apTableName ADD ${Airport.notesFieldValue} TEXT");
+    d.setVersion(3);
   }
   //endregion
 }
