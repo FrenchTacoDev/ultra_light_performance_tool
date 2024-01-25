@@ -14,6 +14,7 @@ class AddRunwayState{
     this.startElevation,
     this.endElevation,
     this.slope,
+    this.notes,
     this.intersections,
   });
 
@@ -27,6 +28,7 @@ class AddRunwayState{
   final int? endElevation;
   ///when given overrides computed value
   final double? slope;
+  final String? notes;
   final List<Intersection>? intersections;
 
   factory AddRunwayState.initial({Runway? rwy}){
@@ -37,6 +39,7 @@ class AddRunwayState{
       endElevation: rwy?.endElevation,
       slope: rwy?.slope,
       surface: rwy?.surface ?? Surface.asphalt,
+      notes: rwy?.notes,
       //Uses placeholder Full for first intersect as this resembles full runway. Text shown to the user is however resolved by localization.
       //See AddRunwayPage for this.
       intersections: rwy?.intersections ?? [const Intersection(designator: "Full", toda: 0)],
@@ -46,7 +49,7 @@ class AddRunwayState{
   AddRunwayState copyWith({
     String? designator, int? direction, Surface? surface,
     int? startElevation, int? endElevation, double? slope,
-    List<Intersection>? intersections,
+    String? notes, List<Intersection>? intersections,
   }){
 
     return AddRunwayState._(
@@ -56,18 +59,20 @@ class AddRunwayState{
       slope: slope ?? this.slope,
       startElevation: startElevation ?? this.startElevation,
       endElevation: endElevation ?? this.endElevation,
+      notes: notes != null && notes.isEmpty ? null : notes ?? this.notes,
       intersections: intersections ?? this.intersections,
     );
   }
 
   bool hasEntries() {
     return designator != null || direction != null || startElevation != null
-        || endElevation != null || slope != null || (intersections != null && intersections!.isNotEmpty && intersections!.first.toda != 0);
+        || endElevation != null || slope != null || notes != null ||
+        (intersections != null && intersections!.isNotEmpty && (intersections!.first.toda != 0 || intersections!.first.notes != null));
   }
 
   bool matchesRunway(Runway r) {
     return r.designator == designator && r.direction == direction && r.startElevation == startElevation
-        && r.endElevation == endElevation && r.slope == slope && listEquals(r.intersections, intersections);
+        && r.endElevation == endElevation && r.slope == slope && r.notes == notes && listEquals(r.intersections, intersections);
   }
 }
 
@@ -99,6 +104,7 @@ class AddRunwayCubit extends Cubit<AddRunwayState>{
         designator: state.designator,
         surface: state.surface,
         direction: state.direction,
+        notes: state.notes,
         slope: slope
     ));
   }
@@ -114,6 +120,7 @@ class AddRunwayCubit extends Cubit<AddRunwayState>{
         startElevation: elevation,
         endElevation: state.endElevation,
         intersections: state.intersections,
+        notes: state.notes,
     );
 
     emit(s);
@@ -131,10 +138,15 @@ class AddRunwayCubit extends Cubit<AddRunwayState>{
       startElevation: state.startElevation,
       endElevation: elevation,
       intersections: state.intersections,
+      notes: state.notes,
     );
 
     emit(s);
     _calculateSlope();
+  }
+
+  void setNotes({String? notes}) {
+    emit(state.copyWith(notes: notes ?? ""));
   }
 
   ///Adds a new intersection card where the user then can enter the designator and the toda
@@ -145,16 +157,23 @@ class AddRunwayCubit extends Cubit<AddRunwayState>{
 
   void setIntersectionDesignator({required Intersection intersection, String? designator}){
     if(state.intersections!.contains(intersection) == false) throw("Intersection not contained");
-    state.intersections![state.intersections!.indexOf(intersection)] = Intersection(designator: designator ?? "", toda: intersection.toda);
+    state.intersections![state.intersections!.indexOf(intersection)] = Intersection(designator: designator ?? "", toda: intersection.toda, notes: intersection.notes);
     emit(state.copyWith(intersections: List<Intersection>.from(state.intersections!)));
   }
 
   void setIntersectionTOD({required Intersection intersection, int? tod}){
     if(state.intersections!.contains(intersection) == false) throw("Intersection not contained");
     var index = state.intersections!.indexOf(intersection);
-    state.intersections![index] = Intersection(designator: intersection.designator, toda: tod ?? 0);
+    state.intersections![index] = Intersection(designator: intersection.designator, toda: tod ?? 0, notes: intersection.notes);
     emit(state.copyWith(intersections: List<Intersection>.from(state.intersections!)));
     if(index == 0) _calculateSlope();
+  }
+
+  void setIntersectionNotes({required Intersection intersection, String? notes}){
+    if(state.intersections!.contains(intersection) == false) throw("Intersection not contained");
+    var index = state.intersections!.indexOf(intersection);
+    state.intersections![index] = Intersection(designator: intersection.designator, toda: intersection.toda, notes: notes);
+    emit(state.copyWith(intersections: List<Intersection>.from(state.intersections!)));
   }
 
   void deleteIntersection({required BuildContext context, required Intersection intersection}) async{
@@ -209,6 +228,7 @@ class AddRunwayCubit extends Cubit<AddRunwayState>{
             startElevation: state.startElevation ?? original!.startElevation,
             endElevation: state.endElevation ?? original!.endElevation,
             slope: state.slope ?? original!.slope,
+            notes: state.notes,
             intersections: state.intersections ?? List.from(original!.intersections),
         )
       );
@@ -224,6 +244,7 @@ class AddRunwayCubit extends Cubit<AddRunwayState>{
           startElevation: state.startElevation,
           endElevation: state.endElevation,
           slope: state.slope ?? 0,
+          notes: state.notes,
         )
     );
   }

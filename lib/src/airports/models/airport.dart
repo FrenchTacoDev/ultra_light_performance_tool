@@ -12,6 +12,7 @@ class Airport{
   static const String icaoFieldValue = "icao";
   static const String iataFieldValue = "iata";
   static const String elevationFieldValue = "elevation";
+  static const String notesFieldValue = "apNotes";
   static const String runwayFieldValue = "runways";
 
   ///internal DatabaseID to handle saving and loading
@@ -24,6 +25,7 @@ class Airport{
   final List<Runway> runways;
   ///in feet as [int]
   final int elevation;
+  final String? notes;
 
   const Airport({
     this.dbid,
@@ -32,6 +34,7 @@ class Airport{
     this.iata,
     required this.runways,
     required this.elevation,
+    this.notes,
   });
 
 
@@ -39,7 +42,7 @@ class Airport{
   String toString() => icao;
 
   @override
-  int get hashCode => Object.hash(name, icao, iata, runways, elevation);
+  int get hashCode => Object.hash(name, icao, iata, runways, elevation, notes);
 
   Airport copyWithID(int id){
     return Airport(
@@ -49,6 +52,7 @@ class Airport{
         iata: iata,
         runways: List.of(runways),
         elevation: elevation,
+        notes: notes,
     );
   }
 
@@ -59,7 +63,8 @@ class Airport{
         && other.icao == icao
         && other.iata == iata
         && listEquals(other.runways, runways)
-        && other.elevation == elevation;
+        && other.elevation == elevation
+        && other.notes == notes;
   }
 
   ///transform class into json representation
@@ -77,6 +82,7 @@ class Airport{
       icaoFieldValue : icao,
       iataFieldValue : iata,
       elevationFieldValue : elevation,
+      notesFieldValue : notes,
       runwayFieldValue : jsonEncode(rwyMaps),
     };
   }
@@ -98,6 +104,7 @@ class Airport{
       icao: map[icaoFieldValue] ?? "Missing ICAO",
       iata: map[iataFieldValue],
       elevation: map[elevationFieldValue] ?? 0,
+      notes: map[notesFieldValue],
       runways: rwys,
     );
   }

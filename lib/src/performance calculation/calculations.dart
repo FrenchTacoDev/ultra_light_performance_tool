@@ -3,10 +3,22 @@ import 'package:ultra_light_performance_tool/src/airports/airports.dart';
 
 typedef Wind = ({int direction, int speed});
 
-///Class that handles all the calculations
-///Must be given all parameters on construction first.
-///Then call the [calculateUnfactored] function to get a result without safety margin.
-class PerformanceCalculator{
+///Data Container for the performance calculation
+class CalculationParameters{
+
+  const CalculationParameters({
+    required this.corrections,
+    required this.rawTod,
+    required this.runway,
+    required this.airport,
+    required this.qnh,
+    required this.temp,
+    required this.wind,
+    required this.runwayCondition,
+    this.underground,
+    this.highGrass = false,
+    this.sodDamaged = false,
+  });
 
   final Corrections corrections;
   final int rawTod;
@@ -20,94 +32,149 @@ class PerformanceCalculator{
   final bool sodDamaged;
   final RunwayCondition runwayCondition;
 
+  @override
+  bool operator ==(Object other) {
+    return other is CalculationParameters
+        && other.corrections == corrections
+        && other.rawTod == rawTod
+        && other.runway == runway
+        && other.airport == airport
+        && other.qnh == qnh
+        && other.temp == temp
+        && other.wind == wind
+        && other.underground == underground
+        && other.highGrass == highGrass
+        && other.sodDamaged == sodDamaged
+        && other.runwayCondition == runwayCondition;
+  }
+
+  @override
+  int get hashCode => Object.hash(corrections, rawTod, runway, airport, qnh,
+      temp, wind, underground, highGrass, sodDamaged, runwayCondition);
+
+}
+
+///Class that handles all the calculations
+///Must be given all parameters on construction first.
+///Then call the [calculateUnfactored] function to get a result without safety margin.
+class PerformanceCalculator{
+
+  final CalculationParameters parameters;
+
   const PerformanceCalculator({
-    required this.corrections,
-    required this.rawTod,
-    required this.runway,
-    required this.airport,
-    required this.qnh,
-    required this.temp,
-    required this.wind,
-    required this.underground,
-    required this.highGrass,
-    required this.sodDamaged,
-    required this.runwayCondition,
+    required this.parameters,
   });
+
+  ///Calculates the slope correction factor
+  double calculateSlopeFactor() => (parameters.runway.slope / 10) + 1;
+
+  ///Calculates real pressure altitude
+  double calculatePressureAltitude() => 30.0 * (1013.0 - parameters.qnh) + parameters.airport.elevation;
+
+  ///Calculates the pressure altitude correction factor
+  double calculatePressureFactor(){
+    var pa = calculatePressureAltitude();
+    if(pa <= 0) return 1.0;
+    if(pa <= 1000) return (pa / 1000) * (1 / 10) + 1;
+    if(pa <= 3000) return (pa / 1000) * (13 / 100) + 1;
+    return (pa / 1000) * (18 / 100) + 1;
+  }
+
+  ///Assumes a decrease of 2°C per 1000ft alt
+  double calculateIsaTemperature(double pressureAlt) => pressureAlt <= 0 ? 15.0 : 15.0 - ((pressureAlt / 1000) * 2);
+
+  ///Assumes a decrease of 2°C per 1000ft alt
+  double calculateIsaDelta(double pressureAlt, int currentTemp){
+    var isaTemp = calculateIsaTemperature(pressureAlt);
+    return currentTemp - isaTemp;
+  }
+
+  ///Calculates the temperature correction factor
+  double calculateTempFactor(double pressureAlt){
+    var deltaT = calculateIsaDelta(pressureAlt, parameters.temp < 0 ? 0 : parameters.temp);
+    return deltaT >= 0 ? deltaT / 100 + 1 : 1 + deltaT / 100;
+  }
+
+  ///Positive value means headwind, negative tailwind
+  double calculateHeadwindComponent(){
+    var angle = _getWindAngle();
+    if(angle == 90) return 0.0;
+    return parameters.wind.speed * cos((angle * pi) / 180);
+  }
+
+  ///Positive value means wind from the right, negative from the left
+  double calculateCrosswindComponent(){
+    var angle = _getWindAngle();
+    if(angle == 0 || angle == 180) return 0.0;
+    var cwc = parameters.wind.speed * sin((angle * pi) / 180);
+    if(_windIsFromLeft()) return -cwc;
+    return cwc;
+
+  }
+
+  bool _windIsFromLeft(){
+    var wind = parameters.wind.direction * pi / 180;
+    var rwy = parameters.runway.direction * pi / 180;
+    var cp = cos(wind) * sin(rwy) - sin(wind) * cos(rwy);
+    if(cp > 0) return true;
+    return false;
+  }
+
+  double calculateWindFactor(double hwc){
+    var windFac = 1.0;
+    if(hwc < 0) windFac = (hwc / 10).abs() * (parameters.corrections.tailWindFactor - 1) + 1;
+    if(hwc > 0) windFac = 1 - (hwc / 10).abs() * (parameters.corrections.headWindFactor - 1);
+    return windFac < 0 ? 0 : windFac;
+    //Todo think about what makes sense when headwind is so strong that the tod is 0
+    //Either 0 => all becomes 0 or 0.1 or 0.01 for a very small number
+  }
+
+  double _getWindAngle() => (parameters.wind.direction - parameters.runway.direction + 360) % 360;
+
+  double getUndergroundFactor() => {
+    Underground.firm : parameters.corrections.grassFactorFirm,
+    Underground.wet : parameters.corrections.grassFactorWet,
+    Underground.softened : parameters.corrections.grassFactorSoftened,
+  }[parameters.underground] ?? 1.0;
+
+  double getSodDamagedFactor() => parameters.sodDamaged ? parameters.corrections.sodDamagedFactor : 1.0;
+  double getHighGrassFactor() => parameters.highGrass ? parameters.corrections.highGrassFactor : 1.0;
+
+  double getContaminationFactor() => {
+    RunwayCondition.dry : 1.0,
+    RunwayCondition.wet : parameters.corrections.conditionFactorWet,
+
+    RunwayCondition.standingWater : parameters.corrections.conditionFactorStandingWater,
+    RunwayCondition.slush : parameters.corrections.conditionFactorSlush,
+
+    RunwayCondition.wetSnow : parameters.corrections.conditionFactorWetSnow,
+    RunwayCondition.drySnow : parameters.corrections.conditionFactorDrySnow,
+  }[parameters.runwayCondition] ?? 1.0;
 
   ///Results in takeoff distance without safety margin!
   double calculateUnfactored(){
-    var slopeFactor = (runway.slope / 10) + 1;
+    var slopeFactor = calculateSlopeFactor();
+    var pressureFactor = calculatePressureFactor();
+    var tempFactor = calculateTempFactor(calculatePressureAltitude());
+    var windFactor = calculateWindFactor(calculateHeadwindComponent());
 
-    var pa = 30 * (1013 - qnh) + airport.elevation;
-    var pressureFactor = _calculateElevationCorrection(pa);
+    var undergroundFactor = parameters.runway.surface == Surface.grass ? getUndergroundFactor() : 1.0;
+    var sodDamagedFactor = getSodDamagedFactor();
+    var highGrassFactor = getHighGrassFactor();
 
-    var isaTemp = pa <= 0 ? 15 : 15 - ((pa / 1000) * 2);
-    var currentTemp = temp < 0 ? 0 : temp;
-    var deltaT = currentTemp - isaTemp;
-    var tempFactor = deltaT >= 0 ? deltaT / 100 + 1 : 1 + deltaT / 100;
+    var contaminationFactor = getContaminationFactor();
 
-    var hwc = _getHeadwindComponent();
-    var windFactor = hwc < 0 ? (hwc / 10).abs() * (corrections.tailWindFactor - 1) + 1 : 1 - (hwc / 10).abs() * (corrections.headWindFactor - 1);
-    windFactor = windFactor < 0 ? 0 : windFactor;
-    //Todo think about what makes sense when headwind is so strong that the tod is 0
-    //Either 0 => all becomes 0 or 0.1 or 0.01 for a very small number
-
-    //Todo enums should resolve from maps especially when implementing custom factors later on
-    var undergroundFactor = 1.0;
-    var sodDamagedFactor = 1.0;
-    var highGrassFactor = 1.0;
-
-    if(runway.surface == Surface.grass){
-      if(underground == Underground.firm) undergroundFactor = corrections.grassFactorFirm;
-      if(underground == Underground.wet) undergroundFactor = corrections.grassFactorWet;
-      if(underground == Underground.softened) undergroundFactor = corrections.grassFactorSoftened;
-
-      if(sodDamaged == true) sodDamagedFactor = corrections.sodDamagedFactor;
-      if(highGrass == true) highGrassFactor = corrections.highGrassFactor;
-    }
-
-    var contaminationFactor = 1.0;
-    if(runwayCondition == RunwayCondition.dry) contaminationFactor = 1.0;
-    if(runwayCondition == RunwayCondition.wet) contaminationFactor = corrections.conditionFactorWet;
-
-    if(runwayCondition == RunwayCondition.standingWater) contaminationFactor = corrections.conditionFactorStandingWater;
-    if(runwayCondition == RunwayCondition.slush) contaminationFactor = corrections.conditionFactorSlush;
-
-    if(runwayCondition == RunwayCondition.wetSnow) contaminationFactor = corrections.conditionFactorWetSnow;
-    if(runwayCondition == RunwayCondition.drySnow) contaminationFactor = corrections.conditionFactorDrySnow;
-
-    var tod = rawTod * slopeFactor * pressureFactor * tempFactor * windFactor * undergroundFactor
+    var tod = parameters.rawTod * slopeFactor * pressureFactor * tempFactor * windFactor * undergroundFactor
         * sodDamagedFactor * highGrassFactor * contaminationFactor * 1.1;
+    
 
-
-    /*
-         print("rawTod: $rawTod, Slope: $slopeFactor, Pressure: $pressureFactor,"
+     /*    print("rawTod: ${parameters.rawTod}, Slope: $slopeFactor, Pressure: $pressureFactor,"
      "Temp: $tempFactor, Wind: $windFactor, "
      "underGround: $undergroundFactor, sod: $sodDamagedFactor,"
-     "highGrass: $highGrassFactor, contam: $contaminationFactor, * 1.1");
-     */
+     "highGrass: $highGrassFactor, contam: $contaminationFactor, * 1.1 = $tod");*/
+
 
     return tod;
-  }
-
-  double _calculateElevationCorrection(int pressureAlt){
-    if(pressureAlt <= 0) return 1.0;
-    if(pressureAlt <= 1000) return (pressureAlt / 1000) * (1 / 10) + 1;
-    if(pressureAlt <= 3000) return (pressureAlt / 1000) * (13 / 100) + 1;
-    return (pressureAlt / 1000) * (18 / 100) + 1;
-  }
-
-  double _getHeadwindComponent(){
-    var angle = _getWindAngle();
-    if(angle == 90) return 0.0;
-    return wind.speed * cos((angle * pi) / 180);
-  }
-
-  double _getWindAngle(){
-    var angularDiff = runway.direction - wind.direction;
-    if(angularDiff % 360 == 180) return 180;
-    if(angularDiff % 360 <= 180) return angularDiff % 180;
-    return (wind.direction - runway.direction) % 180;
   }
 }
 

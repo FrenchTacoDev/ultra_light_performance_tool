@@ -42,7 +42,7 @@ class CalculationState{
   });
 
   factory CalculationState.initial() => CalculationState._();
-  copyWith({
+  CalculationState copyWith({
     Airport? airport,
     Runway? runway,
     Intersection? intersection,
@@ -71,6 +71,23 @@ class CalculationState{
       rawTod: rawTod ?? this.rawTod,
     );
   }
+
+  CalculationState resetTod(){
+    return CalculationState._(
+      airport: airport,
+      runway: runway,
+      intersection: intersection,
+      underground: underground,
+      sodDamaged: sodDamaged,
+      highGrass: highGrass,
+      runwayCondition: runwayCondition,
+      temp: temp,
+      wind: wind,
+      qnh: qnh,
+      safetyFactor: safetyFactor,
+      rawTod: null,
+    );
+  }
 }
 
 ///Handles all operations regarding the performance calculation
@@ -81,6 +98,15 @@ class CalculationCubit extends Cubit<CalculationState>{
   bool canCalc = false;
   ///[Aircraft] that was selected previously by the user
   final Aircraft aircraft;
+
+  ///Used for controlling the scroll motion when view needs scrolling
+  final ScrollController scrollControl = ScrollController();
+
+  @override
+  Future<void> close() async{
+    scrollControl.dispose();
+    return super.close();
+  }
 
   ///checks on every state change if a calc can be done or not
   @override
@@ -137,16 +163,19 @@ class CalculationCubit extends Cubit<CalculationState>{
   void setGrassIsHigh({bool? highGrass}){
     if(highGrass == null || state.highGrass == highGrass) return;
     emit(state.copyWith(highGrass: highGrass));
+    emit(state.resetTod());
   }
 
   void setSodDamaged({bool? sodDamaged}){
     if(sodDamaged == null || state.sodDamaged == sodDamaged) return;
     emit(state.copyWith(sodDamaged: sodDamaged));
+    emit(state.resetTod());
   }
 
   void setRunwayCondition({RunwayCondition? condition}){
     if(condition == null || state.runwayCondition == condition) return;
     emit(state.copyWith(runwayCondition: condition));
+    emit(state.resetTod());
   }
 
   void setTemperature({int? temp}){
@@ -225,12 +254,11 @@ class CalculationCubit extends Cubit<CalculationState>{
     );
   }
 
-  ///Runs the calculation and will automatically warn the user if distance is not sufficient.
-  void calculate({required BuildContext context}){
-    var rawTod = aircraft.todr;
-    var calc = PerformanceCalculator(
+  CalculationParameters getParameters(BuildContext context){
+    if(canCalc == false) throw("Calculation State requires more values to be complete!");
+    return CalculationParameters(
         corrections: context.read<ApplicationCubit>().settings.corrections,
-        rawTod: rawTod,
+        rawTod:  aircraft.todr,
         runway: state.runway!,
         airport: state.airport!,
         qnh: state.qnh!,
@@ -241,13 +269,27 @@ class CalculationCubit extends Cubit<CalculationState>{
         sodDamaged: state.sodDamaged ?? false,
         runwayCondition: state.runwayCondition!
     );
+  }
+
+  ///Runs the calculation and will automatically warn the user if distance is not sufficient.
+  void calculate({required BuildContext context}){
+    var calc = PerformanceCalculator(
+      parameters: getParameters(context),
+    );
 
     emit(state.copyWith(rawTod: calc.calculateUnfactored().ceil()));
-
+    FocusScope.of(context).focusedChild?.unfocus();
     if(state.factorizedTod == null && state.intersection?.toda == null) return;
 
     var remainingFac = state.intersection!.toda - state.factorizedTod!;
     var remainingUnFac = state.intersection!.toda - state.rawTod!;
+
+    if(scrollControl.positions.isNotEmpty) {
+      scrollControl.animateTo(
+          scrollControl.position.maxScrollExtent,
+          duration: const Duration(milliseconds: 200), curve: Curves.decelerate
+      );
+    }
 
     if(remainingFac >= 0) return;
 

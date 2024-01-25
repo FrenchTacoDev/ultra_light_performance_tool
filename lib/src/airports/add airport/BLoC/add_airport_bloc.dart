@@ -13,6 +13,7 @@ class AddAirportState{
     this.icao,
     this.iata,
     this.elevation,
+    this.notes,
     this.runways,
   });
 
@@ -23,6 +24,7 @@ class AddAirportState{
   final String? iata;
   ///in feet
   final int? elevation;
+  final String? notes;
   final List<Runway>? runways;
 
   factory AddAirportState.initial({Airport? original}){
@@ -31,6 +33,7 @@ class AddAirportState{
       icao: original?.icao,
       iata: original?.iata,
       elevation: original?.elevation,
+      notes: original?.notes,
       runways: original?.runways,
     );
   }
@@ -40,23 +43,25 @@ class AddAirportState{
     String? icao,
     String? iata,
     int? elevation,
+    String? notes,
     List<Runway>? runways,
   }){
     return AddAirportState._(
-      name: name ?? this.name,
-      icao: icao ?? this.icao,
-      iata: iata ?? this.iata,
+      name: name != null && name.isEmpty ? null : name ?? this.name,
+      icao: icao != null && icao.isEmpty ? null : icao ?? this.icao,
+      iata: iata != null && iata.isEmpty ? null : iata ?? this.iata,
       elevation: elevation ?? this.elevation,
+      notes:  notes != null && notes.isEmpty ? null : notes ?? this.notes,
       runways: runways != null ? List.of(runways) : this.runways != null ? List.of(this.runways!) : null,
     );
   }
 
   bool hasEntries(){
-    return name != null || icao != null || iata != null || elevation != null || (runways != null && runways!.isNotEmpty);
+    return name != null || icao != null || iata != null || elevation != null || notes != null || (runways != null && runways!.isNotEmpty);
   }
 
   bool matchesAirport(Airport ap){
-    return ap.name == name && ap.icao == icao && ap.iata == iata && ap.elevation == elevation && listEquals(ap.runways, runways);
+    return ap.name == name && ap.icao == icao && ap.iata == iata && ap.elevation == elevation && ap.notes == notes && listEquals(ap.runways, runways);
   }
 }
 
@@ -70,19 +75,23 @@ class AddAirportCubit extends Cubit<AddAirportState>{
   bool get isEdit => original != null;
 
   void setName({String? name}){
-    emit(state.copyWith(name: name));
+    emit(state.copyWith(name: name ?? ""));
   }
 
   void setIcao({String? icao}){
-    emit(state.copyWith(icao: icao));
+    emit(state.copyWith(icao: icao ?? ""));
   }
 
   void setIata({String? iata}){
-    emit(state.copyWith(iata: iata));
+    emit(state.copyWith(iata: iata ?? ""));
   }
 
   void setElevation({int? value}) {
     emit(state.copyWith(elevation: value));
+  }
+
+  void setNotes({String? notes}) {
+    emit(state.copyWith(notes: notes ?? ""));
   }
 
   ///Opens up a new [AddRunwayPage] to enter [Runway] information
@@ -151,8 +160,9 @@ class AddAirportCubit extends Cubit<AddAirportState>{
       ap = Airport(
         name: state.name ?? original!.name,
         icao: state.icao ?? original!.icao,
-        iata: state.iata ?? original!.iata,
+        iata: state.iata,
         elevation: state.elevation ?? original!.elevation,
+        notes: state.notes,
         runways: state.runways ?? original!.runways,
       );
 
@@ -164,6 +174,7 @@ class AddAirportCubit extends Cubit<AddAirportState>{
       icao: state.icao!,
       iata: state.iata,
       elevation: state.elevation!,
+      notes: state.notes,
       runways: state.runways!,
     );
 

@@ -7,6 +7,8 @@ import 'package:ultra_light_performance_tool/src/res/themes.dart';
 ///Adjusts the keyboard to String or Number entry
 ///If [isLastInFocusGroup] is selected true, will unfocus the field on submit and now select the next focus.
 ///Also a Done button is shown on mobile.
+///If [forceMultiLine] is true, the entry will change to a multi line entry that has unlimited lines.
+///Also the focus traversal will be affected by this.
 class ULPTTextField extends StatelessWidget {
   const ULPTTextField({
     super.key,
@@ -18,6 +20,7 @@ class ULPTTextField extends StatelessWidget {
     this.alignRight = false,
     this.isOnlyNumbers = false,
     this.isLastInFocusGroup = false,
+    this.forceMultiLine = false,
   });
 
   final FocusNode focusNode;
@@ -28,6 +31,7 @@ class ULPTTextField extends StatelessWidget {
   final bool alignRight;
   final bool isOnlyNumbers;
   final bool isLastInFocusGroup;
+  final bool forceMultiLine;
 
   @override
   Widget build(BuildContext context) {
@@ -46,12 +50,12 @@ class ULPTTextField extends StatelessWidget {
         focusNode: focusNode,
         textAlign: alignRight ? TextAlign.end : TextAlign.start,
         style: TextStyle(color: theme.interactiveFocusedColor),
-        maxLines: 1,
+        maxLines: forceMultiLine ? null : 1,
         controller: tec,
         autocorrect: false,
         enableSuggestions: false,
-        textInputAction: isLastInFocusGroup ? TextInputAction.done : TextInputAction.next,
-        keyboardType: _getMatchingKeyboard(isNumbersOnly: isOnlyNumbers),
+        textInputAction: _getMatchingAction(),
+        keyboardType: _getMatchingKeyboard(),
         decoration: InputDecoration(
           hintText: hintText,
           contentPadding: const EdgeInsets.symmetric(horizontal: 8, vertical: 13.5),
@@ -71,9 +75,16 @@ class ULPTTextField extends StatelessWidget {
     );
   }
 
-  TextInputType? _getMatchingKeyboard({required bool isNumbersOnly}){
-    if(Platform.isIOS && isNumbersOnly) return TextInputType.datetime;
-    if(Platform.isAndroid && isNumbersOnly) return TextInputType.number;
+  TextInputAction? _getMatchingAction(){
+    if(forceMultiLine) return TextInputAction.newline;
+    if(isLastInFocusGroup) return TextInputAction.done;
+    return TextInputAction.next;
+  }
+
+  TextInputType? _getMatchingKeyboard(){
+    if(Platform.isIOS && isOnlyNumbers) return TextInputType.datetime;
+    if(Platform.isAndroid && isOnlyNumbers) return TextInputType.number;
+    if(forceMultiLine) return TextInputType.multiline;
     return TextInputType.text;
   }
 }

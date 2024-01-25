@@ -40,6 +40,6 @@ class ExportProcessor{
 
     await Future.delayed(Duration.zero);
     ZLibCodec codec = ZLibCodec();
-    return Uint8List.fromList(codec.encode(exportJsonString.codeUnits));
+    return Uint8List.fromList(codec.encode(const Utf8Encoder().convert(exportJsonString)));
   }
 }

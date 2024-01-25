@@ -89,7 +89,8 @@ class ULPTDB{
         'CREATE TABLE $acTableName '
             '(id INTEGER PRIMARY KEY,'
             ' ${Aircraft.nameFieldValue} TEXT,'
-            ' ${Aircraft.todFieldValue} INTEGER)'
+            ' ${Aircraft.todFieldValue} INTEGER,'
+            ' ${Aircraft.notesFieldValue} TEXT)'
     );
   }
 
@@ -101,6 +102,7 @@ class ULPTDB{
             ' ${Airport.icaoFieldValue} TEXT,'
             ' ${Airport.iataFieldValue} TEXT,'
             ' ${Airport.elevationFieldValue} INTEGER,'
+            ' ${Airport.notesFieldValue} TEXT,'
             ' ${Airport.runwayFieldValue} TEXT)'
     );
   }
@@ -117,9 +119,15 @@ class ULPTDB{
   //region Upgrade
   late final List<AsyncValueSetter<sq.Database>> _upgradeMethods;
 
+  Future<bool> _columnExists({required sq.Database db, required String tableName, required String columnName}) async{
+    var tableInfo = await db.rawQuery("PRAGMA table_info($tableName)");
+    return tableInfo.where((e) => e["name"] == columnName).isNotEmpty;
+  }
+
   void _fillUpgradeList(){
     _upgradeMethods = [
           (d) => _upgradeTo2(d),
+          (d) => _upgradeTo3(d),
     ];
   }
 
@@ -136,6 +144,19 @@ class ULPTDB{
   Future<void> _upgradeTo2(sq.Database d) async{
     _createSettingsTable(d);
     d.setVersion(2);
+  }
+
+  Future<void> _upgradeTo3(sq.Database d) async{
+
+    if(await _columnExists(db: d, tableName: acTableName, columnName: Aircraft.notesFieldValue) == false) {
+      await d.execute("ALTER TABLE $acTableName ADD ${Aircraft.notesFieldValue} TEXT");
+    }
+
+    if(await _columnExists(db: d, tableName: apTableName, columnName: Airport.notesFieldValue) == false) {
+      await d.execute("ALTER TABLE $apTableName ADD ${Airport.notesFieldValue} TEXT");
+    }
+
+    d.setVersion(3);
   }
   //endregion
 }

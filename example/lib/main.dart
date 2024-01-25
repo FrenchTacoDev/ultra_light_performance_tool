@@ -74,7 +74,7 @@ Future<void> showCustomLocalizationDialog({required BuildContext context}){
     context: context,
     builder: (context) {
       return AlertDialog(
-        title: Text((Localizer.of(context).customDict! as CustomDictionary).helloYou),
+        title: Text((Localizer.of(context).customDict! as CustomDictionary).helloYou, textAlign: TextAlign.center),
         actionsAlignment: MainAxisAlignment.center,
         actions: [
           OutlinedButton(

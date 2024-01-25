@@ -7,6 +7,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:ultra_light_performance_tool/src/core/core.dart';
 import 'package:ultra_light_performance_tool/src/import_export/import_export.dart';
+import 'package:ultra_light_performance_tool/src/res/themes.dart';
 import 'src/aircraft/aircraft.dart';
 
 export 'package:ultra_light_performance_tool/src/shared widgets/ulpt_button.dart' show ULPTButton;
@@ -33,7 +34,7 @@ class ULPT extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider<ApplicationCubit>(
-      create: (context) => ApplicationCubit(),
+      create: (context) => ApplicationCubit(theme: createDarkTheme(context)),
       child: BlocBuilder<ApplicationCubit, ApplicationState>(
           builder: (context, state) {
             return Localizer(
