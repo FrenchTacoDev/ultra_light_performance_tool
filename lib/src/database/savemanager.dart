@@ -7,7 +7,7 @@ import 'ulpt_db.dart';
 ///[setup] must be called and completed before any other function.
 class SaveManager{
 
-  static const int currentDBVersion = 2;
+  static const int currentDBVersion = 3;
 
   final ULPTDB database = ULPTDB(currentDBVersion: currentDBVersion);
 

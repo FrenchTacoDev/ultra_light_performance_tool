@@ -18,7 +18,7 @@ class ImportProcessor{
   }) async{
 
     ZLibCodec codec = ZLibCodec();
-    var decoded = String.fromCharCodes(codec.decode(data));
+    var decoded = const Utf8Decoder(allowMalformed: true).convert(codec.decode(data));
     var jsonMap = jsonDecode(decoded);
 
     var apJsons = jsonMap["Airports"] as List<dynamic>?;

@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ultra_light_performance_tool/src/aircraft/aircraft.dart';
 import 'package:ultra_light_performance_tool/src/res/themes.dart';
-import 'package:ultra_light_performance_tool/src/shared%20widgets/ulpt_button.dart';
 import 'package:ultra_light_performance_tool/src/core/core.dart';
+import 'package:ultra_light_performance_tool/src/shared%20widgets/shared_widgets.dart';
 import 'BLoC/add_aircraft_bloc.dart';
 import 'widgets/ac_widgets.dart';
 
@@ -60,6 +60,11 @@ class AddAircraftPage extends StatelessWidget {
                             Localizer.of(context).addACTodExplain,
                             style: TextStyle(color: theme.interactiveHintTextColor, fontSize: 12),
                           ),
+                        ),
+                        const SizedBox(height: 32,),
+                        NotesEntry(
+                          value: state.notes,
+                          onNotesSet: (s) => cubit.setNotes(notes: s),
                         ),
                         const SizedBox(height: 16,),
                         ConstrainedBox(

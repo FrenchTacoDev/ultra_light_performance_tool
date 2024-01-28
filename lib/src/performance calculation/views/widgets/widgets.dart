@@ -12,3 +12,4 @@ export 'sod_select.dart';
 export 'high_grass.dart';
 export 'results.dart';
 export 'not_enough_runway_dialog.dart';
+export 'details_buttons.dart';

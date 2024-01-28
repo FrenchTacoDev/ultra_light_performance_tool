@@ -2,6 +2,7 @@ import '../localizer.dart';
 
 ///German translation
 class DE extends Dictionary{
+  const DE({super.customDict});
   //region General
   @override
   String get yes => "Ja";
@@ -24,11 +25,21 @@ class DE extends Dictionary{
   @override
   String get runways => "Pisten";
   @override
+  String get intersection => "Pistenkreuzung";
+  @override
+  String get intersections => "Pistenkreuzungen";
+  @override
   String get full => "Voll";
   @override
   String get toda => "Verfügbare Startstrecke in m";
   @override
   String get entriesLostWarning => "Wollen Sie die Seite wirklich verlassen?\nEingaben gehen verloren!";
+  @override
+  String get factor => "Faktor";
+  @override
+  String get notes => "Notizen";
+  @override
+  String get aircraft => "Luftfahrzeug";
   //endregion
   //region Menu
   @override
@@ -166,7 +177,7 @@ class DE extends Dictionary{
   @override
   String get condSlush => "Schneematsch";
   @override
-  String get condWetSnow => "Normalfeuchter Schnee";
+  String get condWetSnow => "Feuchter Schnee";
   @override
   String get condDrySnow => "Pulver Schnee";
   //endregion
@@ -269,5 +280,71 @@ class DE extends Dictionary{
   String get importFinishedTitle => "Import Abgeschlossen";
   @override
   String get exportFinishedTitle => "Export Abgeschlossen";
+  //endregion
+  //region Takeoff Details
+  @override
+  String get tdHeading => "Startlauf Details";
+  @override
+  String get tdRawDist => "Unkorrigierte Startstrecke ist";
+  @override
+  String get tdSlopeCor => "Pistenneigungskorrektur";
+  @override
+  String get tdSlope => "Pistenneigung";
+  @override
+  String get tdSlopeFac => "Pistenneigungsfaktor";
+  @override
+  String get tdElevCor => "Höhenkorrektur";
+  @override
+  String get tdAirfieldElev => "Flugplatzhöhe";
+  @override
+  String get tdPA => "Dichtehöhe";
+  @override
+  String get tdElevFac => "Höhenkorrekturfaktor";
+  @override
+  String get tdTempCor => "Temperaturkorrektur";
+  @override
+  String get tdOat => "Außentemperatur";
+  @override
+  String get tdIsa => "ISA Temperatur";
+  @override
+  String get tdIsaDev => "ISA Unterschied";
+  @override
+  String get tdTempFac => "Temperaturfaktor";
+  @override
+  String get tdTempHint => "Hinweis: Temperaturen unter 0°C werden nicht korrigiert!";
+  @override
+  String get tdWindCor => "Windkorrektur";
+  @override
+  String get tdWind => "Wind";
+  @override
+  String get tdWindComponent => "Windkomponente";
+  @override
+  String get tdWindFac => "Windfaktor";
+  @override
+  String get tdHeadWind => "Gegenwind";
+  @override
+  String get tdTailWind => "Rückenwind";
+  @override
+  String get tdGrassCor => "Grasbahnkorrekturen";
+  @override
+  String get tdGrassCond => "Grasbedingungen";
+  @override
+  String get tdSodDamagedFac => "$factor für Grasnarbe beschädigt";
+  @override
+  String get tdHighGrassFac => "$factor für hohes Gras";
+  @override
+  String get tdRwyCond => "Pistenzustand";
+  @override
+  String get tdRwyFac => "Pistenzustandsfaktor";
+  @override
+  String get tdMoistAir1 => "Die Berechnung beinhaltet einen generellen Faktor von";
+  @override
+  String get tdMoistAir2 => "für feuchte Luft.";
+  @override
+  String get tdResults => "Ergebnisse";
+  @override
+  String get tdMarginFac => "Aufschlagsfaktor";
+  @override
+  String get tdGeneralHint => "Berechnungsgrundlage ist die Flugsicherheitsmitteilung FSM 3/75 des Luftfahrt-Bundesamtes, sowie AOPA Safety Letter Juni 2020.\nDabei wird für Temperaturen unter 0°C sowie Druckhöhen unter 0ft nicht mehr korrigiert. Ein Aufschlag von 10% für feuchte Luft wird immer berücksichtigt.";
   //endregion
 }

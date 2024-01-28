@@ -1,5 +1,16 @@
+abstract class CustomDict{
+
+  const CustomDict({required this.languageTag});
+
+  final String languageTag;
+}
+
 ///Data container for all Strings that will be implemented by the localization
 abstract class Dictionary{
+  const Dictionary({this.customDict});
+
+  final CustomDict? customDict;
+
   //region General
   String get yes;
   String get no;
@@ -12,9 +23,15 @@ abstract class Dictionary{
   String get reset;
   String get runway;
   String get runways;
+  String get intersection;
+  String get intersections;
   String get full;
   String get toda;
   String get entriesLostWarning;
+  String get factor;
+  String get details => "Details";
+  String get notes;
+  String get aircraft;
   //endregion
 
   //region Menu
@@ -164,10 +181,46 @@ abstract class Dictionary{
   String get importFinishedTitle;
   String get exportFinishedTitle;
   //endregion
+
+  //region Takeoff Details
+  String get tdHeading;
+  String get tdRawDist;
+  String get tdSlopeCor;
+  String get tdSlope;
+  String get tdSlopeFac;
+  String get tdElevCor;
+  String get tdAirfieldElev;
+  String get tdPA;
+  String get tdElevFac;
+  String get tdTempCor;
+  String get tdOat;
+  String get tdIsa;
+  String get tdIsaDev;
+  String get tdTempFac;
+  String get tdTempHint;
+  String get tdWindCor;
+  String get tdWind;
+  String get tdWindComponent;
+  String get tdWindFac;
+  String get tdHeadWind;
+  String get tdTailWind;
+  String get tdGrassCor;
+  String get tdGrassCond;
+  String get tdSodDamagedFac;
+  String get tdHighGrassFac;
+  String get tdRwyCond;
+  String get tdRwyFac;
+  String get tdMoistAir1;
+  String get tdMoistAir2;
+  String get tdResults;
+  String get tdMarginFac;
+  String get tdGeneralHint;
+  //endregion
 }
 
 ///English translation. Works as default.
 class EN extends Dictionary{
+  const EN({super.customDict});
   //region General
   @override
   String get yes => "Yes";
@@ -190,11 +243,21 @@ class EN extends Dictionary{
   @override
   String get runways => "Runways";
   @override
+  String get intersection => "Intersection";
+  @override
+  String get intersections => "Intersections";
+  @override
   String get full => "Full";
   @override
   String get toda => "Takeoff Distance Available in m";
   @override
-  String get entriesLostWarning => "Really leave this page?\nAll entries will be lost!";
+  String get entriesLostWarning => "Leave this page?\nEntries will be lost!";
+  @override
+  String get factor => "Factor";
+  @override
+  String get notes => "Notes";
+  @override
+  String get aircraft => "Aircraft";
   //endregion
 
   //region Menu
@@ -250,7 +313,7 @@ class EN extends Dictionary{
   @override
   String get faGrassSodDamaged => "Grass Sod damaged";
   @override
-  String get faGrassHigh => "High Gras (3-8cm)";
+  String get faGrassHigh => "High Grass (3-8cm)";
   @override
   String get faConditionTitle => "Corrections Runway Condition";
   @override
@@ -435,5 +498,71 @@ class EN extends Dictionary{
   String get importFinishedTitle => "Import Completed";
   @override
   String get exportFinishedTitle => "Export Completed";
+  //endregion
+  //region Takeoff Details
+  @override
+  String get tdHeading => "Takeoff Details";
+  @override
+  String get tdRawDist => "Raw Takeoff Distance is";
+  @override
+  String get tdSlopeCor => "Slope Correction";
+  @override
+  String get tdSlope => "Slope";
+  @override
+  String get tdSlopeFac => "Slope Factor";
+  @override
+  String get tdElevCor => "Elevation Correction";
+  @override
+  String get tdAirfieldElev => "Airfield Elevation";
+  @override
+  String get tdPA => "Pressure Altitude";
+  @override
+  String get tdElevFac => "Elevation Factor";
+  @override
+  String get tdTempCor => "Temperature Correction";
+  @override
+  String get tdOat => "OAT";
+  @override
+  String get tdIsa => "ISA Temperature";
+  @override
+  String get tdIsaDev => "ISA Deviation";
+  @override
+  String get tdTempFac => "Temperature Factor";
+  @override
+  String get tdTempHint => "Hint: Temperatures below 0°C are not being corrected!";
+  @override
+  String get tdWindCor => "Wind Correction";
+  @override
+  String get tdWind => "Wind";
+  @override
+  String get tdWindComponent => "Wind Component";
+  @override
+  String get tdWindFac => "Wind Factor";
+  @override
+  String get tdHeadWind => "Headwind";
+  @override
+  String get tdTailWind => "Tailwind";
+  @override
+  String get tdGrassCor => "Grass Surface Correction";
+  @override
+  String get tdGrassCond => "Grass Condition";
+  @override
+  String get tdSodDamagedFac => "Sod Damaged $factor";
+  @override
+  String get tdHighGrassFac => "High Grass $factor";
+  @override
+  String get tdRwyCond => "Runway Condition";
+  @override
+  String get tdRwyFac => "Condition Factor";
+  @override
+  String get tdMoistAir1 => "The calculation contains a general factor of";
+  @override
+  String get tdMoistAir2 => "for moist air.";
+  @override
+  String get tdResults => "Results";
+  @override
+  String get tdMarginFac => "Margin Factor";
+  @override
+  String get tdGeneralHint => 'The calculation is based on the "Flugsicherheitsmitteilung FSM 3/75" (Safety Letter) of the German Civil Aviation Authority (LBA) as well as AOPA Safety Letter June 2020.\nTemperatures below 0°C as well as pressure altitudes below 0ft are not being corrected.\nIn general 10% margin are always added for moist air.';
   //endregion
 }

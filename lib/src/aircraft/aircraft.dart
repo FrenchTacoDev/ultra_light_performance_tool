@@ -8,20 +8,23 @@ class Aircraft{
 
   static const String nameFieldValue = "name";
   static const String todFieldValue = "tod";
+  static const String notesFieldValue = "notes";
 
-  const Aircraft({this.dbid, required this.name, required this.todr});
+  const Aircraft({this.dbid, required this.name, required this.todr, this.notes});
 
   ///internal DatabaseID to handle saving and loading
   final int? dbid;
   final String name;
   ///takeoff distance required in meters
   final int todr;
+  final String? notes;
 
-  Aircraft copyWith({int? dbid, String? name, int? todr}){
+  Aircraft copyWith({int? dbid, String? name, int? todr, String? notes}){
     return Aircraft(
         dbid: dbid ?? this.dbid,
         name: name ?? this.name,
-        todr: todr ?? this.todr
+        todr: todr ?? this.todr,
+        notes: notes ?? this.notes,
     );
   }
 
@@ -30,6 +33,7 @@ class Aircraft{
     return {
       nameFieldValue : name,
       todFieldValue : todr,
+      notesFieldValue : notes,
     };
   }
 
@@ -39,6 +43,7 @@ class Aircraft{
         dbid: map["id"],
         name: map[nameFieldValue] ?? "Missing Name",
         todr: map[todFieldValue] ?? 0,
+        notes: map[notesFieldValue],
     );
   }
 
@@ -46,11 +51,12 @@ class Aircraft{
   bool operator ==(Object other) {
     return other is Aircraft
         && other.name == name
-        && other.todr == todr;
+        && other.todr == todr
+        && other.notes == notes;
   }
 
   @override
-  int get hashCode => Object.hash(name, todr);
+  int get hashCode => Object.hash(name, todr, notes);
 }
 
 ///Class to handle all [Aircraft]

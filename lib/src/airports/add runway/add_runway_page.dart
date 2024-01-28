@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ultra_light_performance_tool/src/core/core.dart';
 import 'package:ultra_light_performance_tool/src/airports/airports.dart';
-import 'package:ultra_light_performance_tool/src/shared%20widgets/ulpt_button.dart';
+import 'package:ultra_light_performance_tool/src/shared%20widgets/shared_widgets.dart';
 import 'BLoC/add_runway_bloc.dart';
 import 'widgets/widgets.dart';
 
@@ -69,6 +69,16 @@ class AddRunwayPage extends StatelessWidget {
                           onSlopeSet: (s) => cubit.setSlope(slope: s),
                         ),
                         const SizedBox(height: 8,),
+                        NotesEntry(
+                            value: state.notes,
+                            onNotesSet: (n) => cubit.setNotes(notes: n)
+                        ),
+                        const SizedBox(height: 16,),
+                        Text(
+                          Localizer.of(context).pcIntersectTitle,
+                          style: Theme.of(context).textTheme.titleLarge,
+                        ),
+                        const SizedBox(height: 8,),
                         ListView.builder(
                           shrinkWrap: true,
                           itemCount: state.intersections == null ? 1 : state.intersections!.length + 1,
@@ -133,6 +143,11 @@ class _NonEditableIntersect extends StatelessWidget {
                   value: intersection.toda > 0 ? intersection.toda : null,
                   onTodSet: (tod) => cubit.setIntersectionTOD(intersection: intersection, tod: tod)
               ),
+              const SizedBox(height: 8,),
+              NotesEntry(
+                  value: intersection.notes,
+                  onNotesSet: (n) => cubit.setIntersectionNotes(intersection: intersection, notes: n),
+              ),
             ],
           ),
         ),
@@ -171,6 +186,11 @@ class _EditableIntersect extends StatelessWidget {
               IntersectionTodEntry(
                   value: intersection.toda > 0 ? intersection.toda : null,
                   onTodSet: (tod) => cubit.setIntersectionTOD(intersection: intersection, tod: tod)
+              ),
+              const SizedBox(height: 8,),
+              NotesEntry(
+                value: intersection.notes,
+                onNotesSet: (n) => cubit.setIntersectionNotes(intersection: intersection, notes: n),
               ),
               const SizedBox(height: 8,),
               IconButton(

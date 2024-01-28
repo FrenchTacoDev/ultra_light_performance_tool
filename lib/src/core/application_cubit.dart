@@ -33,11 +33,12 @@ class ApplicationState{
 
 class ApplicationCubit extends Cubit<ApplicationState>{
   ApplicationCubit({
+    required ThemeData theme,
     SaveManager? saveManager,
     AircraftManager? acManager,
     AirportManager? airportManager,
     Settings? settings,
-  }) : super(ApplicationState(theme: darkTheme, setupComplete: false)){
+  }) : super(ApplicationState(theme: theme, setupComplete: false)){
     this.saveManager = saveManager ?? SaveManager();
     this.acManager = acManager ?? AircraftManager(saveManager: this.saveManager);
     this.airportManager = airportManager ?? AirportManager(saveManager: this.saveManager);

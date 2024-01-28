@@ -11,6 +11,7 @@ class Runway{
   static const String slopeFieldValue = "slope";
   static const String startElevationFieldValue = "startElevation";
   static const String endElevationFieldValue = "endElevation";
+  static const String notesFieldValue = "rwyNotes";
   static const String intersectFieldValue = "intersections";
 
   final String designator;
@@ -22,6 +23,7 @@ class Runway{
   final int? startElevation;
   ///Not used for slope calculation. Just to store the information. Slope calculation is done when adding a new runway within the cubit
   final int? endElevation;
+  final String? notes;
   ///List of all [Intersection]s contained. Represents sub parts of the runway.
   final List<Intersection> intersections;
 
@@ -40,6 +42,7 @@ class Runway{
     this.slope = 0.0,
     this.startElevation,
     this.endElevation,
+    this.notes,
   }) : assert(direction >= 0 && direction <= 360), assert(intersections.isNotEmpty);
 
 
@@ -47,7 +50,7 @@ class Runway{
   String toString() => designator;
 
   @override
-  int get hashCode => Object.hash(designator, direction, slope, surface, intersections, startElevation, endElevation);
+  int get hashCode => Object.hash(designator, direction, slope, surface, intersections, startElevation, endElevation, notes);
 
   @override
   bool operator ==(Object other) {
@@ -58,6 +61,7 @@ class Runway{
         && other.slope == slope
         && other.startElevation == startElevation
         && other.endElevation == endElevation
+        && other.notes == notes
         && listEquals(other.intersections, intersections);
   }
 
@@ -83,6 +87,7 @@ class Runway{
       slopeFieldValue : slope,
       startElevationFieldValue : startElevation,
       endElevationFieldValue : endElevation,
+      notesFieldValue : notes,
       intersectFieldValue : intersectMaps,
     };
   }
@@ -102,6 +107,7 @@ class Runway{
         startElevation: map[startElevationFieldValue],
         endElevation: map[endElevationFieldValue],
         slope: map[slopeFieldValue],
+        notes: map[notesFieldValue],
         intersections: intersects,
         surface: map[surfaceFieldValue] != null ? Surface.values[map[surfaceFieldValue]!] : Surface.asphalt,
     );
@@ -113,31 +119,35 @@ class Intersection{
 
   static const String designatorFieldValue = "designator";
   static const String todFieldValue = "tod";
+  static const String notesFieldValue = "intersectNotes";
 
   final String designator;
   ///[int] value of takeoff distance available
   final int toda;
+  final String? notes;
 
-  const Intersection({required this.designator, required this.toda});
+  const Intersection({required this.designator, required this.toda, this.notes});
 
   @override
   String toString() => designator;
 
   @override
-  int get hashCode => Object.hash(designator, toda);
+  int get hashCode => Object.hash(designator, toda, notes);
 
   @override
   bool operator ==(Object other) {
     return other is Intersection
         && other.designator == designator
-        && other.toda == toda;
+        && other.toda == toda
+        && other.notes == notes;
   }
 
   ///transform json representation into dart class
   static Intersection deserialize({required Map<String, dynamic> map}) {
     return Intersection(
         designator: map[designatorFieldValue] ?? "Missing Designator",
-        toda: map[todFieldValue] ?? 0
+        toda: map[todFieldValue] ?? 0,
+        notes: map[notesFieldValue],
     );
   }
 
@@ -146,6 +156,7 @@ class Intersection{
     return {
       designatorFieldValue : designator,
       todFieldValue : toda,
+      notesFieldValue : notes,
     };
   }
 }

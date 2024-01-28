@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ultra_light_performance_tool/src/core/core.dart';
 import 'package:ultra_light_performance_tool/src/airports/airports.dart';
-import 'package:ultra_light_performance_tool/src/shared%20widgets/ulpt_button.dart';
+import 'package:ultra_light_performance_tool/src/shared%20widgets/shared_widgets.dart';
 
 import 'BLoC/add_airport_bloc.dart';
 import 'widgets/widgets.dart';
@@ -58,12 +58,14 @@ class AddAirportPage extends StatelessWidget {
                           value: state.elevation,
                         ),
                         const SizedBox(height: 8,),
+                        NotesEntry(
+                          value: state.notes,
+                          onNotesSet: (n) => cubit.setNotes(notes: n),
+                        ),
+                        const SizedBox(height: 8,),
                         Text(
                           Localizer.of(context).runways,
-                          style: TextStyle(
-                              color: Theme.of(context).listTileTheme.titleTextStyle!.color,
-                              fontSize: 22
-                          ),
+                          style: Theme.of(context).textTheme.titleLarge,
                         ),
                         const SizedBox(height: 8,),
                         RunwayList(

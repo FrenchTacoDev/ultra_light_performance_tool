@@ -43,8 +43,8 @@ class PerformanceCalculationPanel extends StatelessWidget {
                 child: BlocBuilder<CalculationCubit, CalculationState>(
                   builder: (context, state) {
                     return Padding(
-                      padding: Platform.isIOS ? const EdgeInsets.fromLTRB(16, 16, 16, 24) :
-                      const EdgeInsets.symmetric(vertical: 16, horizontal: 16),
+                      padding: Platform.isIOS ? const EdgeInsets.fromLTRB(16, 4, 16, 24) :
+                      const EdgeInsets.fromLTRB(16, 4, 16, 16),
                       child: width >= 940 ?
                       _LargeSizedScreen(panelHeight: panelHeight, state: state, airports: airportsList)
                           : width >= 705 ? _MediumSizedScreen(panelHeight: panelHeight, state: state, airports: airportsList,)
@@ -78,9 +78,11 @@ class _LargeSizedScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ULPTMinSizeScrollView(
-      minHeight: 500,
+      scrollController: context.read<CalculationCubit>().scrollControl,
+      minHeight: 550,
       child: Column(
         children: [
+          DetailsButtons(state: state),
           SizedBox(
             height: panelHeight,
             child: Row(
@@ -90,12 +92,14 @@ class _LargeSizedScreen extends StatelessWidget {
                   child: _EntryPanelComponent(
                     state: state,
                     airportsList: airports,
+                    padding: const EdgeInsets.fromLTRB(4, 2, 2, 2),
                   ),
                 ),
                 Expanded(
                   flex: 1,
                   child: _ButtonComponent(
-                      state: state
+                    state: state,
+                    padding: const EdgeInsets.fromLTRB(2, 2, 4, 2),
                   ),
                 )
               ],
@@ -126,20 +130,24 @@ class _MediumSizedScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ULPTMinSizeScrollView(
-      minHeight: 600,
+      scrollController: context.read<CalculationCubit>().scrollControl,
+      minHeight: 650,
       child: Column(
         children: [
+          DetailsButtons(state: state,),
           SizedBox(
             height: panelHeight,
             child: _EntryPanelComponent(
               state: state,
               airportsList: airports,
+              padding: const EdgeInsets.fromLTRB(4, 2, 4, 2),
             ),
           ),
           SizedBox(
-            height: 100,
+            height: 70,
             child: _ButtonComponent(
-                state: state
+              state: state,
+              padding: const EdgeInsets.fromLTRB(4, 2, 4, 2),
             ),
           ),
           Expanded(
@@ -167,22 +175,28 @@ class _SmallSizedScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ULPTMinSizeScrollView(
-      minHeight: 970,
+      scrollController: context.read<CalculationCubit>().scrollControl,
+      minHeight: 1050,
       child: Column(
         children: [
+          DetailsButtons(
+              isSmallSize: true,
+              state: state,
+          ),
           SizedBox(
             height: panelHeight,
             child: _EntryPanelComponent(
               state: state,
               airportsList: airports,
               isSmallSize: true,
+              padding: const EdgeInsets.fromLTRB(2, 2, 2, 2),
             ),
           ),
           SizedBox(
-            height: 100,
+            height: 80,
             child: _ButtonComponent(
               state: state,
-              isSmallSize: true,
+              padding: const EdgeInsets.fromLTRB(2, 2, 2, 2),
             ),
           ),
           Expanded(
@@ -202,11 +216,11 @@ class _SmallSizedScreen extends StatelessWidget {
 class _ButtonComponent extends StatelessWidget {
   const _ButtonComponent({
     required this.state,
-    this.isSmallSize = false,
+    required this.padding,
   });
 
   final CalculationState state;
-  final bool isSmallSize;
+  final EdgeInsets padding;
 
   @override
   Widget build(BuildContext context) {
@@ -215,10 +229,10 @@ class _ButtonComponent extends StatelessWidget {
     //Todo can calc from state otherwise strange vis
 
     return Card(
-      margin: isSmallSize ? const EdgeInsets.all(2) : const EdgeInsets.fromLTRB(2, 4, 4, 2),
+      margin: padding,
       child: Center(
         child: Padding(
-          padding: const EdgeInsets.all(16),
+          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
           child: ULPTButton(
             onTap: () => cubit.calculate(context: context),
             title: Localizer.of(context).pcCalc,
@@ -234,17 +248,19 @@ class _EntryPanelComponent extends StatelessWidget {
   const _EntryPanelComponent({
     required this.state,
     required this.airportsList,
+    required this.padding,
     this.isSmallSize = false,
   });
 
   final List<Airport> airportsList;
   final CalculationState state;
   final bool isSmallSize;
+  final EdgeInsets padding;
 
   @override
   Widget build(BuildContext context) {
     return Card(
-      margin: isSmallSize ? const EdgeInsets.all(2) : const EdgeInsets.fromLTRB(4, 4, 2, 2),
+      margin: padding,
       child: Padding(
         padding: const EdgeInsets.all(16),
         child: isSmallSize ? _SmallEntryPanel(state: state, airportsList: airportsList,)
