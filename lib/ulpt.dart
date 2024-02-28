@@ -21,6 +21,7 @@ class ULPT extends StatelessWidget {
     super.key,
     this.customMenuItems,
     this.customDictionaries,
+    this.showDebugMode = true,
   });
 
   ///Pass your own [PopupMenuItem]s here to add items to the apps menu like an about page.
@@ -31,6 +32,8 @@ class ULPT extends StatelessWidget {
   ///They are then available calling the [Localizer.of(context)] method.
   final List<CustomDict>? customDictionaries;
 
+  final bool showDebugMode;
+
   @override
   Widget build(BuildContext context) {
     return BlocProvider<ApplicationCubit>(
@@ -40,6 +43,7 @@ class ULPT extends StatelessWidget {
             return Localizer(
               customDict: customDictionaries,
               child: MaterialApp(
+                debugShowCheckedModeBanner: showDebugMode,
                 title: "ULPT",
                 theme: state.theme,
                 localizationsDelegates: const [
