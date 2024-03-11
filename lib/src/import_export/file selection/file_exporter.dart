@@ -4,9 +4,8 @@ import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:path/path.dart';
 import 'package:path_provider/path_provider.dart';
-import 'package:permission_handler/permission_handler.dart';
-import 'package:saf/saf.dart';
 import 'package:share_plus/share_plus.dart';
+import 'package:shared_storage/shared_storage.dart' as saf;
 import 'package:ultra_light_performance_tool/src/core/core.dart';
 
 ///Class for writing data to a user selected file(path).
@@ -31,39 +30,31 @@ class ULPTFileExporter{
   }
 }
 
+///Subclass used on Android. Is private bc should only be selected by the main function
 class _AndroidExplorer extends ULPTFileExporter{
   @override
   Future<void> exportULPTData({required Uint8List data,  required Size screenSize, Dictionary? dict}) async{
 
-    throw UnimplementedError();
-
-    //Todo let user select directory
-    //Combine user selected dir with filename
-    //Save/Write to user selected path
     //Use cached file in share sheet so user can directly share.
+    var fileName = "PerfData.ulpt";
 
-    //Maybe saf package is not the right. Check on Shared_Storage package if not working properly
-    Saf saf = Saf("~/ULPT");
-    var perm = await saf.getDirectoryPermission();
+    var cacheFile = File(join((await getTemporaryDirectory()).path, fileName));
+    if(await cacheFile.exists()) await cacheFile.delete(recursive: true);
+    await cacheFile.create(recursive: true);
+    await cacheFile.writeAsBytes(data);
 
-    if(perm == false){
-      throw "Permission Not Granted";
+    var uri = await saf.openDocumentTree();
+
+    if(uri != null){
+      await saf.createFileAsBytes(uri, mimeType: "application/octet-stream", displayName: fileName, bytes: data);
     }
 
-    return;
-
-    var dirPath = await FilePicker.platform.getDirectoryPath(
-      dialogTitle: dict?.saveFileTitle ?? "Save ULPT Data",
+    await Share.shareXFiles(
+      [XFile(cacheFile.path)],
+      sharePositionOrigin: Rect.fromLTRB(0, 0, screenSize.width, 16),
     );
 
-    if(dirPath == null) return;
-    var filePath = join(dirPath, "PerfData.ulpt");
-
-    if(filePath.endsWith(".ulpt") == false) filePath += ".ulpt";
-    var file = File(filePath);
-    if(await file.exists()) await file.delete(recursive: true);
-    await file.create(recursive: true);
-    await file.writeAsBytes(data);
+    await cacheFile.delete(recursive: true);
   }
 }
 

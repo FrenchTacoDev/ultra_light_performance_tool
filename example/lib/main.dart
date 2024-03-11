@@ -87,7 +87,7 @@ Future<void> showCustomLocalizationDialog({required BuildContext context}){
   );
 }
 
-//Example how to implement english and german transaltions for custom dictionary
+//Example how to implement english and german translations for custom dictionary
 abstract class CustomDictionary implements CustomDict{
   String get helloYou;
 }

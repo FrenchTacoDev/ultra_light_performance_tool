@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ultra_light_performance_tool/src/core/core.dart';
@@ -98,7 +100,7 @@ class _AssistantCubit extends Cubit<_AssistantState>{
         );
       }
     }catch (e){
-      //Todo log e
+      log(e.toString());
       return emit(state.copyWith(phase: Phase.error, errorText: dict.fileImportError));
     }finally{
       isFinished = true;
