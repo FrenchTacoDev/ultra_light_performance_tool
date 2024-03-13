@@ -61,6 +61,9 @@ ULPTTheme _darkULPTTheme = ULPTTheme(
 );
 
 ThemeData createDarkTheme(BuildContext context){
+
+  var theme = Theme.of(context);
+
   return ThemeData(
     useMaterial3: false,
     appBarTheme: AppBarTheme(
@@ -74,6 +77,7 @@ ThemeData createDarkTheme(BuildContext context){
       leadingAndTrailingTextStyle: TextStyle(color: _darkULPTTheme.interactiveHintTextColor),
       tileColor: _darkULPTTheme.backgroundColor,
       iconColor: _darkULPTTheme.interactiveHintTextColor,
+      selectedColor: _darkULPTTheme.interactiveFocusedColor,
     ),
     popupMenuTheme: PopupMenuThemeData(
       color: _darkULPTTheme.backgroundColor,
@@ -92,9 +96,12 @@ ThemeData createDarkTheme(BuildContext context){
     ),
     extensions: [_darkULPTTheme],
     textTheme: TextTheme(
-      titleLarge: Theme.of(context).textTheme.titleLarge!.merge(TextStyle(color: _darkULPTTheme.interactiveHintTextColor)),
-      bodyLarge: Theme.of(context).textTheme.bodyLarge!.merge(TextStyle(color: _darkULPTTheme.interactiveHintTextColor)),
-      bodySmall: Theme.of(context).textTheme.bodySmall!.merge(TextStyle(color: _darkULPTTheme.interactiveHintTextColor)),
+      titleLarge: theme.textTheme.titleLarge!.merge(TextStyle(color: _darkULPTTheme.interactiveHintTextColor)),
+      titleSmall: theme.textTheme.titleSmall!.copyWith(color: _darkULPTTheme.interactiveHintTextColor),
+      bodyLarge: theme.textTheme.bodyLarge!.merge(TextStyle(color: _darkULPTTheme.interactiveHintTextColor)),
+      bodyMedium: theme.textTheme.bodyMedium!.copyWith(color: _darkULPTTheme.interactiveHintTextColor),
+      bodySmall: theme.textTheme.bodySmall!.merge(TextStyle(color: _darkULPTTheme.interactiveHintTextColor)),
+      headlineSmall: theme.textTheme.headlineSmall!.copyWith(color: _darkULPTTheme.interactiveHintTextColor),
     ),
   );
 }

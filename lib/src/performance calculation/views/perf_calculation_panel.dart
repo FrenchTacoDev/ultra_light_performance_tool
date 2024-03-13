@@ -144,7 +144,7 @@ class _MediumSizedScreen extends StatelessWidget {
             ),
           ),
           SizedBox(
-            height: 70,
+            height: 75,
             child: _ButtonComponent(
               state: state,
               padding: const EdgeInsets.fromLTRB(4, 2, 4, 2),
