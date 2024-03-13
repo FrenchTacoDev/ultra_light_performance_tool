@@ -29,7 +29,8 @@ class TakeoffDetails extends StatelessWidget {
     var isaDelta = calc.calculateIsaDelta(pa, parameters.temp).round();
     var hwc = calc.calculateHeadwindComponent();
     var facTod = calc.calculateUnfactored();
-    var intersectDesignator = intersection == parameters.runway.intersections.first ? Localizer.of(context).full : intersection.designator;
+    var intersectDesignator = intersection == parameters.runway.intersections.first ?
+      Localizer.of(context).full : intersection.designator;
 
     return Scaffold(
       appBar: AppBar(title: Text(Localizer.of(context).tdHeading)),
@@ -178,8 +179,8 @@ class TakeoffDetails extends StatelessWidget {
                       text: TextSpan(
                           children: [
                             TextSpan(text: "${Localizer.of(context).tdWindComponent}: ", style: bodyS),
-                            if(hwc < 0) TextSpan(text: "${-hwc}kt ${Localizer.of(context).tdTailWind}", style: bodySB),
-                            if(hwc >= 0) TextSpan(text: "${hwc}kt ${Localizer.of(context).tdHeadWind}", style: bodySB),
+                            if(hwc < 0) TextSpan(text: "${-hwc.floor()}kt ${Localizer.of(context).tdTailWind}", style: bodySB),
+                            if(hwc >= 0) TextSpan(text: "${hwc.floor()}kt ${Localizer.of(context).tdHeadWind}", style: bodySB),
                           ]
                       ),
                     ),
