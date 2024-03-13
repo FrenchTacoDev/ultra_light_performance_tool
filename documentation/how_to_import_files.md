@@ -2,6 +2,7 @@
 
  - [Building ULPT on Windows](#on-windows)
  - [Building ULPT on iOS](#on-ios)
+ - [Building ULPT on Android](#on-android)
 
 ## On iOS
 
@@ -208,3 +209,97 @@ channel.InvokeMethod(std::string("onArgsFromNative"), std::make_unique<flutter::
 - in  `main.cpp` function exchange `FlutterWindow window(project);` for `FlutterWindow window(project, command_line);` to call the constructor with the command line arguments.
 
 Now when ULPT is opened from a file, the c++ side provides the path and the import should work.
+
+## On Android
+
+### Enable custom file type for ulpt files on Android:
+
+Go into your apps AndroidManifest.xml and add the following lines under the MainActivities Activity Tab:
+
+```xml
+
+       <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <data
+                    android:scheme="file"
+                    android:host="*"
+                    android:pathPattern=".*\\.ulpt" />
+            </intent-filter>
+            <intent-filter android:priority="1">
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <category android:name="android.intent.category.OPENABLE" />
+
+                <data android:host="*" />
+                <data android:mimeType="application/octet-stream" />
+                <data android:pathPattern=".*\\..*\\..*\\..*\\..*\\.ulpt" />
+                <data android:pathPattern=".*\\..*\\..*\\..*\\.ulpt" />
+                <data android:pathPattern=".*\\..*\\..*\\.ulpt" />
+                <data android:pathPattern=".*\\..*\\.ulpt" />
+                <data android:pathPattern=".*\\.ulpt" />
+                <data android:scheme="content" />
+          </intent-filter>
+```
+
+### Handle app call with arguments from native
+
+Add the following code to the `MainActivity.java` file in the Flutter Project (Android Side):
+
+```java
+
+    @Override
+    protected void onCreate(@Nullable Bundle savedInstanceState) {
+
+        super.onCreate(savedInstanceState);
+
+        //Opens up flutters method channel to communicate with the dart side
+        MethodChannel methodChannel = new MethodChannel(
+                Objects.requireNonNull(this.getFlutterEngine()).getDartExecutor().getBinaryMessenger(),
+                "nativeCommChannel"
+        );
+
+
+        Intent intent = getIntent();
+        if(intent == null) return;
+        String cachePath = handlePerfFileIntent(intent);
+        if(cachePath == null) return;
+        //Send the cached filepath to the dart side
+        methodChannel.invokeMethod("onArgsFromNative", cachePath);
+    }
+
+    //This function takes the content intent and
+    //1 reads its data, 2 copies the data to the app cache directory, 3 returns the cached files path.
+    //This is necessary because we do not have permission to read storage files on android out of the box.
+    private String handlePerfFileIntent(Intent intent){
+
+        Uri uri = intent.getData();
+        if(uri == null) return null;
+
+        String path = getCacheDir() + "/" + "tempPerfData.ulpt";
+        File outputFile = new File(path);
+        if(outputFile.exists()) outputFile.delete();
+
+        try {
+            InputStream is = getContentResolver().openInputStream(uri);
+            if(is == null) return null;
+            FileOutputStream os = new FileOutputStream(outputFile, false);
+
+            byte[] buffer = new byte[4096];
+            int b;
+
+            while((b = is.read(buffer)) != -1){
+                os.write(buffer, 0, b);
+            }
+
+            os.close();
+            is.close();
+        } catch (IOException e) {
+            return null;
+        }
+
+        return path;
+    }
+```
