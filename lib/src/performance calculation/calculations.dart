@@ -96,25 +96,23 @@ class PerformanceCalculator{
   }
 
   ///Positive value means headwind, negative tailwind
-  double calculateHeadwindComponent(){
-    var angle = _getWindAngle();
+  static double calculateHeadwindComponent({required Wind wind, required int rwyDir}){
+    var angle = _getWindAngle(rwyDir: rwyDir, windDir: wind.direction);
     if(angle == 90) return 0.0;
-    return parameters.wind.speed * cos((angle * pi) / 180);
+    return wind.speed * cos((angle * pi) / 180);
   }
 
   ///Positive value means wind from the right, negative from the left
-  double calculateCrosswindComponent(){
-    var angle = _getWindAngle();
+  static double calculateCrosswindComponent({required Wind wind, required int rwyDir}){
+    var angle = _getWindAngle(rwyDir: rwyDir, windDir: wind.direction);
     if(angle == 0 || angle == 180) return 0.0;
-    var cwc = parameters.wind.speed * sin((angle * pi) / 180);
-    if(_windIsFromLeft()) return -cwc;
+    var cwc = wind.speed * sin((angle * pi) / 180);
     return cwc;
-
   }
 
-  bool _windIsFromLeft(){
-    var wind = parameters.wind.direction * pi / 180;
-    var rwy = parameters.runway.direction * pi / 180;
+  static bool windIsFromLeft({required int windDir, required int rwyDir}){
+    var wind = windDir * pi / 180;
+    var rwy = rwyDir * pi / 180;
     var cp = cos(wind) * sin(rwy) - sin(wind) * cos(rwy);
     if(cp > 0) return true;
     return false;
@@ -129,7 +127,7 @@ class PerformanceCalculator{
     //Either 0 => all becomes 0 or 0.1 or 0.01 for a very small number
   }
 
-  double _getWindAngle() => (parameters.wind.direction - parameters.runway.direction + 360) % 360;
+  static double _getWindAngle({required int rwyDir, required int windDir}) => (windDir - rwyDir + 360) % 360;
 
   double getUndergroundFactor() => {
     Underground.firm : parameters.corrections.grassFactorFirm,
@@ -156,7 +154,7 @@ class PerformanceCalculator{
     var slopeFactor = calculateSlopeFactor();
     var pressureFactor = calculatePressureFactor();
     var tempFactor = calculateTempFactor(calculatePressureAltitude());
-    var windFactor = calculateWindFactor(calculateHeadwindComponent());
+    var windFactor = calculateWindFactor(calculateHeadwindComponent(wind: parameters.wind, rwyDir: parameters.runway.direction));
 
     var undergroundFactor = parameters.runway.surface == Surface.grass ? getUndergroundFactor() : 1.0;
     var sodDamagedFactor = getSodDamagedFactor();

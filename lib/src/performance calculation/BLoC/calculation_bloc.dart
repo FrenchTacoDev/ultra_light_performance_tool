@@ -1,4 +1,5 @@
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ultra_light_performance_tool/src/aircraft/aircraft.dart';
 import 'package:ultra_light_performance_tool/src/airports/airports.dart';
@@ -252,6 +253,17 @@ class CalculationCubit extends Cubit<CalculationState>{
           sodDamaged: state.sodDamaged,
         )
     );
+  }
+
+  int? getHeadwindComponent(){
+    if(state.runway == null || state.wind == null) return null;
+    return PerformanceCalculator.calculateHeadwindComponent(wind: state.wind!, rwyDir: state.runway!.direction).floor();
+  }
+
+  int? getCrosswindComponent(){
+    if(state.runway == null || state.wind == null) return null;
+    var xwc = PerformanceCalculator.calculateCrosswindComponent(wind: state.wind!, rwyDir: state.runway!.direction);
+    return xwc > 0 ? xwc.ceil() : xwc.floor();
   }
 
   CalculationParameters getParameters(BuildContext context){

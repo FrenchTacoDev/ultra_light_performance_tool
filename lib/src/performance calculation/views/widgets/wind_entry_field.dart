@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:ultra_light_performance_tool/src/performance%20calculation/calculations.dart';
 import 'package:ultra_light_performance_tool/src/res/themes.dart';
 import 'package:ultra_light_performance_tool/src/shared%20widgets/ulpt_textfield.dart';
 import 'package:ultra_light_performance_tool/src/utils/input_utils.dart';
@@ -15,6 +16,8 @@ class WindEntryField extends StatefulWidget {
     this.runwayCourse,
     this.value,
     this.isSmallSize = false,
+    this.hwc,
+    this.xwc,
   }) : super(key: key);
 
   ///callback function that is called when field is submitted or looses focus
@@ -25,6 +28,10 @@ class WindEntryField extends StatefulWidget {
   final Wind? value;
   ///used for screen size adjustment
   final bool isSmallSize;
+  ///the headwind component shown if delivered
+  final int? hwc;
+  ///the crosswind component shown if delivered
+  final int? xwc;
 
   @override
   State<WindEntryField> createState() => _WindEntryFieldState();
@@ -95,7 +102,11 @@ class _WindEntryFieldState extends State<WindEntryField> {
 
     var theme = Theme.of(context).extensions[ULPTTheme] as ULPTTheme;
 
-    //Todo head and tailwind component sollten angezeigt werden.
+    var hwxwText = "";
+    if(widget.hwc != null && widget.xwc != null){
+      hwxwText = widget.hwc! >= 0 ? "${widget.hwc} HW/${widget.xwc!.abs()} XW KT" :
+      "${widget.hwc!.abs()} TW/${widget.xwc!.abs()} XW KT";
+    }
 
     if(widget.isSmallSize){
       return Row(
@@ -126,29 +137,39 @@ class _WindEntryFieldState extends State<WindEntryField> {
       );
     }
 
-    return Row(
+    return Column(
       children: [
-        Expanded(
-          child: ULPTTextField(
-            enabled: widget.runwayCourse != null,
-            focusNode: focusNode,
-            hintText: Localizer.of(context).enter,
-            alignRight: true,
-            tec: tec,
-            inputFormatter: WindInputFormatter(),
-            isOnlyNumbers: true,
-          ),
-        ),
-        SizedBox(
-          width: theme.perfTextWidth,
-          child: Text(
-            Localizer.of(context).pcWindTitle,
-            textAlign: TextAlign.end,
-            style: TextStyle(
-              fontSize: 18,
-              color: theme.interactiveHintTextColor,
+        Row(
+          children: [
+            Expanded(
+              child: ULPTTextField(
+                enabled: widget.runwayCourse != null,
+                focusNode: focusNode,
+                hintText: Localizer.of(context).enter,
+                alignRight: true,
+                tec: tec,
+                inputFormatter: WindInputFormatter(),
+                isOnlyNumbers: true,
+              ),
             ),
-          ),
+            SizedBox(
+              width: theme.perfTextWidth,
+              child: Text(
+                Localizer.of(context).pcWindTitle,
+                textAlign: TextAlign.end,
+                style: TextStyle(
+                  fontSize: 18,
+                  color: theme.interactiveHintTextColor,
+                ),
+              ),
+            ),
+          ],
+        ),
+        Row(
+          children: [
+            Expanded(child: Text(hwxwText, style: TextStyle(fontSize: 12), textAlign: TextAlign.right,)),
+            SizedBox(width: theme.perfTextWidth,),
+          ],
         ),
       ],
     );

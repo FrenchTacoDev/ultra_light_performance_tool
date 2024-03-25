@@ -15,7 +15,7 @@ class PerformanceCalculationPanel extends StatelessWidget {
     super.key,
     required this.aircraft,
     required this.airportsList,
-    this.panelHeight = 320,
+    this.panelHeight = 330,
   });
 
   ///Selected aircraft that is used for calculation
@@ -304,7 +304,7 @@ class _LargeEntryPanel extends StatelessWidget {
                 runway: state.runway,
                 onIntersectionChanged: (intersect) => cubit.setIntersection(intersection: intersect),
               ),
-              const SizedBox(height: 8,),
+              const SizedBox(height: 19,),
               if(state.runway?.surface == Surface.grass) GrassConditionDropdown(
                 value: state.underground,
                 runway: state.runway,
@@ -334,9 +334,11 @@ class _LargeEntryPanel extends StatelessWidget {
                 WindEntryField(
                   onWindSet: (wind) => cubit.setWind(wind: wind),
                   value: state.wind,
+                  hwc: cubit.getHeadwindComponent(),
+                  xwc: cubit.getCrosswindComponent(),
                   runwayCourse: state.runway?.direction,
                 ),
-                const SizedBox(height: 8,),
+                const SizedBox(height: 2,),
                 QNHEntryField(
                     value: state.qnh,
                     onQNHSet: (qnh) => cubit.setQNH(qnh: qnh),

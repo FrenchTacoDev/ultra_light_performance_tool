@@ -27,7 +27,7 @@ class TakeoffDetails extends StatelessWidget {
     var calc = PerformanceCalculator(parameters: parameters);
     var pa = calc.calculatePressureAltitude();
     var isaDelta = calc.calculateIsaDelta(pa, parameters.temp).round();
-    var hwc = calc.calculateHeadwindComponent();
+    var hwc = PerformanceCalculator.calculateHeadwindComponent(wind: parameters.wind, rwyDir: parameters.runway.direction);
     var facTod = calc.calculateUnfactored();
     var intersectDesignator = intersection == parameters.runway.intersections.first ?
       Localizer.of(context).full : intersection.designator;
