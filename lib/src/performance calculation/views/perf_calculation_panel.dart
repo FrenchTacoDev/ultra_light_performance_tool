@@ -47,7 +47,7 @@ class PerformanceCalculationPanel extends StatelessWidget {
                       const EdgeInsets.fromLTRB(16, 4, 16, 16),
                       child: width >= 940 ?
                       _LargeSizedScreen(panelHeight: panelHeight, state: state, airports: airportsList)
-                          : width >= 705 ? _MediumSizedScreen(panelHeight: panelHeight, state: state, airports: airportsList,)
+                          : width >= 755 ? _MediumSizedScreen(panelHeight: panelHeight, state: state, airports: airportsList,)
                           : _SmallSizedScreen(
                           panelHeight:
                           state.runway != null && state.runway!.surface == Surface.grass ? panelHeight * 1.8 : panelHeight * 1.3,
@@ -304,6 +304,7 @@ class _LargeEntryPanel extends StatelessWidget {
                 runway: state.runway,
                 onIntersectionChanged: (intersect) => cubit.setIntersection(intersection: intersect),
               ),
+              //Non Standard padding to match wind hw/xw info in the other column
               const SizedBox(height: 19,),
               if(state.runway?.surface == Surface.grass) GrassConditionDropdown(
                 value: state.underground,
@@ -410,6 +411,8 @@ class _SmallEntryPanel extends StatelessWidget {
         const SizedBox(height: 8,),
         WindEntryField(
           onWindSet: (wind) => cubit.setWind(wind: wind),
+          hwc: cubit.getHeadwindComponent(),
+          xwc: cubit.getCrosswindComponent(),
           value: state.wind,
           runwayCourse: state.runway?.direction,
           isSmallSize: true,

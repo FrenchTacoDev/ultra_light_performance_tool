@@ -128,7 +128,7 @@ class ApplicationCubit extends Cubit<ApplicationState>{
           builder: (context) => PerformanceCalculationPanel(
             aircraft: ac,
             airportsList: airports,
-            panelHeight: Platform.isIOS || Platform.isAndroid ? 380 : 330,
+            panelHeight: Platform.isIOS || Platform.isAndroid ? 360 : 330,
           ),
         )
     );

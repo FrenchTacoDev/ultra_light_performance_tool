@@ -144,6 +144,9 @@ abstract class Dictionary{
   String get pcTempTooHigh;
   String get pcTempTooLow;
   String get pcWindTitle;
+  String get pcHwShort;
+  String get pcTWShort;
+  String get pcXwShort;
   String get pcWindErrorTitle;
   String get pcWindFormatError;
   String get pcWindDirError;
@@ -430,6 +433,12 @@ class EN extends Dictionary{
   String get pcTempTooLow => "The temperature is to low.\nPlease check.";
   @override
   String get pcWindTitle => "Wind";
+  @override
+  String get pcHwShort => "HW";
+  @override
+  String get pcTWShort => "TW";
+  @override
+  String get pcXwShort => "XW";
   @override
   String get pcWindErrorTitle => "Invalid Wind";
   @override

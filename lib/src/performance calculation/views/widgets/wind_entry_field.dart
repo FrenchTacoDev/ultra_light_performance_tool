@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:ultra_light_performance_tool/src/performance%20calculation/calculations.dart';
 import 'package:ultra_light_performance_tool/src/res/themes.dart';
 import 'package:ultra_light_performance_tool/src/shared%20widgets/ulpt_textfield.dart';
 import 'package:ultra_light_performance_tool/src/utils/input_utils.dart';
@@ -104,34 +103,51 @@ class _WindEntryFieldState extends State<WindEntryField> {
 
     var hwxwText = "";
     if(widget.hwc != null && widget.xwc != null){
-      hwxwText = widget.hwc! >= 0 ? "${widget.hwc} HW/${widget.xwc!.abs()} XW KT" :
-      "${widget.hwc!.abs()} TW/${widget.xwc!.abs()} XW KT";
+      hwxwText = widget.hwc! >= 0 ? "${widget.hwc} ${Localizer.of(context).pcHwShort}/${widget.xwc!.abs()} ${Localizer.of(context).pcXwShort} KT" :
+      "${widget.hwc!.abs()} ${Localizer.of(context).pcTWShort}/${widget.xwc!.abs()} ${Localizer.of(context).pcXwShort} KT";
     }
 
     if(widget.isSmallSize){
-      return Row(
+      return Column(
         children: [
-          SizedBox(
-            width: theme.perfTextWidth,
-            child: Text(
-              Localizer.of(context).pcWindTitle,
-              textAlign: TextAlign.start,
-              style: TextStyle(
-                fontSize: 18,
-                color: theme.interactiveHintTextColor,
+          Row(
+            children: [
+              SizedBox(
+                width: theme.perfTextWidth,
+                child: Text(
+                  Localizer.of(context).pcWindTitle,
+                  textAlign: TextAlign.start,
+                  style: TextStyle(
+                    fontSize: 18,
+                    color: theme.interactiveHintTextColor,
+                  ),
+                ),
               ),
-            ),
+              Expanded(
+                child: ULPTTextField(
+                  enabled: widget.runwayCourse != null,
+                  focusNode: focusNode,
+                  hintText: Localizer.of(context).enter,
+                  alignRight: false,
+                  tec: tec,
+                  inputFormatter: WindInputFormatter(),
+                  isOnlyNumbers: true,
+                ),
+              ),
+            ],
           ),
-          Expanded(
-            child: ULPTTextField(
-              enabled: widget.runwayCourse != null,
-              focusNode: focusNode,
-              hintText: Localizer.of(context).enter,
-              alignRight: false,
-              tec: tec,
-              inputFormatter: WindInputFormatter(),
-              isOnlyNumbers: true,
-            ),
+          const SizedBox(height: 5,),
+          Row(
+            children: [
+              SizedBox(width: theme.perfTextWidth + 8,),
+              if(hwxwText.isNotEmpty) Expanded(
+                  child: Text(
+                    hwxwText,
+                    style: TextStyle(fontSize: 12, color: theme.interactiveHintTextColor,),
+                    textAlign: TextAlign.left,
+                  )
+              ),
+            ],
           ),
         ],
       );
@@ -167,7 +183,15 @@ class _WindEntryFieldState extends State<WindEntryField> {
         ),
         Row(
           children: [
-            Expanded(child: Text(hwxwText, style: TextStyle(fontSize: 12), textAlign: TextAlign.right,)),
+            Expanded(
+                child: Text(
+                  hwxwText,
+                  style: TextStyle(
+                      fontSize: 12,
+                      color: theme.interactiveHintTextColor),
+                      textAlign: TextAlign.right,
+                )
+            ),
             SizedBox(width: theme.perfTextWidth,),
           ],
         ),
