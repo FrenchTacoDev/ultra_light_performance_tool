@@ -103,8 +103,10 @@ class _WindEntryFieldState extends State<WindEntryField> {
 
     var hwxwText = "";
     if(widget.hwc != null && widget.xwc != null){
-      hwxwText = widget.hwc! >= 0 ? "${widget.hwc} ${Localizer.of(context).pcHwShort}/${widget.xwc!.abs()} ${Localizer.of(context).pcXwShort} KT" :
-      "${widget.hwc!.abs()} ${Localizer.of(context).pcTWShort}/${widget.xwc!.abs()} ${Localizer.of(context).pcXwShort} KT";
+      var xwText = widget.xwc! < 0 ? Localizer.of(context).pcXwlShort : widget.xwc! == 0 ? Localizer.of(context).pcXwShort
+          : Localizer.of(context).pcXwrShort;
+      hwxwText = widget.hwc! >= 0 ? "${widget.hwc} ${Localizer.of(context).pcHwShort} / ${widget.xwc!.abs()} $xwText KT" :
+      "${widget.hwc!.abs()} ${Localizer.of(context).pcTWShort} / ${widget.xwc!.abs()} $xwText KT";
     }
 
     if(widget.isSmallSize){
@@ -192,7 +194,7 @@ class _WindEntryFieldState extends State<WindEntryField> {
                       textAlign: TextAlign.right,
                 )
             ),
-            SizedBox(width: theme.perfTextWidth,),
+            SizedBox(width: theme.perfTextWidth + 8,),
           ],
         ),
       ],

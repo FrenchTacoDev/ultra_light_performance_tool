@@ -219,6 +219,10 @@ class DE extends Dictionary{
   @override
   String get pcXwShort => "SW";
   @override
+  String get pcXwlShort => "SWL";
+  @override
+  String get pcXwrShort => "SWR";
+  @override
   String get pcWindErrorTitle => "Ungültiger Wind";
   @override
   String get pcWindFormatError => "Windformat ist falsch!\nBitte überprüfen.";

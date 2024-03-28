@@ -147,6 +147,8 @@ abstract class Dictionary{
   String get pcHwShort;
   String get pcTWShort;
   String get pcXwShort;
+  String get pcXwlShort;
+  String get pcXwrShort;
   String get pcWindErrorTitle;
   String get pcWindFormatError;
   String get pcWindDirError;
@@ -439,6 +441,10 @@ class EN extends Dictionary{
   String get pcTWShort => "TW";
   @override
   String get pcXwShort => "XW";
+  @override
+  String get pcXwlShort => "XWL";
+  @override
+  String get pcXwrShort => "XWR";
   @override
   String get pcWindErrorTitle => "Invalid Wind";
   @override
