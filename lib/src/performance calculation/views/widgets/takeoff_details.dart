@@ -25,6 +25,7 @@ class TakeoffDetails extends StatelessWidget {
     var hintS = theme.textTheme.bodySmall!.merge(const TextStyle(color: Colors.red));
     var bodySB = bodyS!.merge(const TextStyle(fontWeight: FontWeight.bold));
     var calc = PerformanceCalculator(parameters: parameters);
+    var slopeFac = calc.calculateSlopeFactor();
     var pa = calc.calculatePressureAltitude();
     var isaDelta = calc.calculateIsaDelta(pa, parameters.temp).round();
     var hwc = PerformanceCalculator.calculateHeadwindComponent(wind: parameters.wind, rwyDir: parameters.runway.direction);
@@ -65,14 +66,8 @@ class TakeoffDetails extends StatelessWidget {
                             ]
                         ),
                       ),
-                      RichText(
-                        text: TextSpan(
-                            children: [
-                              TextSpan(text: "${Localizer.of(context).tdSlopeFac}: ", style: bodyS),
-                              TextSpan(text: calc.calculateSlopeFactor().toStringAsPrecision(3), style: bodySB),
-                            ]
-                        ),
-                      ),
+                      _CorrectionField(factor: slopeFac),
+                      _FactorField(factor: slopeFac),
                     ],
                   )
               ),
@@ -268,7 +263,7 @@ class TakeoffDetails extends StatelessWidget {
                   text: TextSpan(
                       children: [
                         TextSpan(text: Localizer.of(context).tdMoistAir1, style: bodyS),
-                        TextSpan(text: " 1.10 (10%) ", style: bodySB),
+                        TextSpan(text: " 1.10 (+10%) ", style: bodySB),
                         TextSpan(text: Localizer.of(context).tdMoistAir2, style: bodyS),
                       ]
                   ),
@@ -365,3 +360,51 @@ class _BGCard extends StatelessWidget {
     );
   }
 }
+
+class _CorrectionField extends StatelessWidget {
+  const _CorrectionField({required this.factor});
+
+  final double factor;
+
+  @override
+  Widget build(BuildContext context) {
+
+    var theme = Theme.of(context);
+    var bodyS = theme.textTheme.bodyLarge;
+    var bodySB = bodyS!.merge(const TextStyle(fontWeight: FontWeight.bold));
+
+    return RichText(
+      text: TextSpan(
+          children: [
+            TextSpan(text: "Correction: ", style: bodyS),
+            TextSpan(text: "${factor > 1 ? "+" : ""}${(factor * 100 - 100).round()}%", style: bodySB),
+          ]
+      ),
+    );
+  }
+}
+
+class _FactorField extends StatelessWidget {
+  const _FactorField({required this.factor});
+
+  final double factor;
+
+  @override
+  Widget build(BuildContext context) {
+
+    var theme = Theme.of(context);
+    var bodyS = theme.textTheme.bodyLarge;
+    var bodySB = bodyS!.merge(const TextStyle(fontWeight: FontWeight.bold));
+
+    return RichText(
+      text: TextSpan(
+          children: [
+            TextSpan(text: "Factor: ", style: bodyS),
+            TextSpan(text: factor.toStringAsPrecision(3), style: bodySB),
+          ]
+      ),
+    );
+  }
+}
+
+
