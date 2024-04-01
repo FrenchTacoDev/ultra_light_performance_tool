@@ -25,10 +25,20 @@ class TakeoffDetails extends StatelessWidget {
     var hintS = theme.textTheme.bodySmall!.merge(const TextStyle(color: Colors.red));
     var bodySB = bodyS!.merge(const TextStyle(fontWeight: FontWeight.bold));
     var calc = PerformanceCalculator(parameters: parameters);
+
     var slopeFac = calc.calculateSlopeFactor();
     var pa = calc.calculatePressureAltitude();
+    var pFac = calc.calculatePressureFactor();
+
     var isaDelta = calc.calculateIsaDelta(pa, parameters.temp).round();
+    var tFac = calc.calculateTempFactor(pa);
+
     var hwc = PerformanceCalculator.calculateHeadwindComponent(wind: parameters.wind, rwyDir: parameters.runway.direction);
+    var xwc = PerformanceCalculator.calculateCrosswindComponent(wind: parameters.wind, rwyDir: parameters.runway.direction);
+    var windFac = calc.calculateWindFactor(hwc);
+
+    var conFac = calc.getContaminationFactor();
+    var ugFac = calc.getUndergroundFactor();
     var facTod = calc.calculateUnfactored();
     var intersectDesignator = intersection == parameters.runway.intersections.first ?
       Localizer.of(context).full : intersection.designator;
@@ -93,14 +103,8 @@ class TakeoffDetails extends StatelessWidget {
                           ]
                       ),
                     ),
-                    RichText(
-                      text: TextSpan(
-                          children: [
-                            TextSpan(text: "${Localizer.of(context).tdElevFac}: ", style: bodyS),
-                            TextSpan(text: calc.calculatePressureFactor().toStringAsPrecision(3), style: bodySB),
-                          ]
-                      ),
-                    ),
+                    _CorrectionField(factor: pFac),
+                    _FactorField(factor: pFac),
                   ],
                 ),
               ),
@@ -108,7 +112,7 @@ class TakeoffDetails extends StatelessWidget {
               _BGCard(
                 child: Column(
                   children: [
-                    Text(Localizer.of(context).tdElevCor, style: titleS,),
+                    Text(Localizer.of(context).tdTempCor, style: titleS,),
                     const SizedBox(height: 4,),
                     RichText(
                       text: TextSpan(
@@ -136,14 +140,8 @@ class TakeoffDetails extends StatelessWidget {
                           ]
                       ),
                     ),
-                    RichText(
-                      text: TextSpan(
-                          children: [
-                            TextSpan(text: "${Localizer.of(context).tdTempFac}: ", style: bodyS),
-                            TextSpan(text: calc.calculateTempFactor(pa).toStringAsPrecision(3), style: bodySB),
-                          ]
-                      ),
-                    ),
+                    _CorrectionField(factor: tFac),
+                    _FactorField(factor: tFac),
                     if(parameters.temp < 0) const SizedBox(height: 4,),
                     if(parameters.temp < 0) RichText(
                       textAlign: TextAlign.center,
@@ -182,11 +180,15 @@ class TakeoffDetails extends StatelessWidget {
                     RichText(
                       text: TextSpan(
                           children: [
-                            TextSpan(text: "${Localizer.of(context).tdWindFac}: ", style: bodyS),
-                            TextSpan(text: calc.calculateWindFactor(hwc).toStringAsPrecision(3), style: bodySB),
+                            TextSpan(text: "${Localizer.of(context).tdCrosswindComponent}: ", style: bodyS),
+                            if(xwc < 0) TextSpan(text: "${-xwc.floor()}kt L", style: bodySB),
+                            if(xwc > 0) TextSpan(text: "${xwc.ceil()}kt R", style: bodySB),
+                            if(xwc == 0) TextSpan(text: "${xwc.ceil()}kt", style: bodySB),
                           ]
                       ),
                     ),
+                    _CorrectionField(factor: windFac),
+                    _FactorField(factor: windFac),
                   ],
                 ),
               ),
@@ -204,27 +206,21 @@ class TakeoffDetails extends StatelessWidget {
                           ]
                       ),
                     ),
-                    RichText(
-                      text: TextSpan(
-                          children: [
-                            TextSpan(text: "${Localizer.of(context).factor}: ", style: bodyS),
-                            TextSpan(text: calc.getUndergroundFactor().toStringAsPrecision(3), style: bodySB),
-                          ]
-                      ),
-                    ),
+                    _CorrectionField(factor: ugFac),
+                    _FactorField(factor: ugFac),
                     if(parameters.sodDamaged) RichText(
                       text: TextSpan(
                           children: [
-                            TextSpan(text: "${Localizer.of(context).tdSodDamagedFac}: ", style: bodyS),
-                            TextSpan(text: parameters.corrections.sodDamagedFactor.toStringAsPrecision(3), style: bodySB),
+                            TextSpan(text: "${Localizer.of(context).tdSodDamaged}: ", style: bodyS),
+                            TextSpan(text: "+${(parameters.corrections.sodDamagedFactor * 100 - 100).round()}% (${parameters.corrections.sodDamagedFactor.toStringAsFixed(2)})", style: bodySB),
                           ]
                       ),
                     ),
                     if(parameters.highGrass) RichText(
                       text: TextSpan(
                           children: [
-                            TextSpan(text: "${Localizer.of(context).tdHighGrassFac}: ", style: bodyS),
-                            TextSpan(text: parameters.corrections.highGrassFactor.toStringAsPrecision(3), style: bodySB),
+                            TextSpan(text: "${Localizer.of(context).tdHighGrass}: ", style: bodyS),
+                            TextSpan(text: "+${(parameters.corrections.highGrassFactor * 100 - 100).round()}% (${parameters.corrections.highGrassFactor.toStringAsFixed(2)})", style: bodySB),
                           ]
                       ),
                     ),
@@ -245,14 +241,8 @@ class TakeoffDetails extends StatelessWidget {
                           ]
                       ),
                     ),
-                    RichText(
-                      text: TextSpan(
-                          children: [
-                            TextSpan(text: "${Localizer.of(context).tdRwyFac}: ", style: bodyS),
-                            TextSpan(text: calc.getContaminationFactor().toStringAsPrecision(3), style: bodySB),
-                          ]
-                      ),
-                    ),
+                    _CorrectionField(factor: conFac),
+                    _FactorField(factor: conFac),
                   ],
                 ),
               ),
@@ -286,8 +276,8 @@ class TakeoffDetails extends StatelessWidget {
                     RichText(
                       text: TextSpan(
                           children: [
-                            TextSpan(text: "${Localizer.of(context).tdMarginFac}: ", style: bodyS),
-                            TextSpan(text: "$safetyFactor", style: bodySB),
+                            TextSpan(text: "${Localizer.of(context).pcMarginTitle}: ", style: bodyS),
+                            TextSpan(text: "+${(safetyFactor * 100 - 100).round()}% (${safetyFactor.toStringAsFixed(2)})", style: bodySB),
                           ]
                       ),
                     ),
@@ -376,7 +366,7 @@ class _CorrectionField extends StatelessWidget {
     return RichText(
       text: TextSpan(
           children: [
-            TextSpan(text: "Correction: ", style: bodyS),
+            TextSpan(text: "${Localizer.of(context).correction}: ", style: bodyS),
             TextSpan(text: "${factor > 1 ? "+" : ""}${(factor * 100 - 100).round()}%", style: bodySB),
           ]
       ),
@@ -399,8 +389,8 @@ class _FactorField extends StatelessWidget {
     return RichText(
       text: TextSpan(
           children: [
-            TextSpan(text: "Factor: ", style: bodyS),
-            TextSpan(text: factor.toStringAsPrecision(3), style: bodySB),
+            TextSpan(text: "${Localizer.of(context).factor}: ", style: bodyS),
+            TextSpan(text: factor.toStringAsFixed(2), style: bodySB),
           ]
       ),
     );
