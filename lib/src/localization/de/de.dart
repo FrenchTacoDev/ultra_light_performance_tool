@@ -33,7 +33,7 @@ class DE extends Dictionary{
   @override
   String get toda => "Verfügbare Startstrecke in m";
   @override
-  String get entriesLostWarning => "Wollen Sie die Seite wirklich verlassen?\nEingaben gehen verloren!";
+  String get discardChangesWarning => "Änderungen verwerfen?";
   @override
   String get factor => "Faktor";
   @override
@@ -303,13 +303,13 @@ class DE extends Dictionary{
   @override
   String get tdSlope => "Pistenneigung";
   @override
-  String get tdElevCor => "Höhenkorrektur";
+  String get tdElevCor => "Druckhöhenkorrektur";
   @override
   String get tdAirfieldElev => "Flugplatzhöhe";
   @override
   String get tdPA => "Dichtehöhe";
   @override
-  String get tdTempCor => "Temperaturkorrektur";
+  String get tdTempCor => "Dichtehöhenkorrektur";
   @override
   String get tdOat => "Außentemperatur";
   @override

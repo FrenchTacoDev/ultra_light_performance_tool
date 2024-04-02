@@ -27,7 +27,7 @@ abstract class Dictionary{
   String get intersections;
   String get full;
   String get toda;
-  String get entriesLostWarning;
+  String get discardChangesWarning;
   String get factor;
   String get correction;
   String get details => "Details";
@@ -252,7 +252,7 @@ class EN extends Dictionary{
   @override
   String get toda => "Takeoff Distance Available in m";
   @override
-  String get entriesLostWarning => "Leave this page?\nEntries will be lost!";
+  String get discardChangesWarning => "Discard changes?";
   @override
   String get factor => "Factor";
   @override
@@ -354,9 +354,9 @@ class EN extends Dictionary{
   @override
   String get rwyEditTitle => "Edit Runway";
   @override
-  String get rwyNameHint => "Runway Name";
+  String get rwyNameHint => "Runway Designator";
   @override
-  String get rwyDirHint => "Runway Direction in Degrees";
+  String get rwyDirHint => "Runway Heading in Degrees";
   @override
   String get rwySrfcDropdownHint => "Runway Surface";
   @override
@@ -522,13 +522,13 @@ class EN extends Dictionary{
   @override
   String get tdSlope => "Slope";
   @override
-  String get tdElevCor => "Elevation Correction";
+  String get tdElevCor => "Pressure Altitude Correction";
   @override
   String get tdAirfieldElev => "Airfield Elevation";
   @override
   String get tdPA => "Pressure Altitude";
   @override
-  String get tdTempCor => "Temperature Correction";
+  String get tdTempCor => "Density Altitude Correction";
   @override
   String get tdOat => "OAT";
   @override

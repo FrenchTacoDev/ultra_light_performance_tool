@@ -146,7 +146,7 @@ class AddAirportCubit extends Cubit<AddAirportState>{
     pop() => Navigator.pop(context);
     if(state.hasEntries() == false) return pop();
     if(original != null && state.matchesAirport(original!)) return pop();
-    var res = await ULPTConfirmation.show(context: context, title: Text(Localizer.of(context).entriesLostWarning, textAlign: TextAlign.center,));
+    var res = await ULPTConfirmation.show(context: context, title: Text(Localizer.of(context).discardChangesWarning, textAlign: TextAlign.center,));
     if(res == true) pop();
   }
 
