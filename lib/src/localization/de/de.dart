@@ -33,9 +33,11 @@ class DE extends Dictionary{
   @override
   String get toda => "Verfügbare Startstrecke in m";
   @override
-  String get entriesLostWarning => "Wollen Sie die Seite wirklich verlassen?\nEingaben gehen verloren!";
+  String get discardChangesWarning => "Änderungen verwerfen?";
   @override
   String get factor => "Faktor";
+  @override
+  String get correction => "Korrektur";
   @override
   String get notes => "Notizen";
   @override
@@ -213,6 +215,16 @@ class DE extends Dictionary{
   @override
   String get pcWindTitle => "Wind";
   @override
+  String get pcHwShort => "GW";
+  @override
+  String get pcTWShort => "RW";
+  @override
+  String get pcXwShort => "SW";
+  @override
+  String get pcXwlShort => "SWL";
+  @override
+  String get pcXwrShort => "SWR";
+  @override
   String get pcWindErrorTitle => "Ungültiger Wind";
   @override
   String get pcWindFormatError => "Windformat ist falsch!\nBitte überprüfen.";
@@ -291,25 +303,19 @@ class DE extends Dictionary{
   @override
   String get tdSlope => "Pistenneigung";
   @override
-  String get tdSlopeFac => "Pistenneigungsfaktor";
-  @override
-  String get tdElevCor => "Höhenkorrektur";
+  String get tdElevCor => "Druckhöhenkorrektur";
   @override
   String get tdAirfieldElev => "Flugplatzhöhe";
   @override
   String get tdPA => "Dichtehöhe";
   @override
-  String get tdElevFac => "Höhenkorrekturfaktor";
-  @override
-  String get tdTempCor => "Temperaturkorrektur";
+  String get tdTempCor => "Dichtehöhenkorrektur";
   @override
   String get tdOat => "Außentemperatur";
   @override
   String get tdIsa => "ISA Temperatur";
   @override
   String get tdIsaDev => "ISA Unterschied";
-  @override
-  String get tdTempFac => "Temperaturfaktor";
   @override
   String get tdTempHint => "Hinweis: Temperaturen unter 0°C werden nicht korrigiert!";
   @override
@@ -319,7 +325,7 @@ class DE extends Dictionary{
   @override
   String get tdWindComponent => "Windkomponente";
   @override
-  String get tdWindFac => "Windfaktor";
+  String get tdCrosswindComponent => "Seitenwindkomponente";
   @override
   String get tdHeadWind => "Gegenwind";
   @override
@@ -329,21 +335,17 @@ class DE extends Dictionary{
   @override
   String get tdGrassCond => "Grasbedingungen";
   @override
-  String get tdSodDamagedFac => "$factor für Grasnarbe beschädigt";
+  String get tdSodDamaged => "Grasnarbe beschädigt";
   @override
-  String get tdHighGrassFac => "$factor für hohes Gras";
+  String get tdHighGrass => "Hohes Gras";
   @override
   String get tdRwyCond => "Pistenzustand";
-  @override
-  String get tdRwyFac => "Pistenzustandsfaktor";
   @override
   String get tdMoistAir1 => "Die Berechnung beinhaltet einen generellen Faktor von";
   @override
   String get tdMoistAir2 => "für feuchte Luft.";
   @override
   String get tdResults => "Ergebnisse";
-  @override
-  String get tdMarginFac => "Aufschlagsfaktor";
   @override
   String get tdGeneralHint => "Berechnungsgrundlage ist die Flugsicherheitsmitteilung FSM 3/75 des Luftfahrt-Bundesamtes, sowie AOPA Safety Letter Juni 2020.\nDabei wird für Temperaturen unter 0°C sowie Druckhöhen unter 0ft nicht mehr korrigiert. Ein Aufschlag von 10% für feuchte Luft wird immer berücksichtigt.";
   //endregion

@@ -60,7 +60,7 @@ class AddAircraftCubit extends Cubit<AddAircraftState>{
     pop() => Navigator.pop(context);
     if(state.hasEntries() == false) return pop();
     if(original != null && state.matchesAircraft(original!)) return pop();
-    var res = await ULPTConfirmation.show(context: context, title: Text(Localizer.of(context).entriesLostWarning, textAlign: TextAlign.center,));
+    var res = await ULPTConfirmation.show(context: context, title: Text(Localizer.of(context).discardChangesWarning, textAlign: TextAlign.center,));
     if(res == true) pop();
   }
 

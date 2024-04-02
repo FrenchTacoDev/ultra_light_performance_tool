@@ -1,11 +1,10 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ultra_light_performance_tool/src/core/core.dart';
 import 'package:ultra_light_performance_tool/src/import_export/file%20processing/file_processing.dart';
 import 'package:ultra_light_performance_tool/src/import_export/file%20selection/file_selection.dart';
 import 'package:ultra_light_performance_tool/src/res/themes.dart';
+import 'package:ultra_light_performance_tool/ulpt.dart' as ul;
 
 ///Defines the assistants mode
 enum Mode{
@@ -78,7 +77,7 @@ class _AssistantCubit extends Cubit<_AssistantState>{
       var data = await ExportProcessor.createExportData(saveManager: appCubit.saveManager, exportSettings: state.withSettings);
       await ULPTFileExporter().exportULPTData(data: data, screenSize: size);
     } catch (e){
-      //Todo log e
+      ul.log(e.toString(), name: "FileExport");
       return emit(state.copyWith(phase: Phase.error, errorText: dict.fileExportError));
     }finally{
       isFinished = true;
@@ -100,7 +99,7 @@ class _AssistantCubit extends Cubit<_AssistantState>{
         );
       }
     }catch (e){
-      log(e.toString());
+      ul.log(e.toString(), name: "FileImport");
       return emit(state.copyWith(phase: Phase.error, errorText: dict.fileImportError));
     }finally{
       isFinished = true;

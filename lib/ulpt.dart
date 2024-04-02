@@ -1,5 +1,4 @@
 library ulpt;
-
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter/services.dart';
@@ -14,6 +13,41 @@ export 'package:ultra_light_performance_tool/src/shared widgets/ulpt_button.dart
 export 'package:ultra_light_performance_tool/src/res/themes.dart' show ULPTTheme;
 export 'package:ultra_light_performance_tool/src/localization/localizer.dart' show Localizer, Dictionary, CustomDict;
 
+typedef OnLogFunction = Function(
+        String message, {
+        DateTime? time,
+        int? sequenceNumber,
+        int? level,
+        String? name,
+        Object? error,
+        StackTrace? stackTrace,
+    });
+
+OnLogFunction? _globalOnLogFunction;
+
+///Function that is called either internally by the package or from the outside.
+///It will expose logging features to the classes implementing the ULPT class.
+void log(
+    String message, {
+    DateTime? time,
+    int? sequenceNumber,
+    int? level,
+    String? name,
+    Object? error,
+    StackTrace? stackTrace,
+    }){
+  if(_globalOnLogFunction == null) return;
+  _globalOnLogFunction!(
+    message,
+    time: time,
+    sequenceNumber: sequenceNumber,
+    level: level,
+    name: name,
+    error: error,
+    stackTrace: stackTrace,
+  );
+}
+
 ///This is the main entry point for the App.
 ///When creating your own version of ULPT, just plug this widget into Flutters [runApp] function.
 class ULPT extends StatelessWidget {
@@ -22,6 +56,7 @@ class ULPT extends StatelessWidget {
     this.customMenuItems,
     this.customDictionaries,
     this.showDebugMode = true,
+    this.onLogFunction,
   });
 
   ///Pass your own [PopupMenuItem]s here to add items to the apps menu like an about page.
@@ -34,8 +69,14 @@ class ULPT extends StatelessWidget {
 
   final bool showDebugMode;
 
+  ///Function that handles the logging within the package.
+  final OnLogFunction? onLogFunction;
+
   @override
   Widget build(BuildContext context) {
+
+    if(_globalOnLogFunction == null && onLogFunction != null) _globalOnLogFunction = onLogFunction;
+
     return BlocProvider<ApplicationCubit>(
       create: (context) => ApplicationCubit(theme: createDarkTheme(context)),
       child: BlocBuilder<ApplicationCubit, ApplicationState>(
@@ -103,6 +144,7 @@ class MainPage extends StatelessWidget {
   }
 
   void onAppStartArguments(BuildContext context, String args) async{
+    log("App started with the following arguments\n$args");
     var cubit = context.read<ApplicationCubit>();
     args = args.replaceAll(r'"', "");
     args = args.replaceAll(r'\', r'/');

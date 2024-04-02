@@ -246,11 +246,7 @@ void main(){
         runwayCondition: RunwayCondition.dry
     );
 
-    var calc = PerformanceCalculator(
-      parameters: params
-    );
-
-    expect(calc.calculateHeadwindComponent(), 10);
+    expect(PerformanceCalculator.calculateHeadwindComponent(wind: params.wind, rwyDir: params.runway.direction), 10);
 
     params = CalculationParameters(
         corrections: testCorrections,
@@ -266,7 +262,7 @@ void main(){
         runwayCondition: RunwayCondition.dry
     );
 
-    expect(PerformanceCalculator(parameters: params).calculateHeadwindComponent(), 0);
+    expect(PerformanceCalculator.calculateHeadwindComponent(wind: params.wind, rwyDir: params.runway.direction), 0);
 
     params = CalculationParameters(
         corrections: testCorrections,
@@ -282,7 +278,7 @@ void main(){
         runwayCondition: RunwayCondition.dry
     );
 
-    expect(PerformanceCalculator(parameters: params).calculateHeadwindComponent().floor(), 8);
+    expect(PerformanceCalculator.calculateHeadwindComponent(wind: params.wind, rwyDir: params.runway.direction).floor(), 8);
 
     params = CalculationParameters(
         corrections: testCorrections,
@@ -298,7 +294,7 @@ void main(){
         runwayCondition: RunwayCondition.dry
     );
 
-    expect(PerformanceCalculator(parameters: params).calculateHeadwindComponent().floor(), -6);
+    expect(PerformanceCalculator.calculateHeadwindComponent(wind: params.wind, rwyDir: params.runway.direction).floor(), -6);
   });
 
   test('Calculate Crosswind Component with different winds', () async {
@@ -317,7 +313,7 @@ void main(){
         runwayCondition: RunwayCondition.dry
     );
 
-    expect(PerformanceCalculator(parameters: params).calculateCrosswindComponent(), 0);
+    expect(PerformanceCalculator.calculateCrosswindComponent(rwyDir: params.runway.direction, wind: params.wind), 0);
 
     params = CalculationParameters(
         corrections: testCorrections,
@@ -333,7 +329,7 @@ void main(){
         runwayCondition: RunwayCondition.dry
     );
 
-    expect(PerformanceCalculator(parameters: params).calculateCrosswindComponent(), 10);
+    expect(PerformanceCalculator.calculateCrosswindComponent(rwyDir: params.runway.direction, wind: params.wind), 10);
 
     params = CalculationParameters(
         corrections: testCorrections,
@@ -349,7 +345,7 @@ void main(){
         runwayCondition: RunwayCondition.dry
     );
 
-    expect(PerformanceCalculator(parameters: params).calculateCrosswindComponent(), -10);
+    expect(PerformanceCalculator.calculateCrosswindComponent(rwyDir: params.runway.direction, wind: params.wind), -10);
 
     params = CalculationParameters(
         corrections: testCorrections,
@@ -365,7 +361,7 @@ void main(){
         runwayCondition: RunwayCondition.dry
     );
 
-    expect(PerformanceCalculator(parameters: params).calculateCrosswindComponent().ceil(), 7);
+    expect(PerformanceCalculator.calculateCrosswindComponent(rwyDir: params.runway.direction, wind: params.wind).ceil(), 7);
 
     params = CalculationParameters(
         corrections: testCorrections,
@@ -381,7 +377,7 @@ void main(){
         runwayCondition: RunwayCondition.dry
     );
 
-    expect(PerformanceCalculator(parameters: params).calculateCrosswindComponent().floor(), -9);
+    expect(PerformanceCalculator.calculateCrosswindComponent(rwyDir: params.runway.direction, wind: params.wind).floor(), -9);
   });
 }
 
