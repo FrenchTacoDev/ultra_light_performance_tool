@@ -1,12 +1,26 @@
 import 'package:flutter/material.dart';
+import 'package:ultra_light_performance_tool/src/airports/airports.dart';
+import 'package:ultra_light_performance_tool/src/performance%20calculation/views/widgets/runway_graphic.dart';
 import 'package:ultra_light_performance_tool/src/res/themes.dart';
 import 'package:ultra_light_performance_tool/src/shared%20widgets/ulpt_tab_page.dart';
 import 'package:ultra_light_performance_tool/src/localization/localizer.dart';
 
 ///Panel to show the calc results
 class Results extends StatelessWidget {
-  const Results({super.key, this.rawTOD, this.factorizedTod, this.availTod, required this.isSmallSize});
+  const Results({
+    super.key,
+    this.runway,
+    this.intersection,
+    this.rawTOD,
+    this.factorizedTod,
+    this.availTod,
+    required this.isSmallSize
+  });
 
+  ///Runway to show on the graphic if selected
+  final Runway? runway;
+  ///Intersection to show on the graphic if selected
+  final Intersection? intersection;
   ///raw takeoff distance without factor
   final int? rawTOD;
   ///takeoff distance factored
@@ -18,7 +32,8 @@ class Results extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    if(rawTOD == null || availTod == null) return const _NoData();
+    if(rawTOD == null || availTod == null || runway == null || intersection == null) return const _NoData();
+    return RunwayGraphic(runway: runway!, intersection: intersection!, rawTod: rawTOD!, facTod: factorizedTod!,);
     return _Data(tod: rawTOD!, factorizedTod: factorizedTod!, availTod: availTod!, isSmallSize: isSmallSize,);
   }
 }

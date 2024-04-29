@@ -50,7 +50,7 @@ class PerformanceCalculationPanel extends StatelessWidget {
                           : width >= 755 ? _MediumSizedScreen(panelHeight: panelHeight, state: state, airports: airportsList,)
                           : _SmallSizedScreen(
                           panelHeight:
-                          state.runway != null && state.runway!.surface == Surface.grass ? panelHeight * 1.8 : panelHeight * 1.3,
+                          state.runway != null && state.runway!.surface == Surface.grass ? panelHeight * 1.8 : panelHeight * 1.35,
                           state: state, airports: airportsList
                       ),
                     );
@@ -453,6 +453,8 @@ class _ResultPanelComponent extends StatelessWidget {
         child: Center(
           child: Results(
             isSmallSize: isSmallSize,
+            runway: state.runway,
+            intersection: state.intersection,
             rawTOD: state.rawTod,
             factorizedTod: state.factorizedTod,
             availTod: state.intersection?.toda,
