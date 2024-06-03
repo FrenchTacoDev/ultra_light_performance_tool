@@ -1,5 +1,3 @@
-import 'dart:math';
-
 import 'package:flutter/material.dart';
 import 'package:ultra_light_performance_tool/src/airports/airports.dart';
 import 'package:ultra_light_performance_tool/src/utils/extensions.dart';
@@ -18,7 +16,7 @@ class RunwayGraphic extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.all(8),
       child: CustomPaint(
-        painter: RunwayGraphicPainter(
+        painter: _RunwayGraphicPainter(
           uTheme: Theme.of(context).extensions[ULPTTheme]! as ULPTTheme,
           runway: runway,
           intersection: intersection,
@@ -31,9 +29,9 @@ class RunwayGraphic extends StatelessWidget {
   }
 }
 
-class RunwayGraphicPainter extends CustomPainter{
+class _RunwayGraphicPainter extends CustomPainter{
 
-  RunwayGraphicPainter({
+  _RunwayGraphicPainter({
     required this.uTheme,
     required this.runway,
     required this.intersection,
@@ -56,6 +54,10 @@ class RunwayGraphicPainter extends CustomPainter{
 
   @override
   void paint(Canvas canvas, Size size) {
+    //Todo paint call is done very often, find out why? A single paint is needed as long as size is stable!
+    //Todo all fix numbers into variables so we can reuse/ retune them
+    //Todo localization!
+
     var runwayStartPoint = Offset(0, runwayHeight / 2 + topTextAreaHeight);
     var runwayEndPoint = Offset(size.width - aftTextAreaWidth, runwayHeight / 2 + topTextAreaHeight);
 
@@ -66,9 +68,9 @@ class RunwayGraphicPainter extends CustomPainter{
     var intersectX = runwayStartPoint.dx + intersectXDif * (runwayEndPoint.dx - runwayStartPoint.dx);
 
     paintRunway(canvas, runwayStartPoint, runwayEndPoint);
-    paintRunwayLines(canvas, runwayStartPoint, runwayEndPoint, intersectX);
     if(facTod <= intersection.toda) paintFacTod(canvas, runwayStartPoint, runwayEndPoint, intersectX);
     if(rawTod <= intersection.toda) paintRawTod(canvas, runwayStartPoint, runwayEndPoint, intersectX);
+    paintRunwayLines(canvas, runwayStartPoint, runwayEndPoint, intersectX);
     paintLabels(canvas, runwayStartPoint, runwayEndPoint, intersectX);
   }
 
@@ -127,7 +129,7 @@ class RunwayGraphicPainter extends CustomPainter{
     var labelStyle = TextStyle(fontSize: labelTextSize, color: Colors.white);
     textPainter.text = TextSpan(text: intersection.designator, style: labelStyle);
     textPainter.layout();
-    textPainter.paint(canvas, Offset(intersectX, 0));
+    textPainter.paint(canvas, Offset(intersectX - 2, 0));
 
     textPainter.text = TextSpan(text: "TODA", style: labelStyle);
     textPainter.layout();
@@ -137,34 +139,77 @@ class RunwayGraphicPainter extends CustomPainter{
   void paintFacTod(Canvas canvas, Offset runwayStart, Offset runwayEnd, double intersectX){
     //Paint the tod
     var p = facTod / intersection.toda;
-    var x = intersectX + (runwayEnd.dx - intersectX) * p;
+    var endX = intersectX + (runwayEnd.dx - intersectX) * p;
     var y = runwayEnd.dy - runwayHeight / 5;
 
     var paint = Paint();
     paint.color = Colors.green;
-    canvas.drawLine(Offset(intersectX, y), Offset(x, y), paint);
+    canvas.drawLine(Offset(intersectX, y), Offset(endX, y), paint);
     //Paint the Cap
     paint.strokeWidth = 3;
-    canvas.drawLine(Offset(x, y - 6), Offset(x, y + 6), paint);
+    canvas.drawLine(Offset(endX, y - 6), Offset(endX, y + 6), paint);
+
+    //Paint Label
+    var textPainter = TextPainter(
+      textDirection: TextDirection.ltr,
+      textAlign: TextAlign.center,
+    );
+    var style = TextStyle(fontSize: labelTextSize, color: paint.color);
+    textPainter.text = TextSpan(text: "TOD Margin", style: style);
+    textPainter.layout();
+
+    var labelPoint = Offset(
+        intersectX + (endX - intersectX) / 2 - (textPainter.width / 2),
+        y - textPainter.height / 2
+    );
+
+    paint.color = Colors.black;
+    canvas.drawRect(
+        Rect.fromLTWH(labelPoint.dx - 4, labelPoint.dy - 4, textPainter.width + 8, textPainter.height + 8),
+        paint
+    );
+
+    textPainter.paint(canvas, labelPoint);
   }
 
   void paintRawTod(Canvas canvas, Offset runwayStart, Offset runwayEnd, double intersectX){
     //Paint the tod
     var p = rawTod / intersection.toda;
-    var x = intersectX + (runwayEnd.dx - intersectX) * p;
+    var endX = intersectX + (runwayEnd.dx - intersectX) * p;
     var y = facTod <= intersection.toda ? runwayEnd.dy + runwayHeight / 5 : runwayEnd.dy;
 
     var paint = Paint();
-    facTod <= intersection.toda ? paint.color = Colors.cyan : Colors.green;
-    canvas.drawLine(Offset(intersectX, y), Offset(x, y), paint);
+    paint.color = facTod <= intersection.toda ? Colors.cyan : Colors.red;
+    canvas.drawLine(Offset(intersectX, y), Offset(endX, y), paint);
     //Paint the Cap
     paint.strokeWidth = 3;
-    canvas.drawLine(Offset(x, y - 6), Offset(x, y + 6), paint);
+    canvas.drawLine(Offset(endX, y - 6), Offset(endX, y + 6), paint);
+
+    //Paint Label
+    var textPainter = TextPainter(
+      textDirection: TextDirection.ltr,
+      textAlign: TextAlign.center,
+    );
+    var style = TextStyle(fontSize: labelTextSize, color: paint.color);
+    textPainter.text = TextSpan(text: "TOD No Margin", style: style);
+    textPainter.layout();
+
+    var labelPoint = Offset(
+        intersectX + (endX - intersectX) / 2 - (textPainter.width / 2),
+        y - textPainter.height / 2
+    );
+
+    paint.color = Colors.black;
+    canvas.drawRect(
+        Rect.fromLTWH(labelPoint.dx - 4, labelPoint.dy - 4, textPainter.width + 8, textPainter.height + 8),
+        paint
+    );
+
+    textPainter.paint(canvas, labelPoint);
   }
 
   @override
   bool shouldRepaint(covariant CustomPainter oldDelegate) {
     return false;
   }
-
 }
