@@ -15,15 +15,17 @@ class RunwayGraphic extends StatelessWidget {
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.all(8),
-      child: CustomPaint(
-        painter: _RunwayGraphicPainter(
-          uTheme: Theme.of(context).extensions[ULPTTheme]! as ULPTTheme,
-          runway: runway,
-          intersection: intersection,
-          facTod: facTod,
-          rawTod: rawTod,
+      child: RepaintBoundary(
+        child: CustomPaint(
+          painter: _RunwayGraphicPainter(
+            uTheme: Theme.of(context).extensions[ULPTTheme]! as ULPTTheme,
+            runway: runway,
+            intersection: intersection,
+            facTod: facTod,
+            rawTod: rawTod,
+          ),
+          size: const Size(double.infinity, double.infinity),
         ),
-        size: const Size(double.infinity, double.infinity),
       ),
     );
   }
@@ -54,9 +56,9 @@ class _RunwayGraphicPainter extends CustomPainter{
 
   @override
   void paint(Canvas canvas, Size size) {
-    //Todo paint call is done very often, find out why? A single paint is needed as long as size is stable!
     //Todo all fix numbers into variables so we can reuse/ retune them
     //Todo localization!
+    //Todo when distance is smaller than text, maybe display text behind distance?
 
     var runwayStartPoint = Offset(0, runwayHeight / 2 + topTextAreaHeight);
     var runwayEndPoint = Offset(size.width - aftTextAreaWidth, runwayHeight / 2 + topTextAreaHeight);

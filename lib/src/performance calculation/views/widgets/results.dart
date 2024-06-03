@@ -6,7 +6,7 @@ import 'package:ultra_light_performance_tool/src/shared%20widgets/ulpt_tab_page.
 import 'package:ultra_light_performance_tool/src/localization/localizer.dart';
 
 ///Panel to show the calc results
-class Results extends StatelessWidget {
+class Results extends StatefulWidget {
   const Results({
     super.key,
     this.runway,
@@ -31,10 +31,37 @@ class Results extends StatelessWidget {
   final bool isSmallSize;
 
   @override
+  State<Results> createState() => _ResultsState();
+}
+
+class _ResultsState extends State<Results> {
+
+  bool showGraphic = false;
+
+  @override
   Widget build(BuildContext context) {
-    if(rawTOD == null || availTod == null || runway == null || intersection == null) return const _NoData();
-    return RunwayGraphic(runway: runway!, intersection: intersection!, rawTod: rawTOD!, facTod: factorizedTod!,);
-    return _Data(tod: rawTOD!, factorizedTod: factorizedTod!, availTod: availTod!, isSmallSize: isSmallSize,);
+    if(widget.rawTOD == null || widget.availTod == null || widget.runway == null || widget.intersection == null) return const _NoData();
+    var theme = Theme.of(context).extensions[ULPTTheme]! as ULPTTheme;
+
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        Row(
+          mainAxisAlignment: MainAxisAlignment.end,
+          children: [
+            Text("Show Graphic", style: TextStyle(color: theme.interactiveHintTextColor, fontSize: 16),),
+            Switch(
+              activeColor: Colors.green,
+              inactiveThumbColor: theme.interactiveHintTextColor,
+              value: showGraphic,
+              onChanged: (value) => setState(() {showGraphic = value;}),
+            ),
+          ],
+        ),
+        if(showGraphic == false) Expanded(child: _Data(tod: widget.rawTOD!, factorizedTod: widget.factorizedTod!, availTod: widget.availTod!, isSmallSize: widget.isSmallSize,)),
+        if(showGraphic) Expanded(child: RunwayGraphic(runway: widget.runway!, intersection: widget.intersection!, rawTod: widget.rawTOD!, facTod: widget.factorizedTod!,)),
+      ],
+    );
   }
 }
 
