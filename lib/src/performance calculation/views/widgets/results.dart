@@ -49,7 +49,10 @@ class _ResultsState extends State<Results> {
         Row(
           mainAxisAlignment: MainAxisAlignment.end,
           children: [
-            Text("Show Graphic", style: TextStyle(color: theme.interactiveHintTextColor, fontSize: 16),),
+            Text(
+              Localizer.of(context).showGraphic,
+              style: TextStyle(color: theme.interactiveHintTextColor, fontSize: 16),
+            ),
             Switch(
               activeColor: Colors.green,
               inactiveThumbColor: theme.interactiveHintTextColor,

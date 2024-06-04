@@ -23,6 +23,7 @@ class RunwayGraphic extends StatelessWidget {
             intersection: intersection,
             facTod: facTod,
             rawTod: rawTod,
+            localizer: Localizer.of(context),
           ),
           size: const Size(double.infinity, double.infinity),
         ),
@@ -38,36 +39,49 @@ class _RunwayGraphicPainter extends CustomPainter{
     required this.runway,
     required this.intersection,
     required this.rawTod,
-    required this.facTod
+    required this.facTod,
+    this.localizer,
   });
 
   final ULPTTheme uTheme;
+  final Dictionary? localizer;
   final Runway runway;
   final Intersection intersection;
   final int rawTod;
   final int facTod;
 
-  final double topTextAreaHeight = 22;
   final double aftTextAreaWidth = 40;
   final double mainTextSize = 16;
   final double labelTextSize = 12;
-  final double maxHeight = 100;
+  final double topLabelPadding = 8;
   final double runwayHeight = 100;
+  final double labelXPadding = 8;
+  final double todCapHeight = 12;
 
   @override
   void paint(Canvas canvas, Size size) {
-    //Todo all fix numbers into variables so we can reuse/ retune them
     //Todo localization!
-    //Todo when distance is smaller than text, maybe display text behind distance?
 
-    var runwayStartPoint = Offset(0, runwayHeight / 2 + topTextAreaHeight);
-    var runwayEndPoint = Offset(size.width - aftTextAreaWidth, runwayHeight / 2 + topTextAreaHeight);
+    var topTextAreaHeight = labelTextSize + topLabelPadding;
+    var topOffset = size.height <= topTextAreaHeight + runwayHeight ? 0 :
+      (size.height - (topTextAreaHeight + runwayHeight)) / 2;
+
+    var runwayStartPoint = Offset(
+        0,
+        runwayHeight / 2 + topTextAreaHeight + topOffset
+    );
+
+    var runwayEndPoint = Offset(
+        size.width - aftTextAreaWidth,
+        runwayHeight / 2 + topTextAreaHeight + topOffset
+    );
 
     //How many percent of the runway toda are we further into the runway?
     var intersectXDif =
         (runway.intersections.first.toda - intersection.toda) / runway.intersections.first.toda;
     //Translate this into pixels
-    var intersectX = runwayStartPoint.dx + intersectXDif * (runwayEndPoint.dx - runwayStartPoint.dx);
+    var intersectX =
+        runwayStartPoint.dx + intersectXDif * (runwayEndPoint.dx - runwayStartPoint.dx);
 
     paintRunway(canvas, runwayStartPoint, runwayEndPoint);
     if(facTod <= intersection.toda) paintFacTod(canvas, runwayStartPoint, runwayEndPoint, intersectX);
@@ -115,7 +129,7 @@ class _RunwayGraphicPainter extends CustomPainter{
 
     var paint = Paint();
     paint.color = Colors.black;
-    var numbersBase = Offset(runwayStartPoint.dx + mainTextSize / 2 + 8, runwayStartPoint.dy);
+    var numbersBase = Offset(runwayStartPoint.dx + mainTextSize / 2 + labelXPadding, runwayStartPoint.dy);
     canvas.drawRect(
         Rect.fromCenter(
             center: Offset(numbersBase.dx, numbersBase.dy),
@@ -129,13 +143,18 @@ class _RunwayGraphicPainter extends CustomPainter{
 
     //Intx Label
     var labelStyle = TextStyle(fontSize: labelTextSize, color: Colors.white);
-    textPainter.text = TextSpan(text: intersection.designator, style: labelStyle);
+    textPainter.text = TextSpan(
+        text: intersection == runway.intersections.first && runway.intersections.isNotEmpty ?
+        localizer?.full : intersection.designator,
+        style: labelStyle
+    );
     textPainter.layout();
-    textPainter.paint(canvas, Offset(intersectX - 2, 0));
+    textPainter.paint(canvas, Offset(intersectX - 2, runwayStartPoint.dy - runwayHeight / 2 - labelTextSize - topLabelPadding));
 
-    textPainter.text = TextSpan(text: "TODA", style: labelStyle);
+    //TODA Label
+    textPainter.text = TextSpan(text: localizer?.todaShort, style: labelStyle);
     textPainter.layout();
-    textPainter.paint(canvas, Offset(runwayEndPoint.dx + 8, runwayEndPoint.dy - textPainter.height / 2));
+    textPainter.paint(canvas, Offset(runwayEndPoint.dx + labelXPadding, runwayEndPoint.dy - textPainter.height / 2));
   }
 
   void paintFacTod(Canvas canvas, Offset runwayStart, Offset runwayEnd, double intersectX){
@@ -149,7 +168,7 @@ class _RunwayGraphicPainter extends CustomPainter{
     canvas.drawLine(Offset(intersectX, y), Offset(endX, y), paint);
     //Paint the Cap
     paint.strokeWidth = 3;
-    canvas.drawLine(Offset(endX, y - 6), Offset(endX, y + 6), paint);
+    canvas.drawLine(Offset(endX, y - todCapHeight / 2), Offset(endX, y + todCapHeight / 2), paint);
 
     //Paint Label
     var textPainter = TextPainter(
@@ -157,11 +176,18 @@ class _RunwayGraphicPainter extends CustomPainter{
       textAlign: TextAlign.center,
     );
     var style = TextStyle(fontSize: labelTextSize, color: paint.color);
-    textPainter.text = TextSpan(text: "TOD Margin", style: style);
+    textPainter.text = TextSpan(text: localizer?.todMarginShort, style: style);
     textPainter.layout();
 
+    var labelX = intersectX + (endX - intersectX) / 2 - (textPainter.width / 2);
+
+    if(textPainter.width + 16 >= endX - intersectX){
+      labelX = endX + textPainter.width + 8 > runwayEnd.dx ?
+        runwayStart.dx + mainTextSize / 2 + labelXPadding + 8 : endX + 8;
+    }
+
     var labelPoint = Offset(
-        intersectX + (endX - intersectX) / 2 - (textPainter.width / 2),
+        labelX,
         y - textPainter.height / 2
     );
 
@@ -185,7 +211,7 @@ class _RunwayGraphicPainter extends CustomPainter{
     canvas.drawLine(Offset(intersectX, y), Offset(endX, y), paint);
     //Paint the Cap
     paint.strokeWidth = 3;
-    canvas.drawLine(Offset(endX, y - 6), Offset(endX, y + 6), paint);
+    canvas.drawLine(Offset(endX, y - todCapHeight / 2), Offset(endX, y + todCapHeight / 2), paint);
 
     //Paint Label
     var textPainter = TextPainter(
@@ -193,11 +219,17 @@ class _RunwayGraphicPainter extends CustomPainter{
       textAlign: TextAlign.center,
     );
     var style = TextStyle(fontSize: labelTextSize, color: paint.color);
-    textPainter.text = TextSpan(text: "TOD No Margin", style: style);
+    textPainter.text = TextSpan(text: localizer?.todNoMarginShort, style: style);
     textPainter.layout();
 
+    var labelX = intersectX + (endX - intersectX) / 2 - (textPainter.width / 2);
+    if(textPainter.width + 16 >= endX - intersectX){
+      labelX = endX + textPainter.width + 8 > runwayEnd.dx ?
+      runwayStart.dx + mainTextSize / 2 + labelXPadding + 8 : endX + 8;
+    }
+
     var labelPoint = Offset(
-        intersectX + (endX - intersectX) / 2 - (textPainter.width / 2),
+        labelX,
         y - textPainter.height / 2
     );
 

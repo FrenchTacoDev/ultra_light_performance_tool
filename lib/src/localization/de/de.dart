@@ -33,6 +33,12 @@ class DE extends Dictionary{
   @override
   String get toda => "Verfügbare Startstrecke in m";
   @override
+  String get todaShort => "TODA";
+  @override
+  String get todMarginShort => "TOD Aufschlag";
+  @override
+  String get todNoMarginShort => "TOD ohne Aufschlag";
+  @override
   String get discardChangesWarning => "Änderungen verwerfen?";
   @override
   String get factor => "Faktor";
@@ -256,6 +262,8 @@ class DE extends Dictionary{
   String pcNotEnoughRunway(int overshoot) => "Startdistanz nicht ausreichend.\n${overshoot}m mehr benötigt!";
   @override
   String pcNotEnoughRunwayMargin(int overshoot) => "Startdistanz mit Aufschlag nicht ausreichend.\n${overshoot}m mehr benötigt!";
+  @override
+  String get showGraphic => "Grafik Anzeigen";
   //endregion
   //region Import/Export
   @override

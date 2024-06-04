@@ -85,7 +85,7 @@ class _LargeSizedScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return ULPTMinSizeScrollView(
       scrollController: context.read<CalculationCubit>().scrollControl,
-      minHeight: 550,
+      minHeight: 580,
       child: Column(
         children: [
           DetailsButtons(state: state),
