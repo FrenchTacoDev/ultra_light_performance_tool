@@ -60,7 +60,6 @@ class _RunwayGraphicPainter extends CustomPainter{
 
   @override
   void paint(Canvas canvas, Size size) {
-    //Todo localization!
 
     var topTextAreaHeight = labelTextSize + topLabelPadding;
     var topOffset = size.height <= topTextAreaHeight + runwayHeight ? 0 :
