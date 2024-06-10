@@ -145,6 +145,7 @@ class CalculationCubit extends Cubit<CalculationState>{
   void setIntersection({required Intersection intersection}) {
     if(intersection == state.intersection) return;
     emit(state.copyWith(intersection: intersection));
+    emit(state.resetTod());
   }
 
   //Todo think about if a reset is necessary on grass surface change?

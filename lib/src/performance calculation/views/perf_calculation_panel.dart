@@ -46,11 +46,17 @@ class PerformanceCalculationPanel extends StatelessWidget {
                       padding: Platform.isIOS ? const EdgeInsets.fromLTRB(16, 4, 16, 24) :
                       const EdgeInsets.fromLTRB(16, 4, 16, 16),
                       child: width >= 940 ?
-                      _LargeSizedScreen(panelHeight: panelHeight, state: state, airports: airportsList)
-                          : width >= 755 ? _MediumSizedScreen(panelHeight: panelHeight, state: state, airports: airportsList,)
+                      _LargeSizedScreen(
+                          panelHeight: panelHeight, state: state, airports: airportsList
+                      )
+                          : width >= 755 ?
+                      _MediumSizedScreen(
+                          panelHeight: state.runway != null && state.runway!.surface == Surface.grass ? panelHeight + 10 : panelHeight,
+                          state: state, airports: airportsList,
+                          )
                           : _SmallSizedScreen(
                           panelHeight:
-                          state.runway != null && state.runway!.surface == Surface.grass ? panelHeight * 1.8 : panelHeight * 1.3,
+                          state.runway != null && state.runway!.surface == Surface.grass ? panelHeight * 1.8 : panelHeight * 1.35,
                           state: state, airports: airportsList
                       ),
                     );
@@ -79,7 +85,7 @@ class _LargeSizedScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return ULPTMinSizeScrollView(
       scrollController: context.read<CalculationCubit>().scrollControl,
-      minHeight: 550,
+      minHeight: 580,
       child: Column(
         children: [
           DetailsButtons(state: state),
@@ -131,7 +137,7 @@ class _MediumSizedScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return ULPTMinSizeScrollView(
       scrollController: context.read<CalculationCubit>().scrollControl,
-      minHeight: 650,
+      minHeight: 660,
       child: Column(
         children: [
           DetailsButtons(state: state,),
@@ -453,6 +459,8 @@ class _ResultPanelComponent extends StatelessWidget {
         child: Center(
           child: Results(
             isSmallSize: isSmallSize,
+            runway: state.runway,
+            intersection: state.intersection,
             rawTOD: state.rawTod,
             factorizedTod: state.factorizedTod,
             availTod: state.intersection?.toda,
