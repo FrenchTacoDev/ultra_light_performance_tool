@@ -27,6 +27,9 @@ abstract class Dictionary{
   String get intersections;
   String get full;
   String get toda;
+  String get todaShort;
+  String get todMarginShort;
+  String get todNoMarginShort;
   String get discardChangesWarning;
   String get factor;
   String get correction;
@@ -166,6 +169,7 @@ abstract class Dictionary{
   String get pcRunwayRemain;
   String pcNotEnoughRunway(int overshoot);
   String pcNotEnoughRunwayMargin(int overshoot);
+  String get showGraphic;
   //endregion
 
   //region Import/Export
@@ -251,6 +255,12 @@ class EN extends Dictionary{
   String get full => "Full";
   @override
   String get toda => "Takeoff Distance Available in m";
+  @override
+  String get todaShort => "TODA";
+  @override
+  String get todMarginShort => "TOD Margin";
+  @override
+  String get todNoMarginShort => "TOD no Margin";
   @override
   String get discardChangesWarning => "Discard changes?";
   @override
@@ -475,6 +485,8 @@ class EN extends Dictionary{
   String pcNotEnoughRunway(int overshoot) => "Takeoff distance insufficient.\n${overshoot}m more needed!";
   @override
   String pcNotEnoughRunwayMargin(int overshoot) => "Takeoff distance with margin insufficient.\n${overshoot}m more needed!";
+  @override
+  String get showGraphic => "Show Graphic";
   //endregion
   //region Import/Export
   @override

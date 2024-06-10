@@ -164,7 +164,10 @@ class TakeoffDetails extends StatelessWidget {
                       text: TextSpan(
                           children: [
                             TextSpan(text: "${Localizer.of(context).tdWind}: ", style: bodyS),
-                            TextSpan(text: "${parameters.wind.direction}/${parameters.wind.speed}kt", style: bodySB),
+                            TextSpan(
+                                text: "${parameters.wind.direction < 100 ? "0${parameters.wind.direction}" : parameters.wind.direction}/${parameters.wind.speed}kt",
+                                style: bodySB
+                            ),
                           ]
                       ),
                     ),
