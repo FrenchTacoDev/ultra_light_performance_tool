@@ -9,7 +9,7 @@ import 'package:ultra_light_performance_tool/src/import_export/import_export.dar
 import 'package:ultra_light_performance_tool/src/res/themes.dart';
 import 'src/aircraft/aircraft.dart';
 
-export 'package:ultra_light_performance_tool/src/shared widgets/ulpt_button.dart' show ULPTButton;
+export 'package:ultra_light_performance_tool/src/shared widgets/shared_widgets.dart';
 export 'package:ultra_light_performance_tool/src/res/themes.dart' show ULPTTheme;
 export 'package:ultra_light_performance_tool/src/localization/localizer.dart' show Localizer, Dictionary, CustomDict;
 
