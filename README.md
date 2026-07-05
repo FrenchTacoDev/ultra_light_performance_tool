@@ -6,7 +6,7 @@ The use of this tool does not relief the Pilot in Command from consulting the ai
 The tool uses estimated and interpolated values only and is therefore just for information.
 The liability lies solely with the Pilot in Command.
 
-If you'd like to contirbute to this project, please open a pull-request or send me a message asking what you could do to help out.
+If you'd like to contribute to this project, please open a pull-request or send me a message asking what you could do to help out.
 
 ## Getting started
 
@@ -46,7 +46,7 @@ The example App fully supports opening .ulpt files in place to import saved data
 Currently the app is only in English and German as testing is done with selected testers.
 If you like to be part of the testing team, please leave a message.
 
-ULPT is meant to be an open source / free to use prodcut.
+ULPT is meant to be an open source / free to use product.
 It will be published free of charge to the respective stores.
 
 If you want to publish your own version, please feel free.
